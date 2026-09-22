@@ -1,0 +1,8 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.page {
+  @include flex-center;
+  min-height: 100vh;
+  background: $color-bg;
+}

@@ -1,0 +1,24 @@
+@use 'variables' as *;
+@use 'reset';
+
+// ─── CSS-переменные (для использования в JS/inline) ──────
+:root {
+  --color-bg:            #{$color-bg};
+  --color-surface:       #{$color-surface};
+  --color-surface-hover: #{$color-surface-hover};
+  --color-border:        #{$color-border};
+  --color-primary:       #{$color-primary};
+  --color-primary-hover: #{$color-primary-hover};
+  --color-text:          #{$color-text};
+  --color-text-muted:    #{$color-text-muted};
+  --color-error:         #{$color-error};
+  --sidebar-width:       #{$sidebar-width};
+}
+
+// ─── Базовые стили ────────────────────────────────────────
+body {
+  font-family: $font-family;
+  background-color: $color-bg;
+  color: $color-text;
+  -webkit-font-smoothing: antialiased;
+}

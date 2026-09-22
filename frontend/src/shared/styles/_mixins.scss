@@ -1,0 +1,26 @@
+@use 'variables' as *;
+
+// Flex по центру
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flex вертикальный столбец
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Обрезка текста с многоточием
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Переходы
+@mixin transition($props...) {
+  transition: $props;
+}
