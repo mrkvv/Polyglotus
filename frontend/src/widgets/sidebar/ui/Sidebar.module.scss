@@ -1,0 +1,132 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.sidebar {
+  @include flex-column;
+  width: $sidebar-width;
+  min-width: $sidebar-width;
+  height: 100vh;
+  background: $color-surface;
+  border-right: 1px solid $color-border;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+// ─── Шапка ───────────────────────────────────────────────
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid $color-border;
+}
+
+.logo {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: $color-primary;
+  flex-shrink: 0;
+}
+
+.logoIcon {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.appName {
+  font-size: 16px;
+  font-weight: 700;
+  color: $color-text;
+  letter-spacing: -0.2px;
+}
+
+// ─── Навигация ───────────────────────────────────────────
+.nav {
+  @include flex-column;
+  flex: 1;
+  padding: 12px 8px;
+  gap: 2px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: $color-text-muted;
+  text-decoration: none;
+  @include transition(background 0.15s, color 0.15s);
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: $color-surface-hover;
+    color: $color-text;
+  }
+}
+
+.navItemActive {
+  background: $color-surface-hover;
+  color: $color-primary;
+}
+
+// ─── Футер ───────────────────────────────────────────────
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid $color-border;
+  gap: 8px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.userAvatar {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $color-surface-hover;
+  border: 1px solid $color-border;
+  color: $color-text-muted;
+  flex-shrink: 0;
+}
+
+.username {
+  font-size: 13px;
+  font-weight: 500;
+  color: $color-text;
+  @include text-ellipsis;
+}
+
+.settingsBtn {
+  @include flex-center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $color-text-muted;
+  padding: 6px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  @include transition(background 0.15s, color 0.15s);
+
+  &:hover {
+    background: $color-surface-hover;
+    color: $color-text;
+  }
+}

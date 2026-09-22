@@ -1,0 +1,104 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.card {
+  @include flex-column;
+  align-items: center;
+  gap: 8px;
+
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.logo {
+  @include flex-center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: $color-primary;
+  margin-bottom: 4px;
+}
+
+.logoIcon {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: $color-text;
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: $color-text-muted;
+  margin-bottom: 16px;
+}
+
+.form {
+  @include flex-column;
+  gap: 16px;
+  width: 100%;
+}
+
+.field {
+  @include flex-column;
+  gap: 6px;
+
+  label {
+    font-size: 13px;
+    font-weight: 500;
+    color: $color-text-muted;
+  }
+
+  input {
+    background: $color-bg;
+    border: 1px solid $color-border;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: $color-text;
+    outline: none;
+    width: 100%;
+    @include transition(border-color 0.15s);
+
+    &:focus {
+      border-color: $color-primary;
+    }
+
+    &::placeholder {
+      color: $color-text-muted;
+      opacity: 0.6;
+    }
+  }
+}
+
+.error {
+  font-size: 13px;
+  color: $color-error;
+  text-align: center;
+}
+
+.submit {
+  background: $color-primary;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  @include transition(background 0.15s);
+
+  &:hover {
+    background: $color-primary-hover;
+  }
+}
