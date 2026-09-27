@@ -4,6 +4,63 @@ React-приложение на Vite + TypeScript, построенное по �
 
 ---
 
+## Установка Node.js и npm
+
+Рекомендуемый способ — использовать **nvm (Node Version Manager)**. Он позволяет устанавливать несколько версий Node.js и легко переключаться между ними.
+
+### macOS / Linux
+
+1. Установить nvm:
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+   ```
+2. Перезапустить терминал или выполнить:
+   ```bash
+   source ~/.bashrc   # или ~/.zshrc, если используете Zsh
+   ```
+3. Установить нужную версию Node.js:
+   ```bash
+   nvm install 20
+   nvm use 20
+   ```
+
+> Официальная документация: https://github.com/nvm-sh/nvm
+
+---
+
+### Windows
+
+На Windows используется отдельный порт — **nvm-windows**:
+
+1. Скачать установщик `nvm-setup.exe` со страницы релизов:
+   https://github.com/coreybutler/nvm-windows/releases/latest
+2. Запустить установщик и следовать инструкциям.
+3. Открыть новый терминал (PowerShell или cmd) и выполнить:
+   ```powershell
+   nvm install 20
+   nvm use 20
+   ```
+
+> Официальная документация: https://github.com/coreybutler/nvm-windows
+
+---
+
+### Альтернатива — прямая установка
+
+Если nvm не нужен, Node.js (вместе с npm) можно установить напрямую с официального сайта:
+**https://nodejs.org** — выбрать LTS-версию.
+
+---
+
+### Проверка установки
+
+```bash
+node -v   # должно вывести v20.x.x или выше
+npm -v    # должно вывести 9.x.x или выше
+```
+
+---
+
 ## Требования
 
 | Инструмент | Версия |
