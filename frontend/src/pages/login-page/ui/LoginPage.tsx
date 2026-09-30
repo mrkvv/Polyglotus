@@ -1,9 +1,9 @@
 import { LoginForm } from '@features/auth'
-import styles from './LoginPage.module.scss'
+import './LoginPage.scss'
 
 export function LoginPage() {
   return (
-    <div className={styles.page}>
+    <div className="LoginPage">
       <LoginForm />
     </div>
   )

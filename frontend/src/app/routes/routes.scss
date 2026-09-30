@@ -1,0 +1,11 @@
+.ProtectedLayout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+
+  &__Content {
+    flex: 1;
+    overflow-y: auto;
+    background: #0f1117;
+  }
+}

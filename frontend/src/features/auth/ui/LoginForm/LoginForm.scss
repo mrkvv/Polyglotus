@@ -1,0 +1,115 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.LoginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+
+  // ─── Логотип ───────────────────────────────────────────
+  &__Logo {
+    @include flex-center;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: $color-primary;
+    margin-bottom: 4px;
+
+    &__Icon {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+    }
+  }
+
+  // ─── Заголовок ─────────────────────────────────────────
+  &__Title {
+    font-size: 22px;
+    font-weight: 700;
+    color: $color-text;
+    letter-spacing: -0.3px;
+  }
+
+  // ─── Подзаголовок ──────────────────────────────────────
+  &__Subtitle {
+    font-size: 14px;
+    color: $color-text-muted;
+    margin-bottom: 16px;
+  }
+
+  // ─── Форма ─────────────────────────────────────────────
+  &__Form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  // ─── Поле ввода ────────────────────────────────────────
+  &__Field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: $color-text-muted;
+    }
+
+    input {
+      background: $color-bg;
+      border: 1px solid $color-border;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: $color-text;
+      outline: none;
+      width: 100%;
+      @include transition(border-color);
+
+      &:focus {
+        border-color: $color-primary;
+      }
+
+      &::placeholder {
+        color: $color-text-muted;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  // ─── Ошибка ────────────────────────────────────────────
+  &__Error {
+    font-size: 13px;
+    color: $color-error;
+    text-align: center;
+  }
+
+  // ─── Кнопка отправки ───────────────────────────────────
+  &__Submit {
+    background: $color-primary;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 11px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 4px;
+    width: 100%;
+    @include transition(background);
+
+    &:hover {
+      background: $color-primary-hover;
+    }
+  }
+}

@@ -4,14 +4,13 @@ import { userStore } from '@entities/user'
 import { Sidebar } from '@widgets/sidebar'
 import { LoginPage } from '@pages/login-page'
 import { HomePage } from '@pages/home-page'
-import styles from './routes.module.scss'
 
 // ─── Лэйаут защищённой зоны (сайд-бар + контент) ────────
 function ProtectedLayout() {
   return (
-    <div className={styles.layout}>
+    <div className="ProtectedLayout">
       <Sidebar />
-      <div className={styles.content}>
+      <div className="ProtectedLayout__Content">
         <Outlet />
       </div>
     </div>
