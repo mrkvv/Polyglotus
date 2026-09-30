@@ -4,6 +4,7 @@ import { userStore } from '@entities/user'
 import { Sidebar } from '@widgets/sidebar'
 import { LoginPage } from '@pages/login-page'
 import { HomePage } from '@pages/home-page'
+import "./routes.scss"
 
 // ─── Лэйаут защищённой зоны (сайд-бар + контент) ────────
 function ProtectedLayout() {
