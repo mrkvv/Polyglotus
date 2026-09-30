@@ -1,9 +1,9 @@
-import styles from './HomePage.module.scss'
+import './HomePage.scss'
 
 export function HomePage() {
   return (
-    <main className={styles.page}>
-      <h1 className={styles.title}>Poliglotus</h1>
+    <main className="HomePage">
+      <h1 className="HomePage__Title">Poliglotus</h1>
     </main>
   )
 }

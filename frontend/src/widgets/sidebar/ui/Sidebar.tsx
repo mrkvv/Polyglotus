@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '@features/auth'
 import { ROUTES } from '@shared/config/routes'
-import styles from './Sidebar.module.scss'
+import './Sidebar.scss'
 
 function IconHome() {
   return (
@@ -45,21 +45,21 @@ export function Sidebar() {
   const { username } = useAuth()
 
   return (
-    <aside className={styles.sidebar}>
+    <aside className="Sidebar">
       {/* Шапка */}
-      <div className={styles.header}>
-        <div className={styles.logo}>
-          <span className={styles.logoIcon}>P</span>
+      <div className="Sidebar__Header">
+        <div className="Sidebar__Header__Logo">
+          <span className="Sidebar__Header__Logo__Icon">P</span>
         </div>
-        <span className={styles.appName}>Poliglotus</span>
+        <span className="Sidebar__Header__AppName">Poliglotus</span>
       </div>
 
       {/* Навигация */}
-      <nav className={styles.nav}>
+      <nav className="Sidebar__Nav">
         <NavLink
           to={ROUTES.HOME}
           className={({ isActive }) =>
-            `${styles.navItem}${isActive ? ` ${styles.navItemActive}` : ''}`
+            `Sidebar__Nav__Item${isActive ? ' Sidebar__Nav__Item--active' : ''}`
           }
         >
           <IconHome />
@@ -68,14 +68,18 @@ export function Sidebar() {
       </nav>
 
       {/* Футер: пользователь + настройки */}
-      <div className={styles.footer}>
-        <div className={styles.user}>
-          <div className={styles.userAvatar}>
+      <div className="Sidebar__Footer">
+        <div className="Sidebar__Footer__User">
+          <div className="Sidebar__Footer__User__Avatar">
             <IconUser />
           </div>
-          <span className={styles.username}>{username}</span>
+          <span className="Sidebar__Footer__User__Name">{username}</span>
         </div>
-        <button className={styles.settingsBtn} title="Настройки" aria-label="Настройки">
+        <button
+          className="Sidebar__Footer__SettingsBtn"
+          title="Настройки"
+          aria-label="Настройки"
+        >
           <IconSettings />
         </button>
       </div>

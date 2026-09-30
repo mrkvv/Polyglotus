@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../model/AuthContext'
 import { ROUTES } from '@shared/config/routes'
 import users from '../../data/users.json'
-import styles from './LoginForm.module.scss'
+import './LoginForm.scss'
 
 export function LoginForm() {
   const [username, setUsername] = useState('')
@@ -26,15 +26,15 @@ export function LoginForm() {
   }
 
   return (
-    <div className={styles.card}>
-      <div className={styles.logo}>
-        <span className={styles.logoIcon}>P</span>
+    <div className="LoginForm">
+      <div className="LoginForm__Logo">
+        <span className="LoginForm__Logo__Icon">P</span>
       </div>
-      <h1 className={styles.title}>Poliglotus</h1>
-      <p className={styles.subtitle}>Войдите в аккаунт</p>
+      <h1 className="LoginForm__Title">Poliglotus</h1>
+      <p className="LoginForm__Subtitle">Войдите в аккаунт</p>
 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.field}>
+      <form onSubmit={handleSubmit} className="LoginForm__Form">
+        <div className="LoginForm__Field">
           <label htmlFor="username">Логин</label>
           <input
             id="username"
@@ -47,7 +47,7 @@ export function LoginForm() {
           />
         </div>
 
-        <div className={styles.field}>
+        <div className="LoginForm__Field">
           <label htmlFor="password">Пароль</label>
           <input
             id="password"
@@ -60,9 +60,9 @@ export function LoginForm() {
           />
         </div>
 
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <p className="LoginForm__Error">{error}</p>}
 
-        <button type="submit" className={styles.submit}>
+        <button type="submit" className="LoginForm__Submit">
           Войти
         </button>
       </form>
