@@ -1,0 +1,417 @@
+{
+  "info": {
+    "_postman_id": "76010a09-f432-4194-8b7e-7b135f5371bf",
+    "name": "UserService",
+    "description": "Внутренний микросервис, к которому обращается ТОЛЬКО API Gateway.\n\nТокены проверяются и извлекаются на этапе обработки запроса в API Gateway, следовательно сюда токен не доходит, вместо него приходит заголовок \"X-User-Id\", содержащий id пользователя, отправляющего запрос.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53202645",
+    "_collection_link": "https://go.postman.co/collection/53202645-76010a09-f432-4194-8b7e-7b135f5371bf?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Регистрация",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"mrkv\",\r\n    \"password\": \"mrkv_password\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/auth/register",
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "description": "Заносит пользователя в БД, генерирует токен сессии, добавляет его в Redis и возвращает в ответ. Токен сессии следует запомнить на клиенте.\n\nВозможные коды ответа:\n\n- 201 Created - пользователь успешно создан\n    \n- 400 Bad Request - что-то не так с паролем или логином\n    \n- 409 Conflict - username занят"
+      },
+      "response": []
+    },
+    {
+      "name": "Вход в аккаунт",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"mrkv\",\r\n    \"password\": \"mrkv_password\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/auth/login",
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "description": "Генерирует токен сессии, вносит его в Redis и отправляет в ответ. Токен следует запомнить на клиенте.\n\nВозможные коды ответов:\n\n- 200 OK\n    \n- 401 Unauthorized - введенны неверные credentials"
+      },
+      "response": []
+    },
+    {
+      "name": "Выход из аккаунта",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "url": {
+          "raw": "/auth/logout",
+          "path": [
+            "auth",
+            "logout"
+          ]
+        },
+        "description": "Согласно FS п. F_Settings_9.\n\nУдаляет сессию из Redis и выдает 204 No Content"
+      },
+      "response": []
+    },
+    {
+      "name": "Вход через яндекс",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "/auth/yandex",
+          "path": [
+            "auth",
+            "yandex"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Первичная настройка",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"levelId\": 2,\r\n    \"avatarId\": 5,\r\n    \"themeIds\": [1, 3, 7]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/users/me/onboarding",
+          "path": [
+            "users",
+            "me",
+            "onboarding"
+          ]
+        },
+        "description": "Осуществляет первичную настройку согласно FS п. F_Welcome_(3, 6, 9)\n\nВозможные коды ответов:\n\n- 200 OK\n    \n- 400 Bad Request - если какой-либо из айдишников не существует"
+      },
+      "response": []
+    },
+    {
+      "name": "Получить информацию о пользователе",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "url": {
+          "raw": "/users/me",
+          "path": [
+            "users",
+            "me"
+          ]
+        },
+        "description": "Содержит всю информацию по пользователю. Далее список требовайний FS, которым предоставляется данный функционал: п. F_Settings_(2, 3), F_Chat_(2, 3), F_Main_4\n\nВ ответе указываются id элементов. Их соответствие можно посмотреть по запросу GET /references"
+      },
+      "response": []
+    },
+    {
+      "name": "Удалить аккаунт",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "url": {
+          "raw": "/users/me",
+          "path": [
+            "users",
+            "me"
+          ]
+        },
+        "description": "Удаляет аккаунт из БД, удаляет существующие сессии в Redis."
+      },
+      "response": []
+    },
+    {
+      "name": "Сменить пароль",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"old_password\": \"mrkv_password\",\r\n  \"new_password\": \"new_mrkv_password\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/users/me/password",
+          "path": [
+            "users",
+            "me",
+            "password"
+          ]
+        },
+        "description": "Изменяет пароль пользователя на новый.\n\nВозможные коды ответов:\n\n- 204 No Content - пароль сменен\n    \n- 401 Unauthorized - был введен неверный старый пароль\n    \n- 400 Bad Request - что-то не так с новым паролем (слишком маленький, странные символы)"
+      },
+      "response": []
+    },
+    {
+      "name": "Сменить ник",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"new_name\": \"mrkv4449\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/users/me/name",
+          "path": [
+            "users",
+            "me",
+            "name"
+          ]
+        },
+        "description": "Изменяет ник пользователя, в ответе возвращает новое значение.\n\nВозможные коды ответов:\n\n- 200 OK\n    \n- 400 Bad Request - с новым ником что-то не так\n    \n- 409 Conflict - новый ник уже занят"
+      },
+      "response": []
+    },
+    {
+      "name": "Сменить уровень знаний",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"new_level_id\": 4\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/users/me/level",
+          "path": [
+            "users",
+            "me",
+            "level"
+          ]
+        },
+        "description": "Согласно F_Settings_(5, 8) изменяет уровень знаний пользователя. В теле указывается id уровня знаний в БД. В ответ возвращает новое значение.\n\nВозможные коды ответов:\n\n- 200 OK\n    \n- 400 Bad Request - невалидный id уровня знаний"
+      },
+      "response": []
+    },
+    {
+      "name": "Сменить аватар",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"new_avatar_id\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/users/me/avatar",
+          "path": [
+            "users",
+            "me",
+            "avatar"
+          ]
+        },
+        "description": "Согласно F_Settings_(6, 7) изменяет аватар пользователя. В теле указывается id аватара в БД. В ответ возвращает новое значение.\n\nВозможные коды ответов:\n\n- 200 OK\n    \n- 400 Bad Request - неверный id аватара"
+      },
+      "response": []
+    },
+    {
+      "name": "Сменить интересующие темы",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"new_topic_ids\": [1, 2, 7]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/users/me/topics",
+          "path": [
+            "users",
+            "me",
+            "topics"
+          ]
+        },
+        "description": "Изменяет интересующие темы пользователя. В теле указывается массив id'шников тем в БД. В ответ возвращает новое значение.\n\nВозможные коды ответов:\n\n- 200 OK\n    \n- 400 Bad Request - какой-то id неверный"
+      },
+      "response": []
+    },
+    {
+      "name": "Получить справочные списки",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "/references",
+          "path": [
+            "references"
+          ]
+        },
+        "description": "Согласно F_Settings_(5, 6) отправляет всю статическую информацию. Аватары передаются целиком в виде svg вектора.\n\nОтвет этого запроса необходимо кешировать."
+      },
+      "response": []
+    },
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "/health",
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Проверка состояния сервиса"
+      },
+      "response": []
+    }
+  ]
+}
