@@ -1,0 +1,97 @@
+{
+  "info": {
+    "_postman_id": "63f7e988-6582-48b0-b1eb-1ab5f2295b24",
+    "name": "EmbedderService",
+    "description": "Сервис, работающий с маленькой Embedder-моделькой, задача которой в фоне считать вектора для всех слов внутри нашего приложения.\n\nТак же в ее задачи входит отбор TopK подходящих под диалог слов.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53202645",
+    "_collection_link": "https://go.postman.co/collection/53202645-63f7e988-6582-48b0-b1eb-1ab5f2295b24?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Получить TopK слов по диалогу",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\": 1,\r\n    \"messages\": [\r\n        { \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\"},\r\n        { \"role\": \"ai\", \"content\": \"Sure, here is your daily ex....\"},\r\n        { \"role\": \"user\", \"content\": \"...\"},\r\n        { \"role\": \"ai\", \"content\": \"...\"}\r\n    ],\r\n    \"topK\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/embedder/topk",
+          "path": [
+            "embedder",
+            "topk"
+          ]
+        },
+        "description": "Ожидает последние 3-5 сообщений между пользователем и LLM, id пользователя, из словаря которого будут браться слова, а так же параметр TopK, который говорит сколько слов нужно получить.\n\nTopK по умолчанию 20."
+      },
+      "response": [
+        {
+          "name": "Получить TopK слов по диалогу",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"user_id\": 1,\r\n    \"messages\": [\r\n        { \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\"},\r\n        { \"role\": \"ai\", \"content\": \"Sure, here is your daily ex....\"},\r\n        { \"role\": \"user\", \"content\": \"...\"},\r\n        { \"role\": \"ai\", \"content\": \"...\"}\r\n    ],\r\n    \"topK\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "/embedder/topk",
+              "path": [
+                "embedder",
+                "topk"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\r\n    \"words\": [\r\n        { \"word\": \"banana\", \"distance\": 0.12 },\r\n        { \"word\": \"exercise\", \"distance\": 0.15 }\r\n    ],\r\n    \"topK\": 2\r\n}"
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "/health",
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Проверка состояния сервиса"
+      },
+      "response": []
+    }
+  ]
+}
