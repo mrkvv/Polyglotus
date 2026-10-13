@@ -1,166 +1,60 @@
 {
   "info": {
-    "_postman_id": "f2e3cc76-496f-4cde-9259-1064d5848859",
+    "_postman_id": "95fd74d7-bf7d-4565-a375-853af4d0f889",
     "name": "API Gateway",
     "description": "Раздел, посвященный единой точке входа в бекенд проекта. Frontend обращается именно сюда и практически в каждый свой запрос вставляет токен пользователя.\n\nAPI Gateway осуществляет 3 основные функции:\n\n- Маршрутизация: после получения запроса, проводит его через цепочку фильтров и если все хорошо, то пробрасывает запрос дальше в нужный сервис. Если что-то пошло не так (не пройдена аутентификация / нарушен rate-limit), то запрос не идет дальше, а падает уже здесь.\n    \n- Аутентификация: осуществляется через сессии, которые хранятся в Redis. Роуты для регистрации и входа в аккаунт генерируют пользовательский токен, который следует запомнить на клиенте и в каждом запросе, где требуется аутентифицировать пользователя, необходимо прикреплять этот токен в заголовок \"Authorization\" с ключом \"Bearer <вставить токен>\". Если токен неверный, то запрос падает с ошибкой \"401 Not Authorized\".\n    \n- Rate-limiting: защита от дудос атак. Осуществляется через подсчет в Redis количества действий от определенного пользователя за последнюю минуту. Если счетчик превышает заранее выставленное нами значение, то запрос падает с ошибкой \"429 Too Many Requests\".\n    \n\nДалее коды ответов 401, 422, 429 и 500 указаны не будет, но нужно знать, что:\n\n- 429 может вылететь в любом запросе, когда запросы отправляются слишком быстро: подсчет будет идти и по id пользователя и по его ip.\n    \n- 401 только там, где нужно в заголовок вставлять токен. Если она вылетела, значит либо нет токена, либо он неверный / истек срок действия.\n    \n- 422 может вылезти везде, если структура тела несоответствует ожидаемому (нет какого-либо важного поля или в названии поля допущена ошибка)\n    \n- 500 может выпасть везде, это значит что БД (или Redis) упали",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "53202645",
-    "_collection_link": "https://go.postman.co/collection/53202645-f2e3cc76-496f-4cde-9259-1064d5848859?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/53202645-95fd74d7-bf7d-4565-a375-853af4d0f889?source=collection_link"
   },
   "item": [
     {
       "name": "to UserService",
       "item": [
         {
-          "name": "Регистрация",
+          "name": "Вход через яндекс",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"mrkv\",\r\n    \"password\": \"mrkv_password\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
+            "method": "GET",
+            "header": [],
             "url": {
-              "raw": "/auth/register",
+              "raw": "/auth/yandex",
               "path": [
                 "auth",
-                "register"
+                "yandex"
               ]
             },
-            "description": "Заносит пользователя в БД, генерирует токен сессии, добавляет его в Redis и возвращает в ответ. Токен сессии следует запомнить на клиенте.\n\nВозможные коды ответа:\n\n- 201 Created - пользователь успешно создан\n    \n- 400 Bad Request - что-то не так с паролем или логином\n    \n- 409 Conflict - username занят"
+            "description": "После нажатия на кнопку \"Войти через Яндекс\" пользователь делает этот запрос.\n\nUserService берет client_id нашего приложения в системе Яндекса и возвращает редирект ссылку на вход.\n\nДалее пользователь находится на ресурсе яндекса и подтверждает вход.\n\nПосле входа пользователя в свой аккаунт, яндекс редиректит пользователя на фронтенд на специальную страничку. Что-то типа такого: /auth/callback?code=..., где code - поле, которое нужно вытащить и отправить в запросе \"Обмен кода Яндекс на токен\". Поле code - одноразовое, поэтому то, что оно фигурирует в ссылке - ничего страшного."
           },
           "response": [
             {
-              "name": "Success",
+              "name": "Редирект в Яндекс",
               "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"mrkv\",\r\n    \"password\": \"mrkv_password\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
+                "method": "GET",
+                "header": [],
                 "url": {
-                  "raw": "/auth/register",
+                  "raw": "/auth/yandex",
                   "path": [
                     "auth",
-                    "register"
+                    "yandex"
                   ]
                 }
               },
-              "status": "Created",
-              "code": 201,
-              "_postman_previewlanguage": "json",
+              "status": "Found",
+              "code": 302,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "key": "Location",
+                  "value": "https://oauth.yandex.ru/authorize?client_id=...&redirect_uri=...&response_type=code&scope=login:info&state=..."
                 }
               ],
               "cookie": [],
-              "body": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\",\r\n    \"user\": {\r\n        \"id\": 1,\r\n        \"name\": \"mrkv\",\r\n        \"createdAt\": \"2026-10-04T09:31:41.265238\"\r\n    }\r\n}"
-            },
-            {
-              "name": "Ник занят",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"mrkv\",\r\n    \"password\": \"mrkv_password\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "/auth/register",
-                  "path": [
-                    "auth",
-                    "register"
-                  ]
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "cookie": [],
-              "body": "{\r\n    \"message\": \"Username already exists\"\r\n}"
-            },
-            {
-              "name": "Короткий пароль",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"mrkv\",\r\n    \"password\": \"hi\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "/auth/register",
-                  "path": [
-                    "auth",
-                    "register"
-                  ]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "cookie": [],
-              "body": "{\r\n    \"message\": \"too short password (<8 symbols)\"\r\n}"
+              "body": ""
             }
           ]
         },
         {
-          "name": "Вход в аккаунт",
+          "name": "Обмен кода Яндекс на токен",
           "request": {
             "method": "POST",
             "header": [
@@ -171,7 +65,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"mrkv\",\r\n    \"password\": \"mrkv_password\"\r\n}",
+              "raw": "{\r\n    \"code\": \"....\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -179,17 +73,17 @@
               }
             },
             "url": {
-              "raw": "/auth/login",
+              "raw": "/auth/yandex",
               "path": [
                 "auth",
-                "login"
+                "yandex"
               ]
             },
-            "description": "Генерирует токен сессии, вносит его в Redis и отправляет в ответ. Токен следует запомнить на клиенте.\n\nВозможные коды ответов:\n\n- 200 OK\n    \n- 401 Unauthorized - введенны неверные данные (токен следовательно сгенерирован не будет)"
+            "description": "Нужен для генерации сессии и заполнении информации о пользователе в БД."
           },
           "response": [
             {
-              "name": "Success",
+              "name": "Обмен кода Яндекс на токен",
               "originalRequest": {
                 "method": "POST",
                 "header": [
@@ -200,7 +94,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"mrkv\",\r\n    \"password\": \"mrkv_password\"\r\n}",
+                  "raw": "{\r\n    \"code\": \"....\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -208,10 +102,10 @@
                   }
                 },
                 "url": {
-                  "raw": "/auth/login",
+                  "raw": "/auth/yandex",
                   "path": [
                     "auth",
-                    "login"
+                    "yandex"
                   ]
                 }
               },
@@ -225,7 +119,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\",\n    \"user\": {\n        \"id\": 1,\n        \"name\": \"mrkv\",\n        \"createdAt\": \"2026-10-04T09:31:41.265238\"\n    }\n}"
+              "body": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\",\r\n    \"firstName\": \"Иван\",\r\n    \"lastName\": \"Иванов\",\r\n    \"id\": 1\r\n}"
             }
           ]
         },
@@ -315,21 +209,6 @@
           ]
         },
         {
-          "name": "Вход через яндекс",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "/auth/yandex",
-              "path": [
-                "auth",
-                "yandex"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Первичная настройка",
           "request": {
             "auth": {
@@ -401,7 +280,7 @@
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "text",
-              "header": null,
+              "header": [],
               "cookie": [],
               "body": ""
             }
@@ -458,218 +337,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": 1,\n    \"name\": \"mrkv\",\n    \"levelId\": 3,\n    \"avatarId\": 2,\n    \"topicIds\": [1, 3, 7],\n    \"streak\": {\n        \"current\": 1,\n        \"longest\": 10,\n        \"lastTrainingDate\": \"2026-10-04\"\n    },\n    \"createdAt\": \"2026-10-04T09:31:41.265238\"\n}"
-            }
-          ]
-        },
-        {
-          "name": "Удалить аккаунт",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
-            "url": {
-              "raw": "/users/me",
-              "path": [
-                "users",
-                "me"
-              ]
-            },
-            "description": "Удаляет аккаунт из БД, удаляет существующие сессии в Redis."
-          },
-          "response": [
-            {
-              "name": "Success",
-              "originalRequest": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "/users/me",
-                  "path": [
-                    "users",
-                    "me"
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": "text",
-              "header": null,
-              "cookie": [],
-              "body": ""
-            }
-          ]
-        },
-        {
-          "name": "Сменить пароль",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"old_password\": \"mrkv_password\",\r\n  \"new_password\": \"new_mrkv_password\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "/users/me/password",
-              "path": [
-                "users",
-                "me",
-                "password"
-              ]
-            },
-            "description": "Изменяет пароль пользователя на новый.\n\nВозможные коды ответов:\n\n- 204 No Content - пароль сменен\n    \n- 401 Unauthorized - был введен неверный старый пароль\n    \n- 400 Bad Request - что-то не так с новым паролем (слишком маленький, странные символы)"
-          },
-          "response": [
-            {
-              "name": "Success",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"old_password\": \"mrkv_password\",\r\n  \"new_password\": \"new_mrkv_password\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "/users/me/password",
-                  "path": [
-                    "users",
-                    "me",
-                    "password"
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": "text",
-              "header": null,
-              "cookie": [],
-              "body": ""
-            }
-          ]
-        },
-        {
-          "name": "Сменить ник",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"new_name\": \"mrkv4449\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "/users/me/name",
-              "path": [
-                "users",
-                "me",
-                "name"
-              ]
-            },
-            "description": "Изменяет ник пользователя, в ответе возвращает новое значение.\n\nВозможные коды ответов:\n\n- 200 OK\n    \n- 400 Bad Request - с новым ником что-то не так\n    \n- 409 Conflict - новый ник уже занят"
-          },
-          "response": [
-            {
-              "name": "Success",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"new_name\": \"mrkv4449\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "/users/me/name",
-                  "path": [
-                    "users",
-                    "me",
-                    "name"
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "cookie": [],
-              "body": "{\r\n    \"name\": \"mrkv4449\"\r\n}"
+              "body": "{\n    \"id\": 1,\n    \"yandexId\": 108232,\n    \"firstName\": \"Иван\",\n    \"lastName\": \"Иванов\",\n    \"levelId\": 3,\n    \"avatarId\": 2,\n    \"topicIds\": [1, 3, 7],\n    \"streak\": {\n        \"current\": 1,\n        \"longest\": 10,\n        \"lastTrainingDate\": \"2026-10-04\"\n    },\n    \"createdAt\": \"2026-10-04T09:31:41.265238\"\n}"
             }
           ]
         },
@@ -951,7 +619,7 @@
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "text",
-              "header": null,
+              "header": [],
               "cookie": [],
               "body": "{\r\n    \"levels\": [\r\n        { \"id\": 1, \"name\": \"A1\" },\r\n        { \"id\": 2, \"name\": \"A2\" },\r\n        { \"id\": 3, \"name\": \"B1\" },\r\n        { \"id\": 4, \"name\": \"B2\" },\r\n        { \"id\": 5, \"name\": \"C1\" },\r\n        { \"id\": 6, \"name\": \"C2\" }\r\n    ],\r\n    \"topics\": [\r\n        { \"id\": 1, \"name\": \"Sport\" },\r\n        { \"id\": 2, \"name\": \"Travel\" },\r\n        { \"id\": 3, \"name\": \"Food\" },\r\n        { \"id\": 4, \"name\": \"Technology\" },\r\n        { \"id\": 5, \"name\": \"Music\" }\r\n    ]\r\n    \"avatars\": [\r\n        { \"id\": 1, \"svg\": \"<svg >...</svg>\" },\r\n        { \"id\": 2, \"svg\": \"<svg >...</svg>\" }\r\n    ]\r\n}"
             }
@@ -1127,7 +795,7 @@
               "status": "No Content",
               "code": 204,
               "_postman_previewlanguage": "text",
-              "header": null,
+              "header": [],
               "cookie": [],
               "body": ""
             }
@@ -1447,7 +1115,7 @@
               "status": "No Content",
               "code": 204,
               "_postman_previewlanguage": "text",
-              "header": null,
+              "header": [],
               "cookie": [],
               "body": ""
             }
@@ -1663,7 +1331,7 @@
               "status": "No Content",
               "code": 204,
               "_postman_previewlanguage": "text",
-              "header": null,
+              "header": [],
               "cookie": [],
               "body": ""
             }
@@ -1736,7 +1404,7 @@
               "status": "No Content",
               "code": 204,
               "_postman_previewlanguage": "text",
-              "header": null,
+              "header": [],
               "cookie": [],
               "body": ""
             }
