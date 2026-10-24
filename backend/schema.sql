@@ -52,38 +52,38 @@ CREATE TABLE motivational_phrases(
     phrase TEXT NOT NULL
 );
 
-CREATE TABLE words(
+CREATE TABLE en_words(
     id SERIAL PRIMARY KEY,
-    en VARCHAR(255) UNIQUE NOT NULL,
+    word VARCHAR(255) UNIQUE NOT NULL,
     embedding VECTOR(384) DEFAULT NULL
 );
 
-CREATE TABLE translations(
+CREATE TABLE ru_words (
     id SERIAL PRIMARY KEY,
-    ru VARCHAR(255) UNIQUE NOT NULL
+    word VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE dictionary(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) NOT NULL,
-    word_id INTEGER REFERENCES words(id) NOT NULL,
-    translation_id INTEGER REFERENCES translations(id) NOT NULL,
+    en_word INTEGER REFERENCES en_words(id) NOT NULL,
+    ru_word INTEGER REFERENCES ru_words(id) NOT NULL,
     part_of_speech VARCHAR(50) NOT NULL,
     progress_count INTEGER DEFAULT 0 NOT NULL,
     status VARCHAR(50) CHECK (status IN ('UNLEARNED', 'LEARNED')) DEFAULT 'UNLEARNED',
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_dictionary_record UNIQUE (user_id, word_id, translation_id, part_of_speech)
+    CONSTRAINT unique_dictionary_record UNIQUE (user_id, en_word, ru_word, part_of_speech)
 );
 
 CREATE TABLE daily_words(
     date DATE PRIMARY KEY,
-    word_id INTEGER REFERENCES words(id) NOT NULL,
-    translation_id INTEGER REFERENCES translations(id) NOT NULL
+    en_word INTEGER REFERENCES en_words(id) NOT NULL,
+    ru_word INTEGER REFERENCES ru_words(id) NOT NULL
 );
 
 CREATE INDEX idx_chat_messages_user ON chat_messages(user_id);
 CREATE INDEX idx_dictionary_user ON dictionary(user_id);
 CREATE INDEX idx_user_topics_user ON user_topics(user_id);
 
-CREATE INDEX idx_words_embedding ON words
+CREATE INDEX idx_words_embedding ON en_words
     USING hnsw (embedding vector_cosine_ops);
