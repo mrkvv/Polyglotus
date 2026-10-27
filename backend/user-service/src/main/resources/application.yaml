@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: user-service
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5433}/${POSTGRES_DB:testdb}
+    username: ${POSTGRES_USER:testuser}
+    password: ${POSTGRES_PASSWORD:testpass}
+    driver: org.postgresql.Driver
+
+server:
+  port: 8082
+
+yandex:
+  client-id: ${YANDEX_CLIENT_ID}
+  client-secret: ${YANDEX_CLIENT_SECRET}
+  redirect-uri: ${YANDEX_REDIRECT_URI:http://localhost:3000/auth/callback}
