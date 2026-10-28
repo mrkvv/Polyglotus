@@ -78,6 +78,43 @@ services:
       YANDEX_CLIENT_ID: ${YANDEX_CLIENT_ID}
       YANDEX_CLIENT_SECRET: ${YANDEX_CLIENT_SECRET}
       YANDEX_REDIRECT_URI: ${YANDEX_REDIRECT_URI}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - polyglotus-network
+    deploy:
+      resources:
+        limits:
+          memory: "768M"
+          cpus: "0.5"
+        reservations:
+          memory: "384M"
+          cpus: "0.3"
+
+  api-gateway:
+    build: ./backend/api-gateway
+    container_name: polyglotus-api-gateway
+    ports:
+      - "${GATEWAY_PORT}:8000"
+    depends_on:
+      user-service:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      USER_SERVICE_URL: http://user-service:8082
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - polyglotus-network
     deploy:
