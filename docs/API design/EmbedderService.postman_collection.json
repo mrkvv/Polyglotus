@@ -1,11 +1,11 @@
 {
   "info": {
-    "_postman_id": "63f7e988-6582-48b0-b1eb-1ab5f2295b24",
+    "_postman_id": "b6c80349-da43-4c3c-b62c-07380a51a7f4",
     "name": "EmbedderService",
     "description": "Сервис, работающий с маленькой Embedder-моделькой, задача которой в фоне считать вектора для всех слов внутри нашего приложения.\n\nТак же в ее задачи входит отбор TopK подходящих под диалог слов.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "53202645",
-    "_collection_link": "https://go.postman.co/collection/53202645-63f7e988-6582-48b0-b1eb-1ab5f2295b24?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/53202645-b6c80349-da43-4c3c-b62c-07380a51a7f4?source=collection_link"
   },
   "item": [
     {
@@ -20,7 +20,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"user_id\": 1,\r\n    \"messages\": [\r\n        { \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\"},\r\n        { \"role\": \"ai\", \"content\": \"Sure, here is your daily ex....\"},\r\n        { \"role\": \"user\", \"content\": \"...\"},\r\n        { \"role\": \"ai\", \"content\": \"...\"}\r\n    ],\r\n    \"topK\": 20\r\n}",
+          "raw": "{\r\n    \"userId\": 1,\r\n    \"messages\": [\r\n        { \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\"},\r\n        { \"role\": \"ai\", \"content\": \"Sure, here is your daily ex....\"},\r\n        { \"role\": \"user\", \"content\": \"...\"},\r\n        { \"role\": \"ai\", \"content\": \"...\"}\r\n    ],\r\n    \"topK\": 20\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -49,7 +49,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"user_id\": 1,\r\n    \"messages\": [\r\n        { \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\"},\r\n        { \"role\": \"ai\", \"content\": \"Sure, here is your daily ex....\"},\r\n        { \"role\": \"user\", \"content\": \"...\"},\r\n        { \"role\": \"ai\", \"content\": \"...\"}\r\n    ],\r\n    \"topK\": 2\r\n}",
+              "raw": "{\r\n    \"userId\": 1,\r\n    \"messages\": [\r\n        { \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\"},\r\n        { \"role\": \"ai\", \"content\": \"Sure, here is your daily ex....\"},\r\n        { \"role\": \"user\", \"content\": \"...\"},\r\n        { \"role\": \"ai\", \"content\": \"...\"}\r\n    ],\r\n    \"topK\": 2\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
