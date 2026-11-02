@@ -1,10 +1,28 @@
-import { LoginForm } from '@features/auth'
 import './LoginPage.scss'
+import {Button, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import yandexLogo from './YandexLogo.svg'
 
 export function LoginPage() {
+  const { t } = useTranslation();
+
   return (
     <div className="LoginPage">
-      <LoginForm />
+      <Typography className='LoginPage__Header' variant='h1'>
+        {t('AuthPage.greeting')}
+      </Typography>
+      <Button
+        className="LoginPage__AuthButton"
+        sx={{
+          textTransform: 'none',
+          backgroundColor: '#000000',
+          color: '#ffffff',
+          borderRadius: '45px',
+        }}
+      >
+        <img src={yandexLogo}/>
+        <span className="LoginPage__AuthButton-text">{t('AuthPage.loginButton')}</span>
+      </Button>
     </div>
   )
 }

@@ -1,0 +1,14 @@
+{
+	"AuthPage": {
+		"greeting": "Добро пожаловать в Polyglotus",
+		"loginButton": "Войти с Яндекс ID"
+	},
+  "header": {
+    "title": "Добро пожаловать",
+    "subtitle": "Это мое приложение"
+  },
+  "buttons": {
+    "save": "Сохранить",
+    "cancel": "Отмена"
+  }
+}
