@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '@features/auth'
-import { ROUTES } from '@shared/config/routes'
 import './Sidebar.scss'
 
 function IconHome() {
@@ -57,7 +56,7 @@ export function Sidebar() {
       {/* Навигация */}
       <nav className="Sidebar__Nav">
         <NavLink
-          to={ROUTES.HOME}
+          to="/"
           className={({ isActive }) =>
             `Sidebar__Nav__Item${isActive ? ' Sidebar__Nav__Item--active' : ''}`
           }

@@ -1,7 +1,6 @@
 import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../model/AuthContext'
-import { ROUTES } from '@shared/config/routes'
 import users from '../../data/users.json'
 import './LoginForm.scss'
 
@@ -19,7 +18,7 @@ export function LoginForm() {
     )
     if (found) {
       login(found.username)
-      navigate(ROUTES.HOME)
+      navigate('/')
     } else {
       setError('Неверный логин или пароль')
     }
