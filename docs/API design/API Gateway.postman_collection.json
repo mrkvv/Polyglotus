@@ -1,11 +1,11 @@
 {
   "info": {
-    "_postman_id": "b20b145f-f822-4dbb-ad87-048b9f489e68",
+    "_postman_id": "ec9e1505-e377-46ab-a864-ae58e8de2de1",
     "name": "API Gateway",
     "description": "Раздел, посвященный единой точке входа в бекенд проекта. Frontend обращается именно сюда и практически в каждый свой запрос вставляет токен пользователя.\n\nAPI Gateway осуществляет 3 основные функции:\n\n- Маршрутизация: после получения запроса, проводит его через цепочку фильтров и если все хорошо, то пробрасывает запрос дальше в нужный сервис. Если что-то пошло не так (не пройдена аутентификация / нарушен rate-limit), то запрос не идет дальше, а падает уже здесь.\n    \n- Аутентификация: осуществляется через сессии, которые хранятся в Redis. Роуты для регистрации и входа в аккаунт генерируют пользовательский токен, который следует запомнить на клиенте и в каждом запросе, где требуется аутентифицировать пользователя, необходимо прикреплять этот токен в заголовок \"Authorization\" с ключом \"Bearer <вставить токен>\". Если токен неверный, то запрос падает с ошибкой \"401 Not Authorized\".\n    \n- Rate-limiting: защита от дудос атак. Осуществляется через подсчет в Redis количества действий от определенного пользователя за последнюю минуту. Если счетчик превышает заранее выставленное нами значение, то запрос падает с ошибкой \"429 Too Many Requests\".\n    \n\nДалее коды ответов 401, 422, 429 и 500 указаны не будет, но нужно знать, что:\n\n- 429 может вылететь в любом запросе, когда запросы отправляются слишком быстро: подсчет будет идти и по id пользователя и по его ip.\n    \n- 401 только там, где нужно в заголовок вставлять токен. Если она вылетела, значит либо нет токена, либо он неверный / истек срок действия.\n    \n- 422 может вылезти везде, если структура тела несоответствует ожидаемому (нет какого-либо важного поля или в названии поля допущена ошибка)\n    \n- 500 может выпасть везде, это значит что БД (или Redis) упали",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "53202645",
-    "_collection_link": "https://go.postman.co/collection/53202645-b20b145f-f822-4dbb-ad87-048b9f489e68?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/53202645-ec9e1505-e377-46ab-a864-ae58e8de2de1?source=collection_link"
   },
   "item": [
     {
@@ -1289,6 +1289,85 @@
           ]
         },
         {
+          "name": "Редактировать слово",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"en\": \"river\",\r\n    \"ru\": \"река\",\r\n    \"partOfSpeech\": \"noun\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "/dictionary/words/{id}",
+              "path": [
+                "dictionary",
+                "words",
+                "{id}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Редактировать слово",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"en\": \"river\",\r\n    \"ru\": \"река\",\r\n    \"partOfSpeech\": \"noun\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "/dictionary/words/14",
+                  "path": [
+                    "dictionary",
+                    "words",
+                    "14"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\r\n    \"id\": 14,\r\n    \"en\": \"river\",\r\n    \"ru\": \"река\",\r\n    \"partOfSpeech\": \"noun\",\r\n    \"progressCount\": 0,\r\n    \"status\": \"LEARNED\",\r\n    \"addedAt\": \"2026-11-03 00:38:37.509281\"\r\n}"
+            }
+          ]
+        },
+        {
           "name": "Удалить слово из словаря",
           "request": {
             "method": "DELETE",
@@ -1434,10 +1513,11 @@
               }
             },
             "url": {
-              "raw": "/dictionary/words/{id}",
+              "raw": "/dictionary/words/status/{id}",
               "path": [
                 "dictionary",
                 "words",
+                "status",
                 "{id}"
               ]
             },
@@ -1468,10 +1548,11 @@
                   }
                 },
                 "url": {
-                  "raw": "/dictionary/words/1049",
+                  "raw": "/dictionary/words/status/1049",
                   "path": [
                     "dictionary",
                     "words",
+                    "status",
                     "1049"
                   ]
                 }
@@ -1514,13 +1595,14 @@
               }
             },
             "url": {
-              "raw": "/dictionary/words",
+              "raw": "/dictionary/words/status",
               "path": [
                 "dictionary",
-                "words"
+                "words",
+                "status"
               ]
             },
-            "description": "Изменение статуса у пачки - тоже необходимо для реализации массовости через чекбоксы. Возвращает в ответ обновленные состояния слов из базы.\n\nВозможные варианты ответов:\n\n- 200 OK\n    \n- 400 Bad Request - недопустимое значение в поле статус\n    \n\n404 тут не возвращается, бекенд просто пытается обновить то, что сможет."
+            "description": "Изменение статуса у пачки - тоже необходимо для реализации массовости через чекбоксы.\n\nВозможные варианты ответов:\n\n- 204 No Content - все прошло хорошо\n    \n- 400 Bad Request - недопустимое значение в поле статус\n    \n\n404 тут не возвращается, бекенд просто пытается обновить то, что сможет."
           },
           "response": [
             {
@@ -1547,15 +1629,16 @@
                   }
                 },
                 "url": {
-                  "raw": "/dictionary/words",
+                  "raw": "/dictionary/words/status",
                   "path": [
                     "dictionary",
-                    "words"
+                    "words",
+                    "status"
                   ]
                 }
               },
-              "status": "OK",
-              "code": 200,
+              "status": "No Content",
+              "code": 204,
               "_postman_previewlanguage": "json",
               "header": [
                 {
@@ -1564,7 +1647,7 @@
                 }
               ],
               "cookie": [],
-              "body": "[\n    {\n        \"id\": 1049,\n        \"en\": \"apple\",\n        \"ru\": \"яблоко\",\n        \"partOfSpeech\": \"noun\",\n        \"progressCount\": 3,\n        \"status\": \"LEARNED\",\n        \"addedAt\": \"2026-10-04T09:31:41.265238\"\n    },\n    {\n        \"id\": 2120,\n        \"en\": \"ice\",\n        \"ru\": \"лед\",\n        \"partOfSpeech\": \"noun\",\n        \"progressCount\": 3,\n        \"status\": \"LEARNED\",\n        \"addedAt\": \"2026-10-06T09:31:41.265238\"\n    }\n]"
+              "body": ""
             }
           ]
         },
@@ -1666,7 +1749,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\r\n    \"date\": \"2026-10-06\",\r\n    \"word\": \"run\",\r\n    \"translation\": \"управлять\"\r\n}"
+              "body": "{\r\n    \"date\": \"2026-10-06\",\r\n    \"word\": \"run\"\r\n}"
             }
           ]
         },
