@@ -77,8 +77,7 @@ CREATE TABLE dictionary(
 
 CREATE TABLE daily_words(
     date DATE PRIMARY KEY,
-    en_word INTEGER REFERENCES en_words(id) NOT NULL,
-    ru_word INTEGER REFERENCES ru_words(id) NOT NULL
+    en_word INTEGER REFERENCES en_words(id) NOT NULL
 );
 
 CREATE INDEX idx_chat_messages_user ON chat_messages(user_id);
