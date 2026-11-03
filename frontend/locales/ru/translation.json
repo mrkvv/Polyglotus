@@ -1,14 +1,9 @@
 {
-	"AuthPage": {
-		"greeting": "Добро пожаловать в Polyglotus",
-		"loginButton": "Войти с Яндекс ID"
-	},
-  "header": {
-    "title": "Добро пожаловать",
-    "subtitle": "Это мое приложение"
-  },
-  "buttons": {
-    "save": "Сохранить",
-    "cancel": "Отмена"
-  }
+  "greeting": "Добро пожаловать в Polyglotus",
+  "loginButton": "Войти с Яндекс ID",
+  "customizeHeader": "Настроим всё под вас. Это займёт минуту",
+  "customizeStep1": "Шаг 1. Выберите аватар",
+  "customizeStep2": "Шаг 2. Укажите ваш уровень знаний",
+  "customizeStep3": "Шаг 3. Выберите интересные вам темы",
+  "continue": "Продолжить"
 }

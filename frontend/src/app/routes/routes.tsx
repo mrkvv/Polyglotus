@@ -1,13 +1,40 @@
-import { createBrowserRouter, redirect, Outlet } from 'react-router-dom'
-import { ROUTES } from '@shared/config/routes'
-import { userStore } from '@entities/user'
+import { createBrowserRouter, Navigate, Outlet, useMatch } from 'react-router-dom'
+import { userStore, onboardingStore } from '@entities/user'
 import { Sidebar } from '@widgets/sidebar'
 import { LoginPage } from '@pages/login-page'
 import { HomePage } from '@pages/home-page'
+import { Step1Page } from '@pages/step-1-page'
+import { Step2Page } from '@pages/step-2-page'
+import { Step3Page } from '@pages/step-3-page'
 import "./routes.scss"
 
-// ─── Лэйаут защищённой зоны (сайд-бар + контент) ────────
+// ─── Публичный лэйаут: авторизованных отправляем домой ───
+function PublicLayout() {
+  if (userStore.get()) return <Navigate to="/" replace />
+  return <Outlet />
+}
+
+// ─── Онбординг-лэйаут: защищает шаги от прямого перехода ─
+function OnboardingLayout() {
+  // Определяем номер текущего шага из URL (/login/step-N)
+  const step1 = useMatch('/login/step-1')
+  const step2 = useMatch('/login/step-2')
+  const step3 = useMatch('/login/step-3')
+
+  const currentStep = step1 ? 1 : step2 ? 2 : step3 ? 3 : 1
+
+  if (!onboardingStore.canAccess(currentStep)) {
+    // Редиректим на последний доступный шаг
+    const completed = onboardingStore.getCompletedStep()
+    return <Navigate to={`/login/step-${completed + 1}`} replace />
+  }
+
+  return <Outlet />
+}
+
+// ─── Защищённый лэйаут: неавторизованных на логин ────────
 function ProtectedLayout() {
+  if (!userStore.get()) return <Navigate to="/login" replace />
   return (
     <div className="ProtectedLayout">
       <Sidebar />
@@ -23,36 +50,33 @@ export const router = createBrowserRouter([
 
   // ── Публичные маршруты ──────────────────────────────────
   {
-    path: ROUTES.LOGIN,
-    element: <LoginPage />,
-    loader: () => {
-      // Уже авторизован — не пускаем на логин
-      if (userStore.get()) return redirect(ROUTES.HOME)
-      return null
-    },
+    element: <PublicLayout />,
+    children: [
+      { path: '/login', element: <LoginPage /> },
+    ],
+  },
+
+  // ── Онбординг (публичный, но с защитой порядка шагов) ───
+  {
+    element: <OnboardingLayout />,
+    children: [
+      { path: '/login/step-1', element: <Step1Page /> },
+      { path: '/login/step-2', element: <Step2Page /> },
+      { path: '/login/step-3', element: <Step3Page /> },
+    ],
   },
 
   // ── Защищённые маршруты ─────────────────────────────────
   {
-    path: ROUTES.HOME,
     element: <ProtectedLayout />,
-    loader: () => {
-      // Не авторизован — на страницу логина
-      if (!userStore.get()) return redirect(ROUTES.LOGIN)
-      return null
-    },
     children: [
-      {
-        index: true,
-        element: <HomePage />,
-      },
+      { path: '/', element: <HomePage /> },
     ],
   },
 
   // ── Fallback ────────────────────────────────────────────
   {
     path: '*',
-    loader: () => redirect(ROUTES.HOME),
-    element: null,
+    element: <Navigate to="/" replace />,
   },
 ])

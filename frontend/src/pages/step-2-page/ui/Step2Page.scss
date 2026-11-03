@@ -1,0 +1,22 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.Step2Page {
+  @include flex-center;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  height: 100%;
+
+  &__Header {
+    font-size: 48px;
+    font-weight: 700;
+    color: $color-text;
+    letter-spacing: -1px;
+    text-align: center;
+  }
+
+  &__Form {
+    padding: 16px;
+  }
+}
