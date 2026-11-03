@@ -20,7 +20,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private static final List<String> PUBLIC_PATHS = List.of(
             "/auth/yandex",
             "/auth/logout",
-            "/references"
+            "/references",
+            "/daily-word",
+            "/phrase"
     );
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
