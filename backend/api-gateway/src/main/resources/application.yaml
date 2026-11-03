@@ -19,3 +19,7 @@ server:
 user:
   service:
     url: ${USER_SERVICE_URL:http://localhost:8082}
+
+dictionary:
+  service:
+    url: ${DICTIONARY_SERVICE_URL:http://localhost:8083}
