@@ -16,6 +16,10 @@ export function LoginPage() {
       <Button
         className="LoginPage__AuthButton"
         onClick={() => navigate('/login/step-1')}
+        {t('AuthPage.greeting')}
+      </Typography>
+      <Button
+        className="LoginPage__AuthButton"
         sx={{
           textTransform: 'none',
           backgroundColor: '#000000',
@@ -27,6 +31,7 @@ export function LoginPage() {
         <span className="LoginPage__AuthButton-text">
           {t('loginButton')}
         </span>
+        <span className="LoginPage__AuthButton-text">{t('AuthPage.loginButton')}</span>
       </Button>
     </div>
   )
