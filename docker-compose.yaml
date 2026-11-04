@@ -167,11 +167,14 @@ services:
         condition: service_healthy
       dictionary-service:
         condition: service_healthy
+      training-service:
+        condition: service_healthy
       redis:
         condition: service_healthy
     environment:
       USER_SERVICE_URL: http://user-service:8082
       DICTIONARY_SERVICE_URL: http://dictionary-service:8083
+      TRAINING_SERVICE_URL: http://training-service:8084
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
     healthcheck:
