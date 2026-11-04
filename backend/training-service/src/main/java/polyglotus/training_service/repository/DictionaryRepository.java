@@ -31,6 +31,7 @@ public class DictionaryRepository {
             WHERE d.user_id = ?
                    AND en.word NOT IN (%s)
                    AND d.part_of_speech = ?
+            GROUP BY en.word
             ORDER BY RANDOM()
             LIMIT ?
             """;
@@ -41,6 +42,7 @@ public class DictionaryRepository {
             JOIN en_words en ON d.en_word = en.id
             WHERE en.word NOT IN (%s)
                   AND d.part_of_speech = ?
+            GROUP BY en.word
             ORDER BY RANDOM()
             LIMIT ?
             """;
@@ -50,6 +52,7 @@ public class DictionaryRepository {
             FROM dictionary d
             JOIN en_words en ON d.en_word = en.id
             WHERE en.word NOT IN (%s)
+            GROUP BY en.word
             ORDER BY RANDOM()
             LIMIT ?
             """;
@@ -61,6 +64,7 @@ public class DictionaryRepository {
             WHERE d.user_id = ?
                    AND ru.word NOT IN (%s)
                    AND d.part_of_speech = ?
+            GROUP BY ru.word
             ORDER BY RANDOM()
             LIMIT ?
             """;
@@ -71,6 +75,7 @@ public class DictionaryRepository {
             JOIN ru_words ru ON d.ru_word = ru.id
             WHERE ru.word NOT IN (%s)
                   AND d.part_of_speech = ?
+            GROUP BY ru.word
             ORDER BY RANDOM()
             LIMIT ?
             """;
@@ -80,6 +85,7 @@ public class DictionaryRepository {
             FROM dictionary d
             JOIN ru_words ru ON d.ru_word = ru.id
             WHERE ru.word NOT IN (%s)
+            GROUP BY ru.word
             ORDER BY RANDOM()
             LIMIT ?
             """;
