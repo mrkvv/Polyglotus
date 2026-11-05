@@ -75,7 +75,12 @@ public class DictionaryRepository {
 
     private static final String UPDATE_WORD_STATUS_SQL = """
             UPDATE dictionary
-            SET status = ?
+            SET status = ?,
+                progress_count = CASE ?
+                    WHEN 'LEARNED' THEN 3
+                    WHEN 'UNLEARNED' THEN 0
+                    ELSE progress_count
+                    END
             WHERE id = ? AND user_id = ?
             """;
 
@@ -165,7 +170,7 @@ public class DictionaryRepository {
     }
 
     public boolean setWordStatus(Integer userId, Integer wordId, String status) {
-        int affected = jdbcTemplate.update(UPDATE_WORD_STATUS_SQL, status, wordId, userId);
+        int affected = jdbcTemplate.update(UPDATE_WORD_STATUS_SQL, status, status, wordId, userId);
         return affected > 0;
     }
 
@@ -174,6 +179,7 @@ public class DictionaryRepository {
 
         for(Integer wordId : wordIds) {
             Object[] args = {
+                    status,
                     status,
                     wordId,
                     userId
