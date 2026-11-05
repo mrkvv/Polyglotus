@@ -23,3 +23,7 @@ user:
 dictionary:
   service:
     url: ${DICTIONARY_SERVICE_URL:http://localhost:8083}
+
+training:
+  service:
+    url: ${TRAINING_SERVICE_URL:http://localhost:8084}

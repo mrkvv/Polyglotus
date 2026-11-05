@@ -126,6 +126,36 @@ services:
           memory: "384M"
           cpus: "0.3"
 
+  training-service:
+    build: ./backend/training-service
+    container_name: polyglotus-training-service
+    ports:
+      - "${TRAINING_SERVICE_PORT}:8084"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - polyglotus-network
+    deploy:
+      resources:
+        limits:
+          memory: "768M"
+          cpus: "0.5"
+        reservations:
+          memory: "384M"
+          cpus: "0.3"
 
   api-gateway:
     build: ./backend/api-gateway
@@ -137,11 +167,14 @@ services:
         condition: service_healthy
       dictionary-service:
         condition: service_healthy
+      training-service:
+        condition: service_healthy
       redis:
         condition: service_healthy
     environment:
       USER_SERVICE_URL: http://user-service:8082
       DICTIONARY_SERVICE_URL: http://dictionary-service:8083
+      TRAINING_SERVICE_URL: http://training-service:8084
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
     healthcheck:
