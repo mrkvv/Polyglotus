@@ -57,6 +57,54 @@ services:
           cpus: "0.1"
 
 
+  ollama:
+    image: ollama/ollama:0.40.14
+    container_name: polyglotus-ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "${OLLAMA_PORT}:11434"
+    environment:
+      OLLAMA_KEEP_ALIVE: "30m"
+      OLLAMA_NUM_PARALLEL: 2
+      OLLAMA_MAX_LOADED_MODELS: 1
+    profiles: [ "llm" ]
+    healthcheck:
+      test: [ "CMD-SHELL", "ollama list > /dev/null 2>&1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - polyglotus-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  ollama-init:
+    image: ollama/ollama:0.40.14
+    container_name: polyglotus-ollama-init
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: [ "/bin/sh", "-c" ]
+    command:
+      - |
+        echo "Pulling ${OLLAMA_MODEL} model..."
+        ollama pull ${OLLAMA_MODEL}
+        echo "Model pulled successfully."
+    networks:
+      - polyglotus-network
+    profiles: [ "llm" ]
+    restart: "no"
+
+
   user-service:
     build: ./backend/user-service
     container_name: polyglotus-user-service
@@ -197,6 +245,7 @@ services:
 volumes:
   pg_data:
   redis_data:
+  ollama_data:
 
 networks:
   polyglotus-network:
