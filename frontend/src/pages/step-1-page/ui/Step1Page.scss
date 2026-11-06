@@ -44,7 +44,7 @@
     }
 
     &--selected {
-      box-shadow: 0 0 0 6px #2E7D32;
+      box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px #2E7D32;
       background-color: $color-surface-hover;
       transform: scale(1.06);
     }

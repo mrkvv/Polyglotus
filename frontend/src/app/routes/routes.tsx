@@ -3,6 +3,7 @@ import { userStore, onboardingStore } from '@entities/user'
 import { Sidebar } from '@widgets/sidebar'
 import { LoginPage } from '@pages/login-page'
 import { HomePage } from '@pages/home-page'
+import { AuthCallbackPage } from '@pages/auth-callback-page'
 import { Step1Page } from '@pages/step-1-page'
 import { Step2Page } from '@pages/step-2-page'
 import { Step3Page } from '@pages/step-3-page'
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { path: '/login', element: <LoginPage /> },
+      { path: "/auth/callback", element: <AuthCallbackPage /> },
     ],
   },
 
