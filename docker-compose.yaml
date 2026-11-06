@@ -225,6 +225,7 @@ services:
       TRAINING_SERVICE_URL: http://training-service:8084
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
+      GATEWAY_ALLOWED_ORIGIN: ${GATEWAY_ALLOWED_ORIGIN}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8000/actuator/health" ]
       interval: 10s
