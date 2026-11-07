@@ -213,10 +213,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      ollama:
-        condition: service_healthy
-      ollama-init:
-        condition: service_completed_successfully
       embedder-service:
         condition: service_healthy
     environment:
@@ -228,7 +224,6 @@ services:
       EMBEDDER_SERVICE_URL: http://embedder-service:8086
       OLLAMA_HOST: http://ollama:11434
       OLLAMA_MODEL: ${OLLAMA_MODEL}
-    profiles: [ "llm" ]
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8085/actuator/health" ]
       interval: 10s
@@ -254,17 +249,12 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      ollama:
-        condition: service_healthy
-      ollama-init:
-        condition: service_completed_successfully
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: 5432
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    profiles: [ "llm" ]
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8086/actuator/health" ]
       interval: 10s
