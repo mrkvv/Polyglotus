@@ -205,6 +205,83 @@ services:
           memory: "384M"
           cpus: "0.3"
 
+  ai-service:
+    build: ./backend/ai-service
+    container_name: polyglotus-ai-service
+    ports:
+      - "${AI_SERVICE_PORT}:8085"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      ollama-init:
+        condition: service_completed_successfully
+      embedder-service:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      EMBEDDER_SERVICE_URL: http://embedder-service:8086
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL}
+    profiles: [ "llm" ]
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8085/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - polyglotus-network
+    deploy:
+      resources:
+        limits:
+          memory: "768M"
+          cpus: "0.5"
+        reservations:
+          memory: "384M"
+          cpus: "0.3"
+
+  embedder-service:
+    build: ./backend/embedder-service
+    container_name: polyglotus-embedder-service
+    ports:
+      - "${EMBEDDER_SERVICE_PORT}:8086"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      ollama-init:
+        condition: service_completed_successfully
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    profiles: [ "llm" ]
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8086/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - polyglotus-network
+    deploy:
+      resources:
+        limits:
+          memory: "768M"
+          cpus: "0.5"
+        reservations:
+          memory: "384M"
+          cpus: "0.3"
+
   api-gateway:
     build: ./backend/api-gateway
     container_name: polyglotus-api-gateway
