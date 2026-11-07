@@ -188,8 +188,76 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      AI_SERVICE_URL: http://ai-service:8085
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - polyglotus-network
+    deploy:
+      resources:
+        limits:
+          memory: "768M"
+          cpus: "0.5"
+        reservations:
+          memory: "384M"
+          cpus: "0.3"
+
+  ai-service:
+    build: ./backend/ai-service
+    container_name: polyglotus-ai-service
+    ports:
+      - "${AI_SERVICE_PORT}:8085"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      embedder-service:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      EMBEDDER_SERVICE_URL: http://embedder-service:8086
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8085/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - polyglotus-network
+    deploy:
+      resources:
+        limits:
+          memory: "768M"
+          cpus: "0.5"
+        reservations:
+          memory: "384M"
+          cpus: "0.3"
+
+  embedder-service:
+    build: ./backend/embedder-service
+    container_name: polyglotus-embedder-service
+    ports:
+      - "${EMBEDDER_SERVICE_PORT}:8086"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8086/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -217,12 +285,15 @@ services:
         condition: service_healthy
       training-service:
         condition: service_healthy
+      ai-service:
+        condition: service_healthy
       redis:
         condition: service_healthy
     environment:
       USER_SERVICE_URL: http://user-service:8082
       DICTIONARY_SERVICE_URL: http://dictionary-service:8083
       TRAINING_SERVICE_URL: http://training-service:8084
+      AI_SERVICE_URL: http://ai-service:8085
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
       GATEWAY_ALLOWED_ORIGIN: ${GATEWAY_ALLOWED_ORIGIN}

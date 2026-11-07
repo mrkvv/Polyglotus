@@ -30,3 +30,7 @@ dictionary:
 training:
   service:
     url: ${TRAINING_SERVICE_URL:http://localhost:8084}
+
+ai:
+  service:
+    url: ${AI_SERVICE_URL:http://localhost:8085}
