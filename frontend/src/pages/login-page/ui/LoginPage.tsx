@@ -8,6 +8,10 @@ export function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const handleYandexLogin = () => {
+    window.location.href = 'http://localhost:8000/auth/yandex'
+  }
+
   return (
     <div className="LoginPage">
       <Typography className='LoginPage__Header' variant='h1'>
@@ -15,11 +19,7 @@ export function LoginPage() {
       </Typography>
       <Button
         className="LoginPage__AuthButton"
-        onClick={() => navigate('/login/step-1')}
-        {t('AuthPage.greeting')}
-      </Typography>
-      <Button
-        className="LoginPage__AuthButton"
+        onClick={handleYandexLogin}
         sx={{
           textTransform: 'none',
           backgroundColor: '#000000',
@@ -31,7 +31,6 @@ export function LoginPage() {
         <span className="LoginPage__AuthButton-text">
           {t('loginButton')}
         </span>
-        <span className="LoginPage__AuthButton-text">{t('AuthPage.loginButton')}</span>
       </Button>
     </div>
   )
