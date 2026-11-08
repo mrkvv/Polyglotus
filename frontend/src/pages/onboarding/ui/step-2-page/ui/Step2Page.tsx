@@ -1,15 +1,25 @@
 import { useState } from 'react'
-import { Typography, Button, RadioGroup, FormControlLabel, Radio, FormControl, Paper } from '@mui/material'
+import {
+  Typography,
+  Button,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  FormControl,
+  Paper
+} from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { onboardingStore } from '@entities/user'
-import { LEVELS } from '../model/levels'
+import { useOnboardingContext } from '../../../model/useOnboardingContext';
 import './Step2Page.scss'
 
 export function Step2Page() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [selectedLevel, setSelectedLevel] = useState<string | null>(null)
+  const [selectedLevel, setSelectedLevel] = useState<number | null>(null)
+
+  const { levels } = useOnboardingContext()
 
   const handleContinue = () => {
     onboardingStore.completeStep(2)
@@ -29,14 +39,14 @@ export function Step2Page() {
         <FormControl component="fieldset">
           <RadioGroup
             value={selectedLevel}
-            onChange={(e) => setSelectedLevel(e.target.value)}
+            onChange={(e) => setSelectedLevel(Number(e.target.value))}
           >
-            {LEVELS.map((level) => (
+            {levels.map((level) => (
               <FormControlLabel
-                key={level.value}
-                value={level.value}
+                key={level.id}
+                value={level.id}
                 control={<Radio />}
-                label={`${level.label}. ${level.description}`}
+                label={level.name} 
               />
             ))}
           </RadioGroup>

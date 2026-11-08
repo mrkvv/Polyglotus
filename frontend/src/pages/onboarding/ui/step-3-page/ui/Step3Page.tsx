@@ -3,23 +3,30 @@ import { Typography, Button, Paper, Chip } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { onboardingStore } from '@entities/user'
-import { TOPICS } from '../model/topics'
+import { useOnboardingContext } from '../../../model/useOnboardingContext';
 import './Step3Page.scss'
 
 export function Step3Page() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+  
+  const [selected, setSelected] = useState<Set<number>>(new Set())
 
-  const toggleTopic = (value: string) => {
+  const { topics } = useOnboardingContext()
+
+  const toggleTopic = (id: number) => {
     setSelected((prev) => {
       const next = new Set(prev)
-      next.has(value) ? next.delete(value) : next.add(value)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
       return next
     })
   }
 
-  const handleContinue = () => {
+  const handleContinue = () => {    
     onboardingStore.completeStep(3)
     navigate('/')
   }
@@ -35,13 +42,13 @@ export function Step3Page() {
 
       <Paper className="Step3Page__Paper" variant="outlined" square={false}>
         <div className="Step3Page__Topics">
-          {TOPICS.map((topic) => (
+          {topics.map((topic) => (
             <Chip
-              key={topic.value}
-              label={topic.label}
-              variant={selected.has(topic.value) ? 'filled' : 'outlined'}
-              onClick={() => toggleTopic(topic.value)}
-              className={`Step3Page__Chip${selected.has(topic.value) ? ' Step3Page__Chip--selected' : ''}`}
+              key={topic.id}
+              label={topic.name}
+              variant={selected.has(topic.id) ? 'filled' : 'outlined'}
+              onClick={() => toggleTopic(topic.id)}
+              className={`Step3Page__Chip${selected.has(topic.id) ? ' Step3Page__Chip--selected' : ''}`}
             />
           ))}
         </div>

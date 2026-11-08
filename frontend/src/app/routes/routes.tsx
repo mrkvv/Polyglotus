@@ -1,39 +1,25 @@
-import { createBrowserRouter, Navigate, Outlet, useMatch } from 'react-router-dom'
-import { userStore, onboardingStore } from '@entities/user'
+// app/router/routes.tsx
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
+import { userStore } from '@entities/user'
 import { Sidebar } from '@widgets/sidebar'
 import { LoginPage } from '@pages/login-page'
 import { HomePage } from '@pages/home-page'
 import { AuthCallbackPage } from '@pages/auth-callback-page'
-import { Step1Page } from '@pages/step-1-page'
-import { Step2Page } from '@pages/step-2-page'
-import { Step3Page } from '@pages/step-3-page'
+
+import { 
+  OnboardingLayout, 
+  Step1Page, 
+  Step2Page, 
+  Step3Page 
+} from '@pages/onboarding';
+
 import "./routes.scss"
 
-// ─── Публичный лэйаут: авторизованных отправляем домой ───
 function PublicLayout() {
   if (userStore.get()) return <Navigate to="/" replace />
   return <Outlet />
 }
 
-// ─── Онбординг-лэйаут: защищает шаги от прямого перехода ─
-function OnboardingLayout() {
-  // Определяем номер текущего шага из URL (/login/step-N)
-  const step1 = useMatch('/login/step-1')
-  const step2 = useMatch('/login/step-2')
-  const step3 = useMatch('/login/step-3')
-
-  const currentStep = step1 ? 1 : step2 ? 2 : step3 ? 3 : 1
-
-  if (!onboardingStore.canAccess(currentStep)) {
-    // Редиректим на последний доступный шаг
-    const completed = onboardingStore.getCompletedStep()
-    return <Navigate to={`/login/step-${completed + 1}`} replace />
-  }
-
-  return <Outlet />
-}
-
-// ─── Защищённый лэйаут: неавторизованных на логин ────────
 function ProtectedLayout() {
   if (!userStore.get()) return <Navigate to="/login" replace />
   return (
@@ -46,10 +32,7 @@ function ProtectedLayout() {
   )
 }
 
-// ─── Роутер приложения ───────────────────────────────────
 export const router = createBrowserRouter([
-
-  // ── Публичные маршруты ──────────────────────────────────
   {
     element: <PublicLayout />,
     children: [
@@ -58,7 +41,7 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // ── Онбординг (публичный, но с защитой порядка шагов) ───
+  // ── Онбординг ───
   {
     element: <OnboardingLayout />,
     children: [
@@ -68,7 +51,6 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // ── Защищённые маршруты ─────────────────────────────────
   {
     element: <ProtectedLayout />,
     children: [
@@ -76,7 +58,6 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // ── Fallback ────────────────────────────────────────────
   {
     path: '*',
     element: <Navigate to="/" replace />,

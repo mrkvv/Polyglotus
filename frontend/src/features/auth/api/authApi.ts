@@ -13,6 +13,12 @@ export const authApi = rtkApi.injectEndpoints({
                 body,
             }),
         }),
+        logout: builder.mutation<void, void>({
+            query: () => ({
+                url: '/auth/logout',
+                method: 'POST',
+            }),
+        }),
     }),
 });
 

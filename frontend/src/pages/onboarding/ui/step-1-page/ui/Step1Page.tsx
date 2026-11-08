@@ -1,15 +1,18 @@
+// pages/onboarding/ui/step-1-page/Step1Page.tsx
 import { useState } from 'react'
 import { Paper, Typography, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import './Step1Page.scss'
 import { useTranslation } from 'react-i18next'
-import { AVATARS } from '@shared/assets/icons/avatars'
 import { onboardingStore } from '@entities/user'
+import { useOnboardingContext } from '../../../model/useOnboardingContext';
 
 export function Step1Page() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [selectedId, setSelectedId] = useState<number | null>(null)
+
+  const { avatars } = useOnboardingContext()
 
   const handleContinue = () => {
     onboardingStore.completeStep(1)
@@ -27,17 +30,20 @@ export function Step1Page() {
 
       <Paper className="Step1Page__Paper" variant="outlined" square={false}>
         <div className="Step1Page__Grid">
-          {AVATARS.map(({ id, component: Avatar }) => (
+          {avatars.map(({ id, svg }) => (
             <button
               key={id}
               className={`Step1Page__Slot${selectedId === id
                 ? ' Step1Page__Slot--selected'
                 : ''}`}
               onClick={() => setSelectedId(id)}
-              aria-label={`Img ${id}`}
+              aria-label={`Avatar ${id}`}
               aria-pressed={selectedId === id}
             >
-              <img className="Step1Page__Slot__Avatar" src={Avatar} />
+              <div 
+                className="Step1Page__Slot__Avatar" 
+                dangerouslySetInnerHTML={{ __html: svg }} 
+              />
             </button>
           ))}
         </div>
