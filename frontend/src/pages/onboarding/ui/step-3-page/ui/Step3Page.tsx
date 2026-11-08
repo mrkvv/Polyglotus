@@ -5,14 +5,15 @@ import { useTranslation } from 'react-i18next'
 import { onboardingStore } from '@entities/user'
 import { useOnboardingContext } from '../../../model/useOnboardingContext';
 import './Step3Page.scss'
+import { useCompleteOnboardingMutation } from '@entities/user/api/onboardingApi'
+import { OnboardingPayload } from '@entities/user/model/types'
 
 export function Step3Page() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  
   const [selected, setSelected] = useState<Set<number>>(new Set())
-
   const { topics } = useOnboardingContext()
+  const [completeOnboarding, { isLoading }] = useCompleteOnboardingMutation();
 
   const toggleTopic = (id: number) => {
     setSelected((prev) => {
@@ -26,7 +27,18 @@ export function Step3Page() {
     })
   }
 
-  const handleContinue = () => {    
+  const handleContinue = () => {
+    if (selected !== null) {
+      onboardingStore.setTopicIds(Array.from(selected))
+    }
+
+    const payload: OnboardingPayload = {
+      levelId: onboardingStore.getLevelId() ?? 0,
+      avatarId: onboardingStore.getAvatarId() ?? 0, 
+      themeIds: Array.from(selected), 
+    };
+
+    completeOnboarding(payload);
     onboardingStore.completeStep(3)
     navigate('/')
   }

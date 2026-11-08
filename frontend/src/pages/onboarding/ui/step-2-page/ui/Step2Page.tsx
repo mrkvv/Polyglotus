@@ -22,6 +22,9 @@ export function Step2Page() {
   const { levels } = useOnboardingContext()
 
   const handleContinue = () => {
+    if (selectedLevel !== null) {
+      onboardingStore.setLevelId(selectedLevel)
+    }
     onboardingStore.completeStep(2)
     navigate('/login/step-3')
   }

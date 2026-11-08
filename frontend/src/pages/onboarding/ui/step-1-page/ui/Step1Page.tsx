@@ -15,6 +15,9 @@ export function Step1Page() {
   const { avatars } = useOnboardingContext()
 
   const handleContinue = () => {
+    if (selectedId !== null) {
+      onboardingStore.setAvatarId(selectedId)
+    }
     onboardingStore.completeStep(1)
     navigate('/login/step-2')
   }
