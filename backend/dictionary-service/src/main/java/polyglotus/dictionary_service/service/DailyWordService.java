@@ -5,12 +5,15 @@ import org.springframework.transaction.annotation.Transactional;
 import polyglotus.dictionary_service.dto.DailyWord;
 import polyglotus.dictionary_service.repository.WordRepository;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class DailyWordService {
+
+    private static final String DEFAULT_WORD = "circumstance";
 
     private final WordRepository wordRepository;
 
@@ -27,6 +30,9 @@ public class DailyWordService {
 
     private DailyWord generateAndGetDailyWord() {
         Integer wordsInTotal = wordRepository.getTotalAmountOfWords();
+        if(wordsInTotal == null || wordsInTotal == 0) {
+            return new DailyWord(DEFAULT_WORD, LocalDate.now().toString());
+        }
 
         int randomWordId = ThreadLocalRandom.current().nextInt(1, wordsInTotal + 1);
         wordRepository.insertDailyWord(randomWordId);
