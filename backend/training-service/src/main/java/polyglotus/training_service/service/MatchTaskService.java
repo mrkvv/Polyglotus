@@ -38,8 +38,4 @@ public class MatchTaskService {
         }
         return tasks;
     }
-
-    public void markCorrect(Integer userId, List<Integer> ids) {
-        dictionaryRepository.markCorrect(userId, ids);
-    }
 }
