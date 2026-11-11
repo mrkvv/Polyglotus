@@ -13,3 +13,12 @@ export interface ReferenceResponse {
   topics: ReferenceItem[];
   avatars: AvatarItem[];
 }
+
+export interface GetPhraseResponce {
+  phrase: string;
+}
+
+export interface GetDailyWordResponce {
+  date: string;
+  word: string;
+}
