@@ -1,87 +1,86 @@
-import { NavLink } from 'react-router-dom'
-import { useAuth } from '@features/auth'
+// src/widgets/sidebar/ui/Sidebar.tsx
+import { 
+  Drawer, 
+  List, 
+  ListItem, 
+  ListItemButton, 
+  ListItemIcon, 
+  ListItemText, 
+  Typography 
+} from '@mui/material'
+import HomeIcon from '@mui/icons-material/Home';
+import TaskIcon from '@mui/icons-material/Task';
+import AssistantIcon from '@mui/icons-material/Assistant';
+import StarIcon from '@mui/icons-material/Star';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Sidebar.scss'
 
-function IconHome() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
-      <polyline points="9 22 9 12 15 12 15 22" />
-    </svg>
-  )
-}
-
-function IconSettings() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06
-        a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09
-        A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83
-        l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09
-        A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83
-        l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09
-        a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83
-        l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09
-        a1.65 1.65 0 0 0-1.51 1z" />
-    </svg>
-  )
-}
-
-function IconUser() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  )
-}
+const drawerWidth = 240;
 
 export function Sidebar() {
-  const { username } = useAuth()
+  const { t } = useTranslation()
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const menuItems = [
+    { text: 'Главная', icon: <HomeIcon />, path: '/home' },
+    { text: 'Тренировки', icon: <TaskIcon />, path: '/trainings' },
+    { text: 'ИИ чат', icon: <AssistantIcon />, path: '/chat' },
+    { text: 'Словарь', icon: <StarIcon />, path: '/dictionary' },
+    { text: 'Настройки', icon: <SettingsIcon />, path: '/settings'  },
+  ];
 
   return (
-    <aside className="Sidebar">
-      {/* Шапка */}
-      <div className="Sidebar__Header">
-        <div className="Sidebar__Header__Logo">
-          <span className="Sidebar__Header__Logo__Icon">P</span>
-        </div>
-        <span className="Sidebar__Header__AppName">Poliglotus</span>
-      </div>
+    <Drawer
+      className='Sidebar'
+      variant='permanent'
+      anchor='left'
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+        },
+      }}
+    >
+      <Typography className='Sidebar__Title' variant='h4'>
+        {t('title')}
+      </Typography>
+      
+      <List>
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
 
-      {/* Навигация */}
-      <nav className="Sidebar__Nav">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            `Sidebar__Nav__Item${isActive ? ' Sidebar__Nav__Item--active' : ''}`
-          }
-        >
-          <IconHome />
-          <span>Главная</span>
-        </NavLink>
-      </nav>
-
-      {/* Футер: пользователь + настройки */}
-      <div className="Sidebar__Footer">
-        <div className="Sidebar__Footer__User">
-          <div className="Sidebar__Footer__User__Avatar">
-            <IconUser />
-          </div>
-          <span className="Sidebar__Footer__User__Name">{username}</span>
-        </div>
-        <button
-          className="Sidebar__Footer__SettingsBtn"
-          title="Настройки"
-          aria-label="Настройки"
-        >
-          <IconSettings />
-        </button>
-      </div>
-    </aside>
+          return (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton
+                onClick={() => navigate(item.path)}
+                selected={isActive}
+                sx={{
+                  borderRadius: 3,
+                  '&.Mui-selected': {
+                    backgroundColor: '#E5F0D0',
+                  },
+                }}
+              >
+                <ListItemIcon >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.text} 
+                  sx={{
+                    fontSize: '1.1rem', 
+                    fontWeight: isActive ? 600 : 400,
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          )
+        })}
+      </List>
+    </Drawer>
   )
 }

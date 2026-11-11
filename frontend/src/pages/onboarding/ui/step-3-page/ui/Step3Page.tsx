@@ -40,7 +40,7 @@ export function Step3Page() {
 
     completeOnboarding(payload);
     onboardingStore.completeStep(3)
-    navigate('/')
+    navigate('/home')
   }
 
   return (
