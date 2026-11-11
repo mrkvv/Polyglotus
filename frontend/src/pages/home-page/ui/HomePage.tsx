@@ -30,7 +30,7 @@ export function HomePage() {
           </Typography>
           <Typography variant="h5" sx={{ padding: '26px 30px' }}>
             Пройдите тренировку сегодня, чтобы не потерять серию
-            {/*TODO: надо поудмать как проверять, что сегодня пользователь поднял стрик, спросить у Лёни*/}
+            {/*TODO: useEffect на refetch по запросу стрика - проверять, что поле с датой изменилось ????*/}
           </Typography>
         </Paper>
 

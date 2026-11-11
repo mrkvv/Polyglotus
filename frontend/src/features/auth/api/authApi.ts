@@ -22,4 +22,7 @@ export const authApi = rtkApi.injectEndpoints({
     }),
 });
 
-export const { useExchangeCodeMutation } = authApi; 
+export const { 
+    useExchangeCodeMutation,
+    useLogoutMutation
+} = authApi; 

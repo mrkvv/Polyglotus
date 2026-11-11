@@ -61,9 +61,6 @@ export function Sidebar() {
                 selected={isActive}
                 sx={{
                   borderRadius: 3,
-                  '&.Mui-selected': {
-                    backgroundColor: '#E5F0D0',
-                  },
                 }}
               >
                 <ListItemIcon >
