@@ -1,3 +1,6 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
 .ProtectedLayout {
   display: flex;
   height: 100vh;
@@ -6,6 +9,6 @@
   &__Content {
     flex: 1;
     overflow-y: auto;
-    background: #0f1117;
+    background: $color-bg;
   }
 }
