@@ -9,8 +9,10 @@ import { useGetUserMeQuery, useUpdateUserAvatarMutation, useUpdateUserLevelMutat
 import { useGetReferencesQuery } from '@entities/reference'
 import { useLogoutMutation } from '@features/auth/api/authApi'
 import './SettingsPage.scss'
+import { useNavigate } from 'react-router-dom'
 
 export function SettingsPage() {
+  const navigate = useNavigate();
   const dispatch = useDispatch()
   const theme = useSelector((state: RootState) => state.theme.theme)
 
@@ -57,6 +59,8 @@ export function SettingsPage() {
   const handleLogoutConfirm = async () => {
     setIsLogoutModalOpen(false)
     await logout()
+    localStorage.removeItem('token')
+    navigate('/login')
   }
 
   if (userLoading || refsLoading) {
@@ -198,7 +202,7 @@ export function SettingsPage() {
       <Dialog
         open={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
-        PaperProps={{ sx: { borderRadius: '16px', padding: '8px' } }}
+        sx={{ borderRadius: '16px', padding: '8px' }}
       >
         <DialogTitle>Выйти из учётной записи?</DialogTitle>
         <DialogContent>
