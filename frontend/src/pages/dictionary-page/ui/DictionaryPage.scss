@@ -31,6 +31,10 @@
     }
   }
 
+  &__SearchWrapper {
+    position: relative;
+  }
+
   &__Search.MuiTextField-root {
     width: 400px;
 

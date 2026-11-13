@@ -158,7 +158,7 @@ export function WordsTable({
         onRowsPerPageChange={(e) => {
           onPageSizeChange(parseInt(e.target.value, 10));
         }}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[5, 10, 25, 50, 100]}
         labelRowsPerPage="Rows per page:"
         labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count}`}
       />

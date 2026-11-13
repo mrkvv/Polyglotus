@@ -1,0 +1,161 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.SearchDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 400px;
+  background: #fff;
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+
+  // ── Скроллируемая зона (активна после раскрытия) ──────
+  &__scroll-area {
+    max-height: 320px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $color-border;
+      border-radius: 4px;
+    }
+  }
+
+  // ── Секция ────────────────────────────────────────────
+  &__section {
+    padding: 12px 0 4px;
+  }
+
+  &__section-title {
+    padding: 0 16px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  // ── Строка слова ──────────────────────────────────────
+  &__item {
+    @include flex-center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    gap: 8px;
+    @include transition(background-color 0.15s ease);
+
+    &:hover {
+      background-color: $color-surface;
+    }
+  }
+
+  &__item-text {
+    @include flex-column;
+    gap: 1px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__item-word {
+    font-size: 14px;
+    font-weight: 500;
+    color: $color-text;
+    @include text-ellipsis;
+  }
+
+  &__item-pos {
+    font-size: 11px;
+    color: $color-text-muted;
+  }
+
+  // ── Кнопка + (добавить) ───────────────────────────────
+  &__add-btn {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    @include flex-center;
+    color: $color-text-muted;
+    @include transition(background-color 0.15s ease, color 0.15s ease);
+
+    &:hover {
+      background-color: #e8f5e9;
+      color: #4caf50;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  // ── Кнопка "КО ВСЕМ ПЕРЕВОДАМ" ───────────────────────
+  &__expand-btn {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4caf50;
+    letter-spacing: 0.04em;
+    @include transition(color 0.15s ease);
+
+    &:hover {
+      color: #388e3c;
+    }
+  }
+
+  // ── Разделитель между секциями ────────────────────────
+  &__divider {
+    height: 1px;
+    background: $color-border;
+    margin: 4px 0;
+  }
+
+  // ── Пустое состояние ──────────────────────────────────
+  &__empty {
+    padding: 20px 16px 12px;
+    font-size: 14px;
+    color: $color-text-muted;
+  }
+
+  // ── Футер ─────────────────────────────────────────────
+  &__footer {
+    border-top: 1px solid $color-border;
+    padding: 10px 16px;
+  }
+
+  &__manual-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: $color-text-muted;
+    padding: 0;
+    @include transition(color 0.15s ease);
+
+    &:hover {
+      color: $color-text;
+    }
+  }
+
+  // ── Лоадер ────────────────────────────────────────────
+  &__loader {
+    @include flex-center;
+    padding: 20px;
+  }
+}

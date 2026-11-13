@@ -1,5 +1,11 @@
-import { rtkApi } from '@shared/api/rtkApi';
-import type { GetDictionaryRequest, GetDictionaryResponse } from '../model/types';
+import { rtkApi } from '@shared/api/rtkApi'; // ваш базовый инстанс
+import { 
+  GetDictionaryResponse, 
+  GetDictionaryRequest,
+  GetTranslationsResponse,
+  InsertWordRequest,
+  InsertWordResponse
+} from '../model/types';
 
 export const dictionaryApi = rtkApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -15,7 +21,31 @@ export const dictionaryApi = rtkApi.injectEndpoints({
       }),
       providesTags: ['Dictionary'],
     }),
+
+    getTranslations: builder.query<GetTranslationsResponse, { word: string }>({
+      query: ({ word }) => ({
+        url: '/translations',
+        method: 'GET',
+        params: {
+          word,
+        },
+      }),
+      providesTags: ({ word }) => [{ type: 'Dictionary', id: word }],
+    }),
+
+    insertWord: builder.mutation<InsertWordResponse, InsertWordRequest>({
+      query: (body) => ({
+        url: '/dictionary/words',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Dictionary'],
+    }),
   }),
 });
 
-export const { useGetDictionaryQuery } = dictionaryApi;
+export const {
+  useGetDictionaryQuery,
+  useGetTranslationsQuery,
+  useInsertWordMutation,
+} = dictionaryApi;

@@ -24,6 +24,45 @@ export interface GetDictionaryResponse {
 export interface GetDictionaryRequest {
   page: number;
   size: number;
-  /** Если не передать — вернёт все слова без фильтрации по статусу */
   status?: WordStatus;
+}
+
+// ── /translations ──────────────────────────────────────────
+
+/** Уже добавленное слово из словаря пользователя */
+export interface UserDictionaryItem {
+  id: number;
+  ru: string;
+  partOfSpeech: string;
+}
+
+export interface CatalogTranslationItem {
+  title: string;
+  definition: string;
+  part_of_speech: string;
+  variants_of_words: string[];
+}
+
+export interface GetTranslationsResponse {
+  word: string;
+  inUserDictionary: UserDictionaryItem[];
+  inCatalog: CatalogTranslationItem[];
+}
+
+// ── /dictionary/words ──────────────────────────────────────
+
+export interface InsertWordRequest {
+  en: string;
+  ru: string;
+  partOfSpeech: string;
+}
+
+export interface InsertWordResponse {
+  id: number;
+  en: string;
+  ru: string;
+  partOfSpeech: string;
+  progressCount: 0 | 1 | 2 | 3;
+  status: WordStatus;
+  addedAt: string;
 }
