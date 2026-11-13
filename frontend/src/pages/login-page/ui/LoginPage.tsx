@@ -1,16 +1,11 @@
 import './LoginPage.scss'
-import { useNavigate } from 'react-router-dom';
-import {Button, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import yandexLogo from './YandexLogo.svg'
+import { redirectToYandexLogin } from '@features/auth/api/authApi'
 
 export function LoginPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  const handleYandexLogin = () => {
-    window.location.href = 'http://localhost:8000/auth/yandex'
-  }
 
   return (
     <div className="LoginPage">
@@ -19,7 +14,7 @@ export function LoginPage() {
       </Typography>
       <Button
         className="LoginPage__AuthButton"
-        onClick={handleYandexLogin}
+        onClick={redirectToYandexLogin}
         sx={{
           textTransform: 'none',
           backgroundColor: '#000000',

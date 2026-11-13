@@ -1,5 +1,11 @@
 import { rtkApi } from '@shared/api/rtkApi'
-import { AuthResponse } from './model/types'
+import type { AuthResponse } from '../model/types'
+
+const BASE_URL = 'http://localhost:8000'
+
+export function redirectToYandexLogin() {
+  window.location.href = `${BASE_URL}/auth/yandex`
+}
 
 export const authApi = rtkApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -25,4 +31,4 @@ export const authApi = rtkApi.injectEndpoints({
 export const { 
     useExchangeCodeMutation,
     useLogoutMutation
-} = authApi; 
+} = authApi;

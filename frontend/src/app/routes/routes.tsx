@@ -18,14 +18,14 @@ import { TrainingPage } from '@pages/training-page'
 import { DictionaryPage } from '@pages/dictionary-page'
 import { SettingsPage } from '@pages/settings-page'
 
-const token = localStorage.getItem('token');
-
 function PublicLayout() {
+  const token = localStorage.getItem('token');
   if (token) return <Navigate to="/home" replace />
   return <Outlet />
 }
 
-function ProtectedLayout() {  
+function ProtectedLayout() {
+  const token = localStorage.getItem('token');
   if (!token) {
     return <Navigate to="/login" replace />
   }
@@ -41,6 +41,7 @@ function ProtectedLayout() {
 }
 
 function ProtectedLayoutClean() {
+  const token = localStorage.getItem('token');
   if (!token) {
     return <Navigate to="/login" replace />
   }
