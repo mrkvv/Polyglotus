@@ -5,4 +5,224 @@
   width: 100%;
   height: 100%;
   background: $color-bg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 100px;
+  gap: 32px;
+  overflow-y: auto;
+
+  // ─── Аватар ───────────────────────────────────────────
+  &__AvatarBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__AvatarWrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    @include transition(transform 0.15s);
+
+    &:hover {
+      transform: scale(1.04);
+    }
+  }
+
+  &__Avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    overflow: hidden;
+
+    // SVG-аватар приходит через dangerouslySetInnerHTML
+    svg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+
+    &--placeholder {
+      background-color: $color-surface;
+    }
+  }
+
+  &__AvatarEdit {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #2E7D32;
+    @include flex-center;
+  }
+
+  &__Username {
+    font-weight: 500 !important;
+  }
+
+  // ─── Секции ───────────────────────────────────────────
+  &__Section {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__SectionTitle {
+    font-weight: 700 !important;
+  }
+
+  // ─── Тема ─────────────────────────────────────────────
+  &__ThemeRow {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  &__ThemeOption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: $color-text;
+  }
+
+  &__ThemeSwatch {
+    display: block;
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    border: 2px solid $color-border;
+    @include transition(border-color 0.15s, box-shadow 0.15s);
+
+    &--light {
+      background-color: #ffffff;
+    }
+
+    &--dark {
+      background-color: #1a1a1a;
+    }
+
+    .SettingsPage__ThemeOption--selected & {
+      border-color: #2E7D32;
+      box-shadow: 0 0 0 2px #2E7D32;
+    }
+  }
+
+  // ─── Уровни знаний ────────────────────────────────────
+  &__LevelsPaper {
+    padding: 20px 24px !important;
+  }
+
+  &__LevelsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  &__LevelChip {
+    padding: 10px 20px;
+    border-radius: 24px;
+    border: 1.5px solid #2E7D32;
+    background: transparent;
+    color: $color-text;
+    font-size: 14px;
+    font-family: $font-family;
+    cursor: pointer;
+    @include transition(background-color 0.15s, color 0.15s);
+
+    &:hover {
+      background-color: rgba(46, 125, 50, 0.08);
+    }
+
+    &--selected {
+      background-color: #2E7D32;
+      color: #ffffff;
+
+      &:hover {
+        background-color: #2E7D32;
+      }
+    }
+  }
+
+  // ─── Кнопка выхода ────────────────────────────────────
+  &__LogoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #2E7D32;
+    padding: 8px 0;
+    margin-top: auto;
+    @include transition(opacity 0.15s);
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+
+  // ─── Модалка аватаров ─────────────────────────────────
+  &__AvatarModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+
+    &__Grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    &__Slot {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: none;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      @include transition(transform 0.1s);
+
+      // SVG-аватар
+      div, svg {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+        display: block;
+      }
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &--selected {
+        box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #2E7D32;
+        transform: scale(1.06);
+      }
+    }
+  }
 }

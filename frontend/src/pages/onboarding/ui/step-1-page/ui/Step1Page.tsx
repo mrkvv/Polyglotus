@@ -44,7 +44,7 @@ export function Step1Page() {
               aria-pressed={selectedId === id}
             >
               <div 
-                className="Step1Page__Slot__Avatar" 
+                className="Step1Page__Slot__Avatar"
                 dangerouslySetInnerHTML={{ __html: svg }} 
               />
             </button>

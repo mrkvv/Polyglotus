@@ -18,14 +18,14 @@ import { TrainingPage } from '@pages/training-page'
 import { DictionaryPage } from '@pages/dictionary-page'
 import { SettingsPage } from '@pages/settings-page'
 
-const token = localStorage.getItem('token');
-
 function PublicLayout() {
+  const token = localStorage.getItem('token');
   if (token) return <Navigate to="/home" replace />
   return <Outlet />
 }
 
-function ProtectedLayout() {  
+function ProtectedLayout() {
+  const token = localStorage.getItem('token');
   if (!token) {
     return <Navigate to="/login" replace />
   }
@@ -40,6 +40,14 @@ function ProtectedLayout() {
   )
 }
 
+function ProtectedLayoutClean() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate to="/login" replace />
+  }
+  return <Outlet />
+}
+
 export const router = createBrowserRouter([
   {
     element: <PublicLayout />,
@@ -49,13 +57,18 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // ── Онбординг ───
+  // ── Онбординг (только для залогиненных) ───
   {
-    element: <OnboardingLayout />,
+    element: <ProtectedLayoutClean />,
     children: [
-      { path: '/login/step-1', element: <Step1Page /> },
-      { path: '/login/step-2', element: <Step2Page /> },
-      { path: '/login/step-3', element: <Step3Page /> },
+      {
+        element: <OnboardingLayout />,
+        children: [
+          { path: '/login/step-1', element: <Step1Page /> },
+          { path: '/login/step-2', element: <Step2Page /> },
+          { path: '/login/step-3', element: <Step3Page /> },
+        ],
+      },
     ],
   },
 
