@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   TablePagination, Paper, CircularProgress, Checkbox, IconButton,
@@ -21,62 +21,25 @@ export interface WordRow {
 }
 
 interface WordsTableProps {
-  filter: WordsFilter;
+  rows: WordRow[];
+  total: number;
+  page: number;
+  pageSize: number;
+  loading: boolean;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
 }
 
-// Заглушка запроса
-async function fetchWords(filter: WordsFilter, page: number, pageSize: number) {
-  await new Promise((r) => setTimeout(r, 300));
-
-  const PROGRESS: CustomProgressValue[] = [0, 1, 2, 3];
-
-  const all: WordRow[] = Array.from({ length: 47 }).map((_, i) => ({
-    id: i + 1,
-    word: 'Cucumber',
-    translation: 'Огурец',
-    learned: i === 5,
-    progress: i < PROGRESS.length ? PROGRESS[i] : 0 as CustomProgressValue,
-    dateAdded: '01.01.2011',
-  }));
-
-  const filtered = all.filter((w) => {
-    if (filter === 'learned') return w.learned;
-    if (filter === 'notLearned') return !w.learned;
-    return true;
-  });
-
-  return {
-    rows: filtered.slice(page * pageSize, page * pageSize + pageSize),
-    total: filtered.length,
-  };
-}
-
-export function WordsTable({ filter }: WordsTableProps) {
-  const [rows, setRows] = useState<WordRow[]>([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
-  const [loading, setLoading] = useState(false);
-  const [selected, setSelected] = useState<number[]>([]);
-
-  useEffect(() => {
-    setPage(0);
-    setSelected([]);
-  }, [filter]);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    fetchWords(filter, page, pageSize)
-      .then((res) => {
-        if (!cancelled) {
-          setRows(res.rows);
-          setTotal(res.total);
-        }
-      })
-      .finally(() => !cancelled && setLoading(false));
-    return () => { cancelled = true; };
-  }, [filter, page, pageSize]);
+export function WordsTable({
+  rows,
+  total,
+  page,
+  pageSize,
+  loading,
+  onPageChange,
+  onPageSizeChange,
+}: WordsTableProps) {
+  const [selected, setSelected] = React.useState<number[]>([]);
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -190,11 +153,10 @@ export function WordsTable({ filter }: WordsTableProps) {
         component="div"
         count={total}
         page={page}
-        onPageChange={(_, newPage) => setPage(newPage)}
+        onPageChange={(_, newPage) => onPageChange(newPage)}
         rowsPerPage={pageSize}
         onRowsPerPageChange={(e) => {
-          setPageSize(parseInt(e.target.value, 10));
-          setPage(0);
+          onPageSizeChange(parseInt(e.target.value, 10));
         }}
         rowsPerPageOptions={[5, 10, 25]}
         labelRowsPerPage="Rows per page:"

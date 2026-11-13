@@ -16,5 +16,5 @@ export const rtkApi = createApi({
     },
   }),
   endpoints: () => ({}),
-  tagTypes: ['User', 'References'],
+  tagTypes: ['User', 'References', 'Dictionary'],
 });
