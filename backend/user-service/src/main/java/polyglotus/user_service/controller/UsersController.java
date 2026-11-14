@@ -2,11 +2,8 @@ package polyglotus.user_service.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import polyglotus.user_service.dto.request.AvatarChangeRequest;
-import polyglotus.user_service.dto.request.LevelChangeRequest;
-import polyglotus.user_service.dto.request.OnboardingRequest;
+import polyglotus.user_service.dto.request.*;
 import polyglotus.user_service.dto.User;
-import polyglotus.user_service.dto.request.TopicsChangeRequest;
 import polyglotus.user_service.service.UserService;
 
 import java.util.List;
@@ -69,6 +66,16 @@ public class UsersController {
     ) {
         List<Integer> insertedTopics = userService.setUserTopics(id, request.newTopicIds());
         Map<String, List<Integer>> response = Map.of("topicIds", insertedTopics);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/me/theme")
+    public ResponseEntity<Map<String, Integer>> setUserTheme(
+            @RequestHeader(value = USER_ID_HEADER) Integer id,
+            @RequestBody ThemeChangeRequest request
+    ) {
+        userService.setUserTheme(id, request.newThemeId());
+        Map<String, Integer> response = Map.of("newThemeId", request.newThemeId());
         return ResponseEntity.ok(response);
     }
 }

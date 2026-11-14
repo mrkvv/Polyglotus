@@ -29,6 +29,7 @@ public class UserRepository {
                    u.last_name,
                    u.level_id,
                    u.avatar_id,
+                   u.theme_id,
                    u.created_at,
                    s.current_streak,
                    s.longest_streak,
@@ -45,6 +46,11 @@ public class UserRepository {
 
     private static final String SET_USER_AVATAR_SQL = """
             UPDATE users SET avatar_id = ?
+            WHERE id = ?
+            """;
+
+    private static final String SET_USER_THEME_SQL = """
+            UPDATE users SET theme_id = ?
             WHERE id = ?
             """;
 
@@ -73,5 +79,9 @@ public class UserRepository {
 
     public void setUserAvatar(Integer userId, Integer newAvatarId) {
         jdbcTemplate.update(SET_USER_AVATAR_SQL, newAvatarId, userId);
+    }
+
+    public void setUserTheme(Integer userId, Integer newThemeId) {
+        jdbcTemplate.update(SET_USER_THEME_SQL, newThemeId, userId);
     }
 }

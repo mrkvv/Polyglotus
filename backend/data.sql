@@ -17,6 +17,10 @@ VALUES ('Маленькие шаги каждый день ведут к бол�
 
 -- Аватарки: вставляем svg прям сюда
 
+INSERT INTO themes (theme_name)
+VALUES ('light'), ('dark')
+    ON CONFLICT (theme_name) DO NOTHING;
+
 INSERT INTO en_words (word)
 VALUES ('apple'), ('book'), ('cat'), ('dog'), ('house'),
        ('water'), ('friend'), ('family'), ('school'), ('music'),
