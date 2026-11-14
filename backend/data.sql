@@ -1,6 +1,7 @@
-INSERT INTO levels (level_name)
-VALUES ('A1'), ('A2'), ('B1'),
-       ('B2'), ('C1'), ('C2')
+INSERT INTO levels (level_name, level_description)
+VALUES ('A1', 'Начинаю с нуля'), ('A2', 'Знаю основы'),
+       ('B1', 'Могу поддержать беседу'),('B2', 'Говорю уверенно'),
+       ('C1', 'Свободно владею'), ('C2', 'Уровень носителя')
     ON CONFLICT (level_name) DO NOTHING;
 
 INSERT INTO topics (topic_name)

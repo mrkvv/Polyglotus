@@ -2,7 +2,8 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE levels (
     id SERIAL PRIMARY KEY,
-    level_name VARCHAR(10) UNIQUE NOT NULL
+    level_name VARCHAR(10) UNIQUE NOT NULL,
+    level_description VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE avatars (

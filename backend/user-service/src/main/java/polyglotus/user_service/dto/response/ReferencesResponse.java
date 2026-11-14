@@ -8,11 +8,12 @@ public record ReferencesResponse (
     List<Topic> topics,
     List<Avatar> avatars
 ) {
-    public record Level(Integer id, String name) {
+    public record Level(Integer id, String name, String description) {
         public static Level fromMap(Map<String, Object> map) {
             Integer id = (Integer) map.get("id");
             String name = (String) map.get("level_name");
-            return new Level(id, name);
+            String description = (String) map.get("level_description");
+            return new Level(id, name, description);
         }
     }
 
