@@ -15,13 +15,15 @@ public class ValidationService {
             "grammar_pattern"
     );
 
+    private static final int MAX_WORD_LENGTH = 30;
+
     public void validateWords(String ruWord, String enWord) {
         if(ruWord == null || enWord == null || ruWord.isBlank() || enWord.isBlank()) {
             throw new NoWordsProvidedException();
         }
 
-        if(ruWord.length() > 20 || enWord.length() > 20) {
-            throw new WordsSizeLimitExceededException(ruWord, enWord);
+        if(ruWord.length() > MAX_WORD_LENGTH || enWord.length() > MAX_WORD_LENGTH) {
+            throw new WordsSizeLimitExceededException(ruWord, enWord, MAX_WORD_LENGTH);
         }
     }
 
