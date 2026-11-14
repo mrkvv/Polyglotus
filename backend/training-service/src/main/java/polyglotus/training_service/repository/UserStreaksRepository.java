@@ -6,6 +6,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserStreaksRepository {
 
+    private static final String UPDATE_USER_STREAK_SQL = """
+            UPDATE user_streaks
+            SET current_streak = 0
+            WHERE user_id = ?
+                AND CURRENT_DATE - last_training_date > 1
+            """;
+
     private static final String INCREMENT_USER_STREAK_SQL = """
             UPDATE user_streaks
             SET
@@ -22,6 +29,10 @@ public class UserStreaksRepository {
     }
 
     public void updateUserStreak(Integer userId) {
+        jdbcTemplate.update(UPDATE_USER_STREAK_SQL, userId);
+    }
+
+    public void incrementUserStreak(Integer userId) {
         jdbcTemplate.update(INCREMENT_USER_STREAK_SQL, userId);
     }
 }

@@ -23,5 +23,6 @@ public class WordProgressService {
     public void markCorrect(Integer userId, List<Integer> ids) {
         dictionaryRepository.markCorrect(userId, ids);
         streaksRepository.updateUserStreak(userId);
+        streaksRepository.incrementUserStreak(userId);
     }
 }
