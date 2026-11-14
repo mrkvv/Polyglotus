@@ -49,7 +49,7 @@ export function Step2Page() {
                 key={level.id}
                 value={level.id}
                 control={<Radio />}
-                label={level.name} 
+                label={level.name + '. ' + level.description} 
               />
             ))}
           </RadioGroup>

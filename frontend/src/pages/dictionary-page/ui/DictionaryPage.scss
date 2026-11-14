@@ -44,26 +44,26 @@
   }
 
   &__TabsBlock {
-    border: 1px solid #eee;
+    border: 1px solid $color-border;
     border-radius: 12px;
     overflow: hidden;
-    background-color: #fff;
+    background-color: $color-surface;
   }
 
   &__Tabs.MuiTabs-root {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $color-border;
     min-height: 48px;
 
     .MuiTab-root {
       text-transform: none;
       font-weight: 500;
       font-size: 14px;
-      color: #999;
+      color: $color-text-muted;
       min-height: 48px;
       padding: 0 24px;
 
       &.Mui-selected {
-        color: #333;
+        color: $color-text;
       }
     }
 

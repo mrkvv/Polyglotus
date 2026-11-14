@@ -17,6 +17,7 @@ export interface User {
   lastName: string;
   levelId: number;
   avatarId: number;
+  themeId: number;
   topicIds: number[];
   streak: UserStreak;
   createdAt: string;

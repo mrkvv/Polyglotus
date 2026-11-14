@@ -5,7 +5,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@app/store/store'
 import { setTheme } from '@app/store/themeSlice'
-import { useGetUserMeQuery, useUpdateUserAvatarMutation, useUpdateUserLevelMutation } from '@entities/user/api/uesrApi'
+import { useGetUserMeQuery, useUpdateUserAvatarMutation, useUpdateUserLevelMutation, useUpdateUserThemeMutation } from '@entities/user/api/uesrApi'
 import { useGetReferencesQuery } from '@entities/reference'
 import { useLogoutMutation } from '@features/auth/api/authApi'
 import './SettingsPage.scss'
@@ -21,11 +21,13 @@ export function SettingsPage() {
 
   const [updateAvatar] = useUpdateUserAvatarMutation()
   const [updateLevel] = useUpdateUserLevelMutation()
+  const [updateTheme] = useUpdateUserThemeMutation()
   const [logout] = useLogoutMutation()
 
   // Локальное состояние инициализируем из данных пользователя после загрузки
   const [avatarId, setAvatarId] = useState<number | null>(null)
   const [levelId, setLevelId] = useState<number | null>(null)
+  const [themeId, setThemeId] = useState<number | null>(null)
   const [pendingAvatarId, setPendingAvatarId] = useState<number | null>(null)
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false)
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
@@ -35,6 +37,7 @@ export function SettingsPage() {
     if (user) {
       setAvatarId(user.avatarId)
       setLevelId(user.levelId)
+      setThemeId(user.themeId)
     }
   }, [user])
 
@@ -45,7 +48,7 @@ export function SettingsPage() {
 
   const handleConfirmAvatar = async () => {
     if (pendingAvatarId !== null) {
-      await updateAvatar(pendingAvatarId)
+      await updateAvatar({ newAvatarId: pendingAvatarId })
       setAvatarId(pendingAvatarId)
     }
     setIsAvatarModalOpen(false)
@@ -53,7 +56,12 @@ export function SettingsPage() {
 
   const handleSelectLevel = async (id: number) => {
     setLevelId(id)
-    await updateLevel(id)
+    await updateLevel({ newLevelId: id })
+  }
+
+  const handleSelectTheme = async (theme: string) => {
+    setThemeId(theme === 'light' ? 1 : 2)
+    await updateTheme({ newThemeId: theme === 'light' ? 1 : 2 })
   }
 
   const handleLogoutConfirm = async () => {
@@ -107,7 +115,10 @@ export function SettingsPage() {
         <div className="SettingsPage__ThemeRow">
           <button
             className={`SettingsPage__ThemeOption${theme === 'light' ? ' SettingsPage__ThemeOption--selected' : ''}`}
-            onClick={() => dispatch(setTheme('light'))}
+            onClick={() => {
+              dispatch(setTheme('light'))
+              handleSelectTheme('light')
+            }}
             aria-label="Светлая тема"
             aria-pressed={theme === 'light'}
           >
@@ -116,7 +127,10 @@ export function SettingsPage() {
           </button>
           <button
             className={`SettingsPage__ThemeOption${theme === 'dark' ? ' SettingsPage__ThemeOption--selected' : ''}`}
-            onClick={() => dispatch(setTheme('dark'))}
+            onClick={() => {
+              dispatch(setTheme('dark'))
+              handleSelectTheme('dark')
+            }}
             aria-label="Тёмная тема"
             aria-pressed={theme === 'dark'}
           >
@@ -140,7 +154,7 @@ export function SettingsPage() {
                 onClick={() => handleSelectLevel(level.id)}
                 aria-pressed={levelId === level.id}
               >
-                {level.name}
+                {level.name + '. ' + level.description}
               </button>
             ))}
           </div>

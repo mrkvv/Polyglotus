@@ -15,14 +15,16 @@ export const referenceApi = rtkApi.injectEndpoints({
       query: () => ({
         url: '/phrase',
         method: 'GET'
-      })
+      }),
+      providesTags: ['References'],
     }),
 
     getDailyWord: builder.query<GetDailyWordResponce, void>({
       query: () => ({
         url: '/daily-word',
         method: 'GET'
-      })
+      }),
+      providesTags: ['References'], 
     })
   }),
 });

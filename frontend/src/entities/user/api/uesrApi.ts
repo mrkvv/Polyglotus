@@ -8,7 +8,7 @@ export const userApi = rtkApi.injectEndpoints({
       providesTags: ['User'], 
     }),
 
-    updateUserLevel: builder.mutation<number, number>({
+    updateUserLevel: builder.mutation<{ levelId: number }, { newLevelId: number }>({
       query: (body) => ({
         url: '/users/me/level',
         method: 'PUT',
@@ -17,7 +17,7 @@ export const userApi = rtkApi.injectEndpoints({
       invalidatesTags: ['User'],
     }),
 
-    updateUserAvatar: builder.mutation<number, number>({
+    updateUserAvatar: builder.mutation<{ avatarId: number }, { newAvatarId: number }>({
       query: (body) => ({
         url: '/users/me/avatar',
         method: 'PUT',
@@ -34,6 +34,15 @@ export const userApi = rtkApi.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
+
+    updateUserTheme: builder.mutation<{ newThemeId: number }, { newThemeId: number }>({
+      query: (body) => ({
+        url: '/users/me/theme',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['User'],
+    }),
   }),
 });
 
@@ -41,5 +50,6 @@ export const {
   useGetUserMeQuery, 
   useUpdateUserLevelMutation,
   useUpdateUserAvatarMutation,
-  useUpdateUserTopicsMutation
+  useUpdateUserTopicsMutation,
+  useUpdateUserThemeMutation
 } = userApi;

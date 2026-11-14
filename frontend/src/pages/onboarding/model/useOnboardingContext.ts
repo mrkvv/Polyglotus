@@ -5,6 +5,7 @@ interface OnboardingContextType {
   avatars: AvatarItem[];
   levels: ReferenceItem[];
   topics: ReferenceItem[];
+  themes: ReferenceItem[];
 }
 
 export const useOnboardingContext = () => {
