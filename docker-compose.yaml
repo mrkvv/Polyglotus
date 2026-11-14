@@ -314,6 +314,22 @@ services:
           memory: "384M"
           cpus: "0.3"
 
+  frontend:
+    build: ./frontend
+    container_name: polyglotus-frontend
+    ports:
+      - "${FRONTEND_PORT}:80"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    networks:
+      - polyglotus-network
+    deploy:
+      resources:
+        limits:
+          memory: "512M"
+          cpus: "0.5"
+
 volumes:
   pg_data:
   redis_data:
