@@ -5,7 +5,6 @@ export interface DictionaryWord {
   en: string;
   ru: string;
   partOfSpeech: string;
-  /** 0 — не начато, 1–2 — в процессе, 3 — выучено */
   progressCount: 0 | 1 | 2 | 3;
   status: WordStatus;
   addedAt: string;
@@ -27,9 +26,6 @@ export interface GetDictionaryRequest {
   status?: WordStatus;
 }
 
-// ── /translations ──────────────────────────────────────────
-
-/** Уже добавленное слово из словаря пользователя */
 export interface UserDictionaryItem {
   id: number;
   ru: string;
@@ -49,8 +45,6 @@ export interface GetTranslationsResponse {
   inCatalog: CatalogTranslationItem[];
 }
 
-// ── /dictionary/words ──────────────────────────────────────
-
 export interface InsertWordRequest {
   en: string;
   ru: string;
@@ -65,4 +59,9 @@ export interface InsertWordResponse {
   progressCount: 0 | 1 | 2 | 3;
   status: WordStatus;
   addedAt: string;
+}
+
+export interface UpdateWordPayload{
+  id: number;
+  body: InsertWordRequest;
 }
