@@ -223,7 +223,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       EMBEDDER_SERVICE_URL: http://embedder-service:8086
-      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://ollama:11434}
       OLLAMA_MODEL: ${OLLAMA_MODEL}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8085/actuator/health" ]
@@ -330,10 +330,30 @@ services:
           memory: "512M"
           cpus: "0.5"
 
+  cloudpub:
+    image: cloudpub/cloudpub:3.7.962
+    container_name: polyglotus-cloudpub
+    restart: unless-stopped
+    environment:
+      TOKEN: ${CLOUDPUB_TOKEN}
+      HTTP: ollama:11434
+    command: run
+    depends_on:
+      ollama:
+        condition: service_healthy
+      ollama-init:
+        condition: service_completed_successfully
+    profiles: [ "llm" ]
+    networks:
+      - polyglotus-network
+    volumes:
+      - cloudpub_config:/home/cloudpub
+
 volumes:
   pg_data:
   redis_data:
   ollama_data:
+  cloudpub_config:
 
 networks:
   polyglotus-network:
