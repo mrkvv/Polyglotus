@@ -5,6 +5,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import polyglotus.api_gateway.model.path.UserServicePath;
 
 @Configuration
 public class UserServiceRoutes {
@@ -15,31 +16,31 @@ public class UserServiceRoutes {
     public RouteLocator userRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("user_login", r -> r
-                        .path("/auth/yandex")
+                        .path(UserServicePath.LOGIN.path())
                         .uri(userServiceUrl))
                 .route("user_logout", r -> r
-                        .path("/auth/logout")
+                        .path(UserServicePath.LOGOUT.path())
                         .uri(userServiceUrl))
                 .route("user_onboarding", r -> r
-                        .path("/users/me/onboarding")
+                        .path(UserServicePath.ONBOARDING.path())
                         .uri(userServiceUrl))
                 .route("user_me", r -> r
-                        .path("/users/me")
+                        .path(UserServicePath.USERS_ME.path())
                         .uri(userServiceUrl))
                 .route("user_change_level", r -> r
-                        .path("/users/me/level")
+                        .path(UserServicePath.USERS_ME_LEVEL.path())
                         .uri(userServiceUrl))
                 .route("user_change_avatar", r -> r
-                        .path("/users/me/avatar")
+                        .path(UserServicePath.USERS_ME_AVATAR.path())
                         .uri(userServiceUrl))
                 .route("user_change_topics", r -> r
-                        .path("/users/me/topics")
+                        .path(UserServicePath.USERS_ME_TOPICS.path())
                         .uri(userServiceUrl))
                 .route("user_change_theme", r -> r
-                        .path("/users/me/theme")
+                        .path(UserServicePath.USERS_ME_THEME.path())
                         .uri(userServiceUrl))
                 .route("references", r -> r
-                        .path("/references")
+                        .path(UserServicePath.REFERENCES.path())
                         .uri(userServiceUrl))
                 .build();
     }

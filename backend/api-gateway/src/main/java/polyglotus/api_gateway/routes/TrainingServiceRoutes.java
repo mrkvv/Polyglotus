@@ -5,6 +5,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import polyglotus.api_gateway.model.path.TrainingServicePath;
 
 @Configuration
 public class TrainingServiceRoutes {
@@ -16,16 +17,16 @@ public class TrainingServiceRoutes {
     public RouteLocator trainingRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("training_translation", r -> r
-                        .path("/training/translate")
+                        .path(TrainingServicePath.TRAINING_TRANSLATE.path())
                         .uri(trainingServiceUrl))
                 .route("training_match", r -> r
-                        .path("/training/match")
+                        .path(TrainingServicePath.TRAINING_MATCH.path())
                         .uri(trainingServiceUrl))
                 .route("training_fill", r -> r
-                        .path("/training/fill")
+                        .path(TrainingServicePath.TRAINING_FILL.path())
                         .uri(trainingServiceUrl))
                 .route("training_mark_correct", r -> r
-                        .path("/training/mark-correct")
+                        .path(TrainingServicePath.MARK_CORRECT.path())
                         .uri(trainingServiceUrl))
                 .build();
     }

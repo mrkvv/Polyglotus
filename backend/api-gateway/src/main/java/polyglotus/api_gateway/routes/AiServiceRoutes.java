@@ -5,6 +5,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import polyglotus.api_gateway.model.path.AiServicePath;
 
 @Configuration
 public class AiServiceRoutes {
@@ -16,7 +17,7 @@ public class AiServiceRoutes {
     public RouteLocator aiRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("chat", r -> r
-                        .path("/ai/chat")
+                        .path(AiServicePath.CHAT.path())
                         .uri(aiServiceUrl))
                 .build();
     }

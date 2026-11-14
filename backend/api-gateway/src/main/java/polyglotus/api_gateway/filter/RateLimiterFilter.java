@@ -8,31 +8,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import polyglotus.api_gateway.model.path.Path;
+import polyglotus.api_gateway.service.PathRegistry;
 import polyglotus.api_gateway.service.RedisRateLimiterService;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 @Component
 public class RateLimiterFilter implements GlobalFilter, Ordered {
 
-    private static final String LOGIN_ACTION = "login";
-    private static final String GET_REFERENCES_ACTION = "references";
-    private static final String OTHER_ACTION = "other";
-
-    private static final String LOGIN_PATH = "/auth/yandex";
-    private static final String REFERENCES_PATH = "/references";
-
     private static final String X_USER_ID_HEADER = "X-User-Id";
-
     private static final String TOO_MANY_REQUESTS_ERROR = "TOO_MANY_REQUESTS";
-
-    private static final Map<String, Integer> LIMITS = Map.of(
-            LOGIN_ACTION,5,
-            GET_REFERENCES_ACTION,5,
-            OTHER_ACTION, 20
-    );
 
     private final RedisRateLimiterService rateLimiterService;
 
@@ -42,9 +29,9 @@ public class RateLimiterFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String path = exchange.getRequest().getPath().toString();
-        String action = defineAction(path);
-        int limit = LIMITS.get(action);
+        Path path = PathRegistry.resolve(exchange.getRequest().getPath().toString());
+        String action = path.action();
+        int limit = path.limit();
 
         String ip = exchange.getRequest().getRemoteAddress().getAddress().getHostAddress();
         String userId = exchange.getRequest().getHeaders().getFirst(X_USER_ID_HEADER);
@@ -66,11 +53,6 @@ public class RateLimiterFilter implements GlobalFilter, Ordered {
                 });
     }
 
-    private String defineAction(String path) {
-        if (path.contains(LOGIN_PATH)) return LOGIN_ACTION;
-        if (path.contains(REFERENCES_PATH)) return GET_REFERENCES_ACTION;
-        return OTHER_ACTION;
-    }
 
     private Mono<Void> tooManyRequests(ServerWebExchange exchange, int limit) {
         exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
