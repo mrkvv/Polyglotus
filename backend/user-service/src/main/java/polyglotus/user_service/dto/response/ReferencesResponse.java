@@ -6,7 +6,8 @@ import java.util.Map;
 public record ReferencesResponse (
     List<Level> levels,
     List<Topic> topics,
-    List<Avatar> avatars
+    List<Avatar> avatars,
+    List<Theme> themes
 ) {
     public record Level(Integer id, String name) {
         public static Level fromMap(Map<String, Object> map) {
@@ -29,6 +30,14 @@ public record ReferencesResponse (
             Integer id = (Integer) map.get("id");
             String svg = (String) map.get("avatar");
             return new Avatar(id, svg);
+        }
+    }
+
+    public record Theme(Integer id, String name) {
+        public static Theme fromMap(Map<String, Object> map) {
+            Integer id = (Integer) map.get("id");
+            String name = (String) map.get("theme_name");
+            return new Theme(id, name);
         }
     }
 }

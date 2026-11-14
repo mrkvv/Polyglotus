@@ -10,6 +10,11 @@ CREATE TABLE avatars (
     avatar TEXT NOT NULL
 );
 
+CREATE TABLE themes (
+    id SERIAL PRIMARY KEY,
+    theme_name VARCHAR(50) UNIQUE NOT NULL
+);
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     yandex_id VARCHAR(255) UNIQUE NOT NULL,
@@ -17,6 +22,7 @@ CREATE TABLE users (
     last_name VARCHAR(100),
     level_id INTEGER REFERENCES levels(id) ON DELETE SET NULL,
     avatar_id INTEGER REFERENCES avatars(id) ON DELETE SET NULL,
+    theme_id INTEGER DEFAULT 1 REFERENCES themes(id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
