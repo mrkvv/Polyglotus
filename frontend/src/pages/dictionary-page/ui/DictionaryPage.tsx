@@ -49,7 +49,9 @@ export function DictionaryPage() {
   const [debouncedWord, setDebouncedWord] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchWrapperRef = useRef<HTMLDivElement>(null);
 
+  // Дебаунс: обновляем debouncedWord при изменении ввода
   useEffect(() => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     const trimmed = searchInput.trim();
@@ -67,6 +69,17 @@ export function DictionaryPage() {
     };
   }, [searchInput]);
 
+  // Клик вне SearchWrapper — закрыть дропдаун, слово остаётся
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const { data: translationsData, isFetching: isTranslationsFetching } =
     useGetTranslationsQuery(
       { word: debouncedWord },
@@ -75,7 +88,6 @@ export function DictionaryPage() {
 
   // ── Добавление слова ──────────────────────────────────
   const [insertWord] = useInsertWordMutation();
-  // Храним ключи слов, по которым идёт запрос: "word|ru|partOfSpeech"
   const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
 
   const handleAdd = useCallback(
@@ -84,6 +96,10 @@ export function DictionaryPage() {
       setPendingIds((prev) => new Set(prev).add(key));
       try {
         await insertWord({ en: word, ru: variant, partOfSpeech }).unwrap();
+        // После успешного добавления — стираем поле и закрываем дропдаун
+        setSearchInput('');
+        setDebouncedWord('');
+        setDropdownOpen(false);
       } finally {
         setPendingIds((prev) => {
           const next = new Set(prev);
@@ -100,9 +116,13 @@ export function DictionaryPage() {
     console.log('manual add');
   }, []);
 
-  const handleClose = useCallback(() => {
-    setDropdownOpen(false);
-  }, []);
+  // Фокус на поле — если есть текст, показать дропдаун
+  const handleFocus = useCallback(() => {
+    if (searchInput.trim()) {
+      setDebouncedWord(searchInput.trim());
+      setDropdownOpen(true);
+    }
+  }, [searchInput]);
 
   return (
     <div className="DictionaryPage">
@@ -111,14 +131,15 @@ export function DictionaryPage() {
           {t('dictionary')}
         </Typography>
 
-        {/* Обёртка с position: relative — дропдаун позиционируется от неё */}
-        <div className="DictionaryPage__SearchWrapper">
+        <div className="DictionaryPage__SearchWrapper" ref={searchWrapperRef}>
           <TextField
             className="DictionaryPage__Search"
             placeholder="Search"
             variant="outlined"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
+            onFocus={handleFocus}
+            autoComplete="off"
             slotProps={{
               input: {
                 startAdornment: (
@@ -138,7 +159,6 @@ export function DictionaryPage() {
               pendingIds={pendingIds}
               onAdd={handleAdd}
               onManual={handleManual}
-              onClose={handleClose}
             />
           )}
         </div>

@@ -6,22 +6,23 @@
     border: 1px solid $color-border;
     border-radius: 12px;
     overflow: hidden;
-    background-color: $color-surface;
+    background-color: $color-bg;
   }
 
   // Шапка таблицы
   &__head-cell {
-    background-color: $color-surface !important;
+    background-color: $color-bg !important;
     color: $color-text-muted !important;
     font-weight: 500 !important;
-    font-size: 14px !important;
+    font-size: 18px !important;
     border-bottom: 1px solid $color-border !important;
     padding: 16px 20px !important;
   }
 
   // Ячейки тела
   &__body-cell {
-    font-size: 14px !important;
+    width: auto;
+    font-size: 16px !important;
     color: $color-text !important;
     border-bottom: 1px solid $color-border !important;
     padding: 12px 20px !important;
@@ -29,10 +30,6 @@
 
   // Строки
   &__row {
-    &:nth-of-type(odd) {
-      background-color: $color-surface;
-    }
-
     &:hover {
       background-color: $color-surface-hover !important;
     }
@@ -69,7 +66,7 @@
   // Пагинация
   &__pagination {
     border-top: none !important;
-    background-color: $color-surface;
+    background-color: $color-bg;
     color: $color-text-muted;
 
     .MuiTablePagination-toolbar {
@@ -78,13 +75,13 @@
 
     .MuiTablePagination-selectLabel,
     .MuiTablePagination-displayedRows {
-      font-size: 12px;
+      font-size: 14px;
       color: $color-text-muted;
       margin: 0;
     }
 
     .MuiTablePagination-select {
-      font-size: 12px;
+      font-size: 14px;
       color: $color-text-muted;
     }
   }

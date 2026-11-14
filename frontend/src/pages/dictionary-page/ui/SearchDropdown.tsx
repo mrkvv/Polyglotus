@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Paper, Typography, List, ListItemButton, ListItemText,
   Divider, Button, Box, CircularProgress,
@@ -16,7 +16,6 @@ interface SearchDropdownProps {
   pendingIds: Set<string>;
   onAdd: (variant: string, partOfSpeech: string, word: string) => void;
   onManual: () => void;
-  onClose: () => void;
 }
 
 // Вспомогательный компонент — группа переводов из каталога
@@ -117,28 +116,16 @@ export function SearchDropdown({
   pendingIds,
   onAdd,
   onManual,
-  onClose,
 }: SearchDropdownProps) {
-  const ref = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     setExpanded(false);
   }, [word]);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [onClose]);
-
   if (isLoading) {
     return (
-      <Paper ref={ref} elevation={3} sx={paperSx}>
+      <Paper elevation={3} sx={paperSx}>
         <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
           <CircularProgress size={24} />
         </Box>
@@ -159,7 +146,7 @@ export function SearchDropdown({
   const visibleCatalog = expanded ? inCatalog : inCatalog.slice(0, CATALOG_PREVIEW_LIMIT);
 
   return (
-    <Paper ref={ref} elevation={3} sx={paperSx}>
+    <Paper elevation={3} sx={paperSx}>
       {/* ── Скроллируемая зона ── */}
       <Box sx={needsScroll ? scrollAreaSx : undefined}>
 

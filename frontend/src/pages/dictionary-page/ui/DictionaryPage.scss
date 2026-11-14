@@ -25,9 +25,9 @@
     align-items: center;
 
     &__Description {
-      width: 50%;
+      width: 479px;
       align-items: start;
-      margin-bottom: 24px;
+      margin-bottom: 24px !important;
     }
   }
 
@@ -47,7 +47,7 @@
     border: 1px solid $color-border;
     border-radius: 12px;
     overflow: hidden;
-    background-color: $color-surface;
+    background-color: $color-bg;
   }
 
   &__Tabs.MuiTabs-root {

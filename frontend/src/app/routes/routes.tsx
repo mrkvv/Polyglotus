@@ -1,4 +1,6 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
 import { userStore } from '@entities/user'
 import { LoginPage } from '@pages/login-page'
 import { HomePage } from '@pages/home-page'
@@ -18,6 +20,8 @@ import { TrainingPage } from '@pages/training-page'
 import { DictionaryPage } from '@pages/dictionary-page'
 import { SettingsPage } from '@pages/settings-page'
 import { ErrorHandlerProvider } from '@app/providers/ErrorHandlerProvider'
+import { useGetUserMeQuery } from '@entities/user/api/uesrApi'
+import { setTheme } from '@app/store/themeSlice'
 
 function RootLayout() {
   return (
@@ -35,6 +39,15 @@ function PublicLayout() {
 
 function ProtectedLayout() {
   const token = localStorage.getItem('token');
+  const dispatch = useDispatch()
+  const { data: user } = useGetUserMeQuery(undefined, { skip: !token })
+
+  useEffect(() => {
+    if (user) {
+      dispatch(setTheme(user.themeId === 1 ? 'light' : 'dark'))
+    }
+  }, [user])
+
   if (!token) {
     return <Navigate to="/login" replace />
   }

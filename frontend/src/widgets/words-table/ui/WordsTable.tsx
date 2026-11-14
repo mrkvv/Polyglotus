@@ -138,7 +138,7 @@ export function WordsTable({
                     </TableCell>
                     <TableCell className="WordsTable__body-cell" align="right">
                       <IconButton size="small">
-                        <MoreVertIcon fontSize="small" />
+                        <MoreVertIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>
