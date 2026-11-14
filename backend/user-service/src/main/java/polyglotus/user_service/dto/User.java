@@ -11,6 +11,7 @@ public record User (
         String lastName,
         Integer levelId,
         Integer avatarId,
+        Integer themeId,
         List<Integer> topicIds,
         Streak streak,
         String createdAt
@@ -29,6 +30,7 @@ public record User (
         String lastName = (String) map.get("last_name");
         Integer levelId = (Integer) map.get("level_id");
         Integer avatarId = (Integer) map.get("avatar_id");
+        Integer themeId = (Integer) map.get("theme_id");
         String createdAt = Objects.toString(map.get("created_at"), null);
 
         Integer currentStreak = (Integer) map.get("current_streak");
@@ -37,6 +39,6 @@ public record User (
         Streak streak = new Streak(currentStreak, longestStreak, lastTrainingDate);
 
         return new User(id, yandexId, firstName, lastName,
-                levelId, avatarId, topicIds, streak, createdAt);
+                levelId, avatarId, themeId, topicIds, streak, createdAt);
     }
 }

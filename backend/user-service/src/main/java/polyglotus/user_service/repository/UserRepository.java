@@ -29,6 +29,7 @@ public class UserRepository {
                    u.last_name,
                    u.level_id,
                    u.avatar_id,
+                   u.theme_id,
                    u.created_at,
                    s.current_streak,
                    s.longest_streak,
