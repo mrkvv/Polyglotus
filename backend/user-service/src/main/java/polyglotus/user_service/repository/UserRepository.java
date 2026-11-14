@@ -48,6 +48,11 @@ public class UserRepository {
             WHERE id = ?
             """;
 
+    private static final String SET_USER_THEME_SQL = """
+            UPDATE users SET theme_id = ?
+            WHERE id = ?
+            """;
+
     private final JdbcTemplate jdbcTemplate;
 
     public UserRepository(JdbcTemplate jdbcTemplate) {
@@ -73,5 +78,9 @@ public class UserRepository {
 
     public void setUserAvatar(Integer userId, Integer newAvatarId) {
         jdbcTemplate.update(SET_USER_AVATAR_SQL, newAvatarId, userId);
+    }
+
+    public void setUserTheme(Integer userId, Integer newThemeId) {
+        jdbcTemplate.update(SET_USER_THEME_SQL, newThemeId, userId);
     }
 }

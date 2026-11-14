@@ -8,6 +8,7 @@ import polyglotus.user_service.dto.User;
 import polyglotus.user_service.dto.response.YandexInfoResponse;
 import polyglotus.user_service.exception.IncorrectAvatarIdException;
 import polyglotus.user_service.exception.IncorrectLevelIdException;
+import polyglotus.user_service.exception.IncorrectThemeIdException;
 import polyglotus.user_service.exception.IncorrectTopicIdException;
 import polyglotus.user_service.repository.*;
 
@@ -22,6 +23,7 @@ public class UserService {
     private final UserStreaksRepository userStreaksRepository;
     private final AvatarsRepository avatarsRepository;
     private final TopicsRepository topicsRepository;
+    private final ThemesRepository themesRepository;
 
     private final RedisRepository redisRepository;
 
@@ -31,6 +33,7 @@ public class UserService {
                        UserStreaksRepository userStreaksRepository,
                        AvatarsRepository avatarsRepository,
                        TopicsRepository topicsRepository,
+                       ThemesRepository themesRepository,
                        RedisRepository redisRepository) {
         this.userRepository = userRepository;
         this.userTopicsRepository = userTopicsRepository;
@@ -38,6 +41,7 @@ public class UserService {
         this.userStreaksRepository = userStreaksRepository;
         this.avatarsRepository = avatarsRepository;
         this.topicsRepository = topicsRepository;
+        this.themesRepository = themesRepository;
         this.redisRepository = redisRepository;
     }
 
@@ -99,6 +103,11 @@ public class UserService {
         return distinctTopicIds;
     }
 
+    public void setUserTheme(Integer userId, Integer themeId) {
+        ensureThemeExists(themeId);
+        userRepository.setUserTheme(userId, themeId);
+    }
+
 
     private void ensureLevelExists(Integer levelId) {
         if(levelId == null || !levelsRepository.levelExists(levelId)) {
@@ -115,6 +124,12 @@ public class UserService {
     private void ensureTopicsExists(List<Integer> topicIds) {
         if(topicIds.isEmpty() || !topicsRepository.topicsExist(topicIds)) {
             throw new IncorrectTopicIdException(topicIds);
+        }
+    }
+
+    private void ensureThemeExists(Integer themeId) {
+        if(themeId == null || !themesRepository.themeExists(themeId)) {
+            throw new IncorrectThemeIdException(themeId);
         }
     }
 }
