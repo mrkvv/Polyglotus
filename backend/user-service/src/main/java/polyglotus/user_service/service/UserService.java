@@ -74,6 +74,7 @@ public class UserService {
     @Transactional
     public User getUserInfo(Integer userId) {
         List<Integer> userTopics = userTopicsRepository.getUserTopics(userId);
+        userStreaksRepository.updateStreak(userId);
         return User.fromMap(userRepository.getUserInfo(userId), userTopics);
     }
 
