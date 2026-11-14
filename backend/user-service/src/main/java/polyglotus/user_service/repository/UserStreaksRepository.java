@@ -10,6 +10,13 @@ public class UserStreaksRepository {
             VALUES (?) ON CONFLICT(user_id) DO NOTHING
             """;
 
+    private static final String UPDATE_USER_STREAK_SQL = """
+            UPDATE user_streaks
+            SET current_streak = 0
+            WHERE user_id = ?
+                AND CURRENT_DATE - last_training_date > 1
+            """;
+
     private final JdbcTemplate jdbcTemplate;
 
     public UserStreaksRepository(JdbcTemplate jdbcTemplate) {
@@ -18,5 +25,9 @@ public class UserStreaksRepository {
 
     public void insertUser(Integer userId) {
         jdbcTemplate.update(INITIALIZE_USER_STREAK_SQL, userId);
+    }
+
+    public void updateStreak(Integer userId) {
+        jdbcTemplate.update(UPDATE_USER_STREAK_SQL, userId);
     }
 }

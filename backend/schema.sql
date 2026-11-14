@@ -2,12 +2,18 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE levels (
     id SERIAL PRIMARY KEY,
-    level_name VARCHAR(10) UNIQUE NOT NULL
+    level_name VARCHAR(10) UNIQUE NOT NULL,
+    level_description VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE avatars (
     id SERIAL PRIMARY KEY,
     avatar TEXT NOT NULL
+);
+
+CREATE TABLE themes (
+    id SERIAL PRIMARY KEY,
+    theme_name VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE users (
@@ -17,6 +23,7 @@ CREATE TABLE users (
     last_name VARCHAR(100),
     level_id INTEGER REFERENCES levels(id) ON DELETE SET NULL,
     avatar_id INTEGER REFERENCES avatars(id) ON DELETE SET NULL,
+    theme_id INTEGER DEFAULT 1 REFERENCES themes(id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

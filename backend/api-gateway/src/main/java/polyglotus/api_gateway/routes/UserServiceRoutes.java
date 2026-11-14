@@ -35,6 +35,9 @@ public class UserServiceRoutes {
                 .route("user_change_topics", r -> r
                         .path("/users/me/topics")
                         .uri(userServiceUrl))
+                .route("user_change_theme", r -> r
+                        .path("/users/me/theme")
+                        .uri(userServiceUrl))
                 .route("references", r -> r
                         .path("/references")
                         .uri(userServiceUrl))

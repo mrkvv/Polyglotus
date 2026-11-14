@@ -10,6 +10,7 @@ import polyglotus.training_service.dto.TranslationTask;
 import polyglotus.training_service.service.MatchTaskService;
 import polyglotus.training_service.service.SentenceFillingTaskService;
 import polyglotus.training_service.service.TranslationTaskService;
+import polyglotus.training_service.service.WordProgressService;
 
 import java.util.List;
 import java.util.Map;
@@ -27,13 +28,16 @@ public class TrainingController {
     private final TranslationTaskService translationTaskService;
     private final MatchTaskService matchTaskService;
     private final SentenceFillingTaskService sentenceFillingTaskService;
+    private final WordProgressService wordProgressService;
 
     public TrainingController(TranslationTaskService translationTaskService,
                               MatchTaskService matchTaskService,
-                              SentenceFillingTaskService sentenceFillingTaskService) {
+                              SentenceFillingTaskService sentenceFillingTaskService,
+                              WordProgressService wordProgressService) {
         this.translationTaskService = translationTaskService;
         this.matchTaskService = matchTaskService;
         this.sentenceFillingTaskService = sentenceFillingTaskService;
+        this.wordProgressService = wordProgressService;
     }
 
     @GetMapping("/translate")
@@ -76,7 +80,7 @@ public class TrainingController {
             @RequestHeader(value = USER_ID_HEADER) Integer id,
             @RequestBody MarkCorrectRequest request
     ) {
-        matchTaskService.markCorrect(id, request.idsToMark());
+        wordProgressService.markCorrect(id, request.idsToMark());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

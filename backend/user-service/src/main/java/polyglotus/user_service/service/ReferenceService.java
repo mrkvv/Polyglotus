@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import polyglotus.user_service.dto.response.ReferencesResponse;
 import polyglotus.user_service.repository.AvatarsRepository;
 import polyglotus.user_service.repository.LevelsRepository;
+import polyglotus.user_service.repository.ThemesRepository;
 import polyglotus.user_service.repository.TopicsRepository;
 
 import java.util.List;
@@ -14,13 +15,16 @@ public class ReferenceService {
     private final AvatarsRepository avatarsRepository;
     private final LevelsRepository levelsRepository;
     private final TopicsRepository topicsRepository;
+    private final ThemesRepository themesRepository;
 
     public ReferenceService(AvatarsRepository avatarsRepository,
                             LevelsRepository levelsRepository,
-                            TopicsRepository topicsRepository) {
+                            TopicsRepository topicsRepository,
+                            ThemesRepository themesRepository) {
         this.avatarsRepository = avatarsRepository;
         this.levelsRepository = levelsRepository;
         this.topicsRepository = topicsRepository;
+        this.themesRepository = themesRepository;
     }
 
     public ReferencesResponse getReferences() {
@@ -43,6 +47,12 @@ public class ReferenceService {
                         .map(ReferencesResponse.Topic::fromMap)
                         .toList();
 
-        return new ReferencesResponse(levels, topics, avatars);
+        List<ReferencesResponse.Theme> themes =
+                themesRepository.getAllThemes()
+                        .stream()
+                        .map(ReferencesResponse.Theme::fromMap)
+                        .toList();
+
+        return new ReferencesResponse(levels, topics, avatars, themes);
     }
 }
