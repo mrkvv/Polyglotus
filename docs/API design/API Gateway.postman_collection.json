@@ -1,11 +1,11 @@
 {
   "info": {
-    "_postman_id": "ec9e1505-e377-46ab-a864-ae58e8de2de1",
+    "_postman_id": "8f74ce87-ac6d-4d80-abed-51d46a4cc4d4",
     "name": "API Gateway",
     "description": "Раздел, посвященный единой точке входа в бекенд проекта. Frontend обращается именно сюда и практически в каждый свой запрос вставляет токен пользователя.\n\nAPI Gateway осуществляет 3 основные функции:\n\n- Маршрутизация: после получения запроса, проводит его через цепочку фильтров и если все хорошо, то пробрасывает запрос дальше в нужный сервис. Если что-то пошло не так (не пройдена аутентификация / нарушен rate-limit), то запрос не идет дальше, а падает уже здесь.\n    \n- Аутентификация: осуществляется через сессии, которые хранятся в Redis. Роуты для регистрации и входа в аккаунт генерируют пользовательский токен, который следует запомнить на клиенте и в каждом запросе, где требуется аутентифицировать пользователя, необходимо прикреплять этот токен в заголовок \"Authorization\" с ключом \"Bearer <вставить токен>\". Если токен неверный, то запрос падает с ошибкой \"401 Not Authorized\".\n    \n- Rate-limiting: защита от дудос атак. Осуществляется через подсчет в Redis количества действий от определенного пользователя за последнюю минуту. Если счетчик превышает заранее выставленное нами значение, то запрос падает с ошибкой \"429 Too Many Requests\".\n    \n\nДалее коды ответов 401, 422, 429 и 500 указаны не будет, но нужно знать, что:\n\n- 429 может вылететь в любом запросе, когда запросы отправляются слишком быстро: подсчет будет идти и по id пользователя и по его ip.\n    \n- 401 только там, где нужно в заголовок вставлять токен. Если она вылетела, значит либо нет токена, либо он неверный / истек срок действия.\n    \n- 422 может вылезти везде, если структура тела несоответствует ожидаемому (нет какого-либо важного поля или в названии поля допущена ошибка)\n    \n- 500 может выпасть везде, это значит что БД (или Redis) упали",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "53202645",
-    "_collection_link": "https://go.postman.co/collection/53202645-ec9e1505-e377-46ab-a864-ae58e8de2de1?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/53202645-8f74ce87-ac6d-4d80-abed-51d46a4cc4d4?source=collection_link"
   },
   "item": [
     {
@@ -73,7 +73,11 @@
               }
             },
             "url": {
-              "raw": "/auth/yandex",
+              "raw": "localhost:8000/auth/yandex",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "auth",
                 "yandex"
@@ -137,7 +141,11 @@
               }
             ],
             "url": {
-              "raw": "/auth/logout",
+              "raw": "localhost:8000/auth/logout",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "auth",
                 "logout"
@@ -235,7 +243,11 @@
               }
             },
             "url": {
-              "raw": "/users/me/onboarding",
+              "raw": "localhost:8000/users/me/onboarding",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "users",
                 "me",
@@ -300,7 +312,11 @@
               }
             ],
             "url": {
-              "raw": "/users/me",
+              "raw": "localhost:8000/users/me",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "users",
                 "me"
@@ -337,7 +353,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": 1,\n    \"yandexId\": 108232,\n    \"firstName\": \"Иван\",\n    \"lastName\": \"Иванов\",\n    \"levelId\": 3,\n    \"avatarId\": 2,\n    \"topicIds\": [1, 3, 7],\n    \"streak\": {\n        \"current\": 1,\n        \"longest\": 10,\n        \"lastTrainingDate\": \"2026-10-04\"\n    },\n    \"createdAt\": \"2026-10-04T09:31:41.265238\"\n}"
+              "body": "{\n    \"id\": 1,\n    \"yandexId\": 108232,\n    \"firstName\": \"Иван\",\n    \"lastName\": \"Иванов\",\n    \"levelId\": 3,\n    \"avatarId\": 2,\n    \"themeId\": 1,\n    \"topicIds\": [1, 3, 7],\n    \"streak\": {\n        \"current\": 1,\n        \"longest\": 10,\n        \"lastTrainingDate\": \"2026-10-04\"\n    },\n    \"createdAt\": \"2026-10-04T09:31:41.265238\"\n}"
             }
           ]
         },
@@ -368,7 +384,11 @@
               }
             },
             "url": {
-              "raw": "/users/me/level",
+              "raw": "localhost:8000/users/me/level",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "users",
                 "me",
@@ -451,7 +471,11 @@
               }
             },
             "url": {
-              "raw": "/users/me/avatar",
+              "raw": "localhost:8000/users/me/avatar",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "users",
                 "me",
@@ -534,7 +558,11 @@
               }
             },
             "url": {
-              "raw": "/users/me/topics",
+              "raw": "localhost:8000/users/me/topics",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "users",
                 "me",
@@ -596,7 +624,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "/references",
+              "raw": "localhost:8000/references",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "references"
               ]
@@ -618,10 +650,98 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": "text",
-              "header": [],
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "cookie": [],
-              "body": "{\r\n    \"levels\": [\r\n        { \"id\": 1, \"name\": \"A1\" },\r\n        { \"id\": 2, \"name\": \"A2\" },\r\n        { \"id\": 3, \"name\": \"B1\" },\r\n        { \"id\": 4, \"name\": \"B2\" },\r\n        { \"id\": 5, \"name\": \"C1\" },\r\n        { \"id\": 6, \"name\": \"C2\" }\r\n    ],\r\n    \"topics\": [\r\n        { \"id\": 1, \"name\": \"Sport\" },\r\n        { \"id\": 2, \"name\": \"Travel\" },\r\n        { \"id\": 3, \"name\": \"Food\" },\r\n        { \"id\": 4, \"name\": \"Technology\" },\r\n        { \"id\": 5, \"name\": \"Music\" }\r\n    ]\r\n    \"avatars\": [\r\n        { \"id\": 1, \"svg\": \"<svg >...</svg>\" },\r\n        { \"id\": 2, \"svg\": \"<svg >...</svg>\" }\r\n    ]\r\n}"
+              "body": "{\r\n    \"levels\": [\r\n        { \"id\": 1, \"name\": \"A1\", \"description\": \"Начинаю с нуля\" },\r\n        { \"id\": 2, \"name\": \"A2\", \"description\": \"Знаю основы\" },\r\n        { \"id\": 3, \"name\": \"B1\", \"description\": \"Могу поддержать беседу\" },\r\n        { \"id\": 4, \"name\": \"B2\", \"description\": \"Говорю уверенно\" },\r\n        { \"id\": 5, \"name\": \"C1\", \"description\": \"Свободно владею\" },\r\n        { \"id\": 6, \"name\": \"C2\", \"description\": \"Уровень носителя\" }\r\n    ],\r\n    \"topics\": [\r\n        { \"id\": 1, \"name\": \"Sport\" },\r\n        { \"id\": 2, \"name\": \"Travel\" },\r\n        { \"id\": 3, \"name\": \"Food\" },\r\n        { \"id\": 4, \"name\": \"Technology\" },\r\n        { \"id\": 5, \"name\": \"Music\" }\r\n    ],\r\n    \"avatars\": [\r\n        { \"id\": 1, \"svg\": \"<svg >...</svg>\" },\r\n        { \"id\": 2, \"svg\": \"<svg >...</svg>\" }\r\n    ],\r\n    \"themes\": [\r\n        { \"id\": 1, \"name\": \"light\" },\r\n        { \"id\": 2, \"name\": \"dark\" }\r\n    ]\r\n}"
+            }
+          ]
+        },
+        {
+          "name": "Сменить тему оформления",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"newThemeId\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8000/users/me/theme",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "users",
+                "me",
+                "theme"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"newThemeId\": 2\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "/users/me/theme",
+                  "path": [
+                    "users",
+                    "me",
+                    "theme"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\r\n    \"newThemeId\": 2\r\n}"
             }
           ]
         }
@@ -655,7 +775,11 @@
               }
             },
             "url": {
-              "raw": "/ai/chat",
+              "raw": "localhost:8000/ai/chat",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "ai",
                 "chat"
@@ -700,7 +824,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\r\n    \"userMessage\": \"Hello, give me 5 daily excersizes\",\r\n    \"AiMessage\": \"Sure, here is your daily ex....\"\r\n}"
+              "body": "{\r\n    \"userMessage\": \"Hello, give me 5 daily excersizes\",\r\n    \"aiMessage\": \"Sure, here is your daily ex....\"\r\n}"
             }
           ]
         },
@@ -715,7 +839,11 @@
               }
             ],
             "url": {
-              "raw": "/ai/chat",
+              "raw": "localhost:8000/ai/chat",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "ai",
                 "chat"
@@ -751,7 +879,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\r\n    \"messages\": [\r\n        { \"id\": 1, \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\", \"createdAt\": \"...\"},\r\n        { \"id\": 2, \"role\": \"ai\", \"content\": \"Sure, here is your daily ex....\", \"createdAt\": \"...\"},\r\n        { \"id\": 12, \"role\": \"user\", \"content\": \"...\", \"createdAt\": \"...\"},\r\n        { \"id\": 14, \"role\": \"ai\", \"content\": \"...\", \"createdAt\": \"...\"}\r\n    ]\r\n}"
+              "body": "{\r\n    \"messages\": [\r\n        { \"id\": 1, \"userId\": 1, \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\", \"createdAt\": \"...\"},\r\n        { \"id\": 2, \"userId\": 1, \"role\": \"LLM\", \"content\": \"Sure, here is your daily ex....\", \"createdAt\": \"...\"},\r\n        { \"id\": 12, \"userId\": 1, \"role\": \"user\", \"content\": \"...\", \"createdAt\": \"...\"},\r\n        { \"id\": 14, \"userId\": 1, \"role\": \"LLM\", \"content\": \"...\", \"createdAt\": \"...\"}\r\n    ]\r\n}"
             }
           ]
         },
@@ -766,7 +894,11 @@
               }
             ],
             "url": {
-              "raw": "/ai/chat",
+              "raw": "localhost:8000/ai/chat",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "ai",
                 "chat"
@@ -818,7 +950,11 @@
               }
             ],
             "url": {
-              "raw": "/training/translate?to=en&amount=5",
+              "raw": "localhost:8000/training/translate?to=en&amount=5",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "training",
                 "translate"
@@ -936,7 +1072,11 @@
               }
             ],
             "url": {
-              "raw": "/training/match?amount=5",
+              "raw": "localhost:8000/training/match?amount=5",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "training",
                 "match"
@@ -1002,7 +1142,11 @@
               }
             ],
             "url": {
-              "raw": "/training/fill?amount=3",
+              "raw": "localhost:8000/training/fill?amount=3",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "training",
                 "fill"
@@ -1076,7 +1220,11 @@
               }
             },
             "url": {
-              "raw": "/training/mark-correct",
+              "raw": "localhost:8000/training/mark-correct",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "training",
                 "mark-correct"
@@ -1138,7 +1286,11 @@
               }
             ],
             "url": {
-              "raw": "/dictionary?page=0&size=20&status=LEARNED",
+              "raw": "localhost:8000/dictionary?page=0&size=20&status=LEARNED",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "dictionary"
               ],
@@ -1234,7 +1386,11 @@
               }
             },
             "url": {
-              "raw": "/dictionary/words",
+              "raw": "localhost:8000/dictionary/words",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "dictionary",
                 "words"
@@ -1312,7 +1468,11 @@
               }
             },
             "url": {
-              "raw": "/dictionary/words/{id}",
+              "raw": "localhost:8000/dictionary/words/{id}",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "dictionary",
                 "words",
@@ -1378,7 +1538,11 @@
               }
             ],
             "url": {
-              "raw": "/dictionary/words/{id}",
+              "raw": "localhost:8000/dictionary/words/{id}",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "dictionary",
                 "words",
@@ -1440,7 +1604,11 @@
               }
             },
             "url": {
-              "raw": "/dictionary/words",
+              "raw": "localhost:8000/dictionary/words",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "dictionary",
                 "words"
@@ -1513,7 +1681,11 @@
               }
             },
             "url": {
-              "raw": "/dictionary/words/status/{id}",
+              "raw": "localhost:8000/dictionary/words/status/{id}",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "dictionary",
                 "words",
@@ -1595,7 +1767,11 @@
               }
             },
             "url": {
-              "raw": "/dictionary/words/status",
+              "raw": "localhost:8000/dictionary/words/status",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "dictionary",
                 "words",
@@ -1662,7 +1838,11 @@
               }
             ],
             "url": {
-              "raw": "/translations?word=run",
+              "raw": "localhost:8000/translations?word=run",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "translations"
               ],
@@ -1709,7 +1889,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\r\n    \"word\": \"run\",\r\n    \"inUserDictionary\": [\r\n        {\r\n            \"id\": 2155,\r\n            \"ru\": \"бег\",\r\n            \"partOfSpeech\": \"noun\"\r\n        }\r\n    ],\r\n    \"inCatalog\": [\r\n        {\r\n            \"ru\": \"бегать\",\r\n            \"partOfSpeech\": \"verb\"\r\n        },\r\n        {\r\n            \"ru\": \"управлять\",\r\n            \"partOfSpeech\": \"verb\"\r\n        },\r\n        {\r\n            \"ru\": \"работать\",\r\n            \"partOfSpeech\": \"verb\"\r\n        }\r\n    ]\r\n}"
+              "body": "{\r\n    \"word\": \"run\",\r\n    \"inUserDictionary\": [\r\n        {\r\n            \"id\": 2155,\r\n            \"ru\": \"бег\",\r\n            \"partOfSpeech\": \"noun\"\r\n        }\r\n    ],\r\n    \"inCatalog\": [\r\n        {\r\n            \"title\": \"Бег\",\r\n            \"definition\": \"Действие быстрого передвижения на ногах, быстрее, чем ходьба.\",\r\n            \"variants_of_words\": [\r\n                \"бег\",\r\n                \"забег\",\r\n                \"пробежка\",\r\n                \"спринт\"\r\n            ],\r\n            \"part_of_speech\": \"noun\"\r\n        },\r\n        {\r\n            \"title\": \"Бег\",\r\n            \"definition\": \"Соревнование, в котором участники бегут, чтобы первыми достичь финишной черты.\",\r\n            \"variants_of_words\": [\r\n                \"забег\",\r\n                \"бег\",\r\n                \"гонка\",\r\n                \"соревнование по бегу\"\r\n            ],\r\n            \"part_of_speech\": \"noun\"\r\n        },\r\n        {\r\n            \"title\": \"Непрерывная работа\",\r\n            \"definition\": \"Период непрерывной деятельности или функционирования.\",\r\n            \"variants_of_words\": [\r\n                \"серия\",\r\n                \"цикл\",\r\n                \"непрерывная работа\",\r\n                \"сеанс\"\r\n            ],\r\n            \"part_of_speech\": \"noun\"\r\n        },\r\n        {\r\n            \"title\": \"Серия успехов\",\r\n            \"definition\": \"Непрерывная последовательность успехов или подобных событий.\",\r\n            \"variants_of_words\": [\r\n                \"серия\",\r\n                \"полоса\",\r\n                \"цепочка\",\r\n                \"бум\"\r\n            ],\r\n            \"part_of_speech\": \"noun\"\r\n        },\r\n        {\r\n            \"title\": \"Бежать\",\r\n            \"definition\": \"Двигаться со скоростью быстрее ходьбы, используя быстрые шаги.\",\r\n            \"variants_of_words\": [\r\n                \"бежать\",\r\n                \"мчаться\",\r\n                \"спешить\",\r\n                \"скакать\"\r\n            ],\r\n            \"part_of_speech\": \"verb\"\r\n        },\r\n        {\r\n            \"title\": \"Управлять\",\r\n            \"definition\": \"Возглавлять или управлять чем-либо, например, бизнесом или организацией.\",\r\n            \"variants_of_words\": [\r\n                \"управлять\",\r\n                \"вести\",\r\n                \"руководить\",\r\n                \"организовывать\"\r\n            ],\r\n            \"part_of_speech\": \"verb\"\r\n        },\r\n        {\r\n            \"title\": \"Работать\",\r\n            \"definition\": \"Функционировать или работать должным образом, особенно машины или системы.\",\r\n            \"variants_of_words\": [\r\n                \"работать\",\r\n                \"функционировать\",\r\n                \"действовать\",\r\n                \"запускается\"\r\n            ],\r\n            \"part_of_speech\": \"verb\"\r\n        },\r\n        {\r\n            \"title\": \"Участвовать в беге\",\r\n            \"definition\": \"Участвовать в соревновании, включающем бег.\",\r\n            \"variants_of_words\": [\r\n                \"бежать\",\r\n                \"соревноваться в беге\",\r\n                \"участвовать в гонке\",\r\n                \"спринтовать\"\r\n            ],\r\n            \"part_of_speech\": \"verb\"\r\n        }\r\n    ]\r\n}"
             }
           ]
         },
@@ -1719,7 +1899,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "/daily-word",
+              "raw": "localhost:8000/daily-word",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "daily-word"
               ]
@@ -1759,7 +1943,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "/phrase",
+              "raw": "localhost:8000/phrase",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
               "path": [
                 "phrase"
               ]
