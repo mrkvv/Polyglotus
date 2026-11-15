@@ -1,6 +1,7 @@
 export interface ReferenceItem {
   id: number;
   name: string;
+  description?: string,
 }
 
 export interface AvatarItem {

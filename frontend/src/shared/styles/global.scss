@@ -5,7 +5,7 @@
 :root,
 [data-theme='light'] {
   --color-bg:            #ffffff;
-  --color-surface:       #f5f5f5;
+  --color-surface:       #ffffff;
   --color-surface-hover: #ebebeb;
   --color-border:        #d0d0d0;
   --color-primary:       #000000;
@@ -13,6 +13,10 @@
   --color-text:          #000000;
   --color-text-muted:    #666666;
   --color-error:         #cc0000;
+  --color-selected:      #e8f5e9;
+  --color-selected-hover:#dcedc8;
+  --color-flashcard-bg:  #FFF1D7;
+  --color-flashcard-accent: #f59e0b;
   --sidebar-width:       240px;
 }
 
@@ -27,6 +31,10 @@
   --color-text:          #f0f0f0;
   --color-text-muted:    #aaaaaa;
   --color-error:         #ff5555;
+  --color-selected:      #1a2e1a;
+  --color-selected-hover:#1f361f;
+  --color-flashcard-bg:  #3a2e1a;
+  --color-flashcard-accent: #c97e08;
   --sidebar-width:       240px;
 }
 

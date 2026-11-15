@@ -1,0 +1,88 @@
+@use '@shared/styles/variables' as *;
+
+.WordsTable {
+  &__container {
+    width: 100%;
+    border: 1px solid $color-border;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: $color-bg;
+  }
+
+  // Шапка таблицы
+  &__head-cell {
+    background-color: $color-bg !important;
+    color: $color-text-muted !important;
+    font-weight: 500 !important;
+    font-size: 18px !important;
+    border-bottom: 1px solid $color-border !important;
+    padding: 16px 20px !important;
+  }
+
+  // Ячейки тела
+  &__body-cell {
+    width: auto;
+    font-size: 16px !important;
+    color: $color-text !important;
+    border-bottom: 1px solid $color-border !important;
+    padding: 12px 20px !important;
+  }
+
+  // Строки
+  &__row {
+    &:hover {
+      background-color: $color-surface-hover !important;
+    }
+
+    &--selected {
+      background-color: $color-selected !important;
+
+      &:hover {
+        background-color: $color-selected-hover !important;
+      }
+    }
+  }
+
+  // Кастомный чекбокс (круглый)
+  &__checkbox {
+    padding: 0 !important;
+
+    .MuiSvgIcon-root {
+      font-size: 24px;
+    }
+
+    &.Mui-checked {
+      color: #4caf50 !important;
+    }
+  }
+
+  // Лоадер
+  &__loader {
+    display: flex;
+    justify-content: center;
+    padding: 32px;
+  }
+
+  // Пагинация
+  &__pagination {
+    border-top: none !important;
+    background-color: $color-bg;
+    color: $color-text-muted;
+
+    .MuiTablePagination-toolbar {
+      min-height: 48px;
+    }
+
+    .MuiTablePagination-selectLabel,
+    .MuiTablePagination-displayedRows {
+      font-size: 14px;
+      color: $color-text-muted;
+      margin: 0;
+    }
+
+    .MuiTablePagination-select {
+      font-size: 14px;
+      color: $color-text-muted;
+    }
+  }
+}
