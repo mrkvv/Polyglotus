@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, SyntheticEvent, useRef, useEffect, useCallback } from 'react';
 import { WordsTable, WordsFilter, WordRow, MenuAction } from '@widgets/words-table';
-import { useGetDictionaryQuery, useGetTranslationsQuery, useInsertWordMutation, useUpdateWordStatusMutation, useUpdateWordsStatusesMutation, useDeleteWordMutation, useDeleteWordsBatchMutation, useUpdateWordsMutation, useIncrementWordProgressMutation } from '../api/dictionaryApi';
+import { useGetDictionaryQuery, useGetTranslationsQuery, useInsertWordMutation, useUpdateWordStatusMutation, useUpdateWordsStatusesMutation, useDeleteWordMutation, useDeleteWordsBatchMutation, useUpdateWordsMutation, useIncrementWordProgressMutation, useLazyGetDictionaryQuery } from '../api/dictionaryApi';
 import type { WordStatus } from '../model/types';
 import { mapToWordRow } from '../lib/mapToWordRow';
 import { SearchDropdown } from './SearchDropdown';
@@ -102,11 +102,21 @@ export function DictionaryPage() {
 
   // ── Флеш-карточки ─────────────────────────────────────
   const [flashOpen, setFlashOpen] = useState(false);
-  const allLearned = rows.length === 0 || rows.every((r) => r.learned);
+  const [flashWords, setFlashWords] = useState<WordRow[]>([]);
+  const [triggerGetUnlearned] = useLazyGetDictionaryQuery();
 
-  const handleFlashCorrect = useCallback(
-    async (wordId: number) => {
-      await incrementProgress({ ids: [wordId] });
+  const handleFlashOpen = useCallback(async () => {
+    const result = await triggerGetUnlearned({ page: 0, size: 20, status: 'UNLEARNED' });
+    const words = result.data?.words.map(mapToWordRow) ?? [];
+    setFlashWords(words);
+    setFlashOpen(true);
+  }, [triggerGetUnlearned]);
+
+  const handleFlashFinish = useCallback(
+    async (correctIds: number[]) => {
+      if (correctIds.length > 0) {
+        await incrementProgress({ ids: correctIds });
+      }
     },
     [incrementProgress],
   );
@@ -274,8 +284,7 @@ export function DictionaryPage() {
         </div>
       </div>
       <FlashCardWidget
-        disabled={allLearned}
-        onClick={() => setFlashOpen(true)}
+        onClick={handleFlashOpen}
       />
       <EditWordModal
         open={editRow !== null}
@@ -293,8 +302,8 @@ export function DictionaryPage() {
 
       <FlashCardModal
         open={flashOpen}
-        words={rows.filter((r) => !r.learned)}
-        onCorrect={handleFlashCorrect}
+        words={flashWords}
+        onFinish={handleFlashFinish}
         onClose={() => setFlashOpen(false)}
       />
     </div>

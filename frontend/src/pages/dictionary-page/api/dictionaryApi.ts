@@ -91,13 +91,13 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Dictionary'],
     }),
   }),
 });
 
 export const {
   useGetDictionaryQuery,
+  useLazyGetDictionaryQuery,
   useGetTranslationsQuery,
   useInsertWordMutation,
   useUpdateWordStatusMutation,
