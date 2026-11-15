@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, SyntheticEvent, useRef, useEffect, useCallback } from 'react';
 import { WordsTable, WordsFilter, WordRow, MenuAction } from '@widgets/words-table';
-import { useGetDictionaryQuery, useGetTranslationsQuery, useInsertWordMutation, useUpdateWordStatusMutation, useUpdateWordsStatusesMutation, useDeleteWordMutation, useDeleteWordsBatchMutation, useUpdateWordsMutation } from '../api/dictionaryApi';
+import { useGetDictionaryQuery, useGetTranslationsQuery, useInsertWordMutation, useUpdateWordStatusMutation, useUpdateWordsStatusesMutation, useDeleteWordMutation, useDeleteWordsBatchMutation, useUpdateWordsMutation, useIncrementWordProgressMutation } from '../api/dictionaryApi';
 import type { WordStatus } from '../model/types';
 import { mapToWordRow } from '../lib/mapToWordRow';
 import { SearchDropdown } from './SearchDropdown';
 import { EditWordModal } from './EditWordModal';
 import { DeleteWordModal } from './DeleteWordModal';
+import { FlashCardWidget } from './FlashCardWidget';
+import { FlashCardModal } from './FlashCardModal';
 
 const filterToStatus: Record<WordsFilter, WordStatus | undefined> = {
   all: undefined,
@@ -95,7 +97,19 @@ export function DictionaryPage() {
   const [deleteWord] = useDeleteWordMutation();
   const [deleteWordsBatch] = useDeleteWordsBatchMutation();
   const [updateWord] = useUpdateWordsMutation();
+  const [incrementProgress] = useIncrementWordProgressMutation();
   const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
+
+  // ── Флеш-карточки ─────────────────────────────────────
+  const [flashOpen, setFlashOpen] = useState(false);
+  const allLearned = rows.length === 0 || rows.every((r) => r.learned);
+
+  const handleFlashCorrect = useCallback(
+    async (wordId: number) => {
+      await incrementProgress({ ids: [wordId] });
+    },
+    [incrementProgress],
+  );
 
   // ── Модалки ───────────────────────────────────────────
   const [editRow, setEditRow] = useState<WordRow | null>(null);
@@ -232,32 +246,37 @@ export function DictionaryPage() {
           {t('dictionaryDescription')}
         </Typography>
 
-        <div className="DictionaryPage__TabsBlock">
-          <Tabs
-            className="DictionaryPage__Tabs"
-            value={filter}
-            onChange={handleFilterChange}
-          >
-            <Tab value="all" label="ВСЕ" />
-            <Tab value="learned" label="ВЫУЧИЛ" />
-            <Tab value="notLearned" label="НЕ ВЫУЧИЛ" />
-          </Tabs>
+        <div className="DictionaryPage__ContentRow">
+          <div className="DictionaryPage__TabsBlock">
+            <Tabs
+              className="DictionaryPage__Tabs"
+              value={filter}
+              onChange={handleFilterChange}
+            >
+              <Tab value="all" label="ВСЕ" />
+              <Tab value="learned" label="ВЫУЧИЛ" />
+              <Tab value="notLearned" label="НЕ ВЫУЧИЛ" />
+            </Tabs>
 
-          <div className="DictionaryPage__TableWrapper">
-            <WordsTable
-              rows={rows}
-              total={total}
-              page={page}
-              pageSize={pageSize}
-              loading={isFetching}
-              onPageChange={setPage}
-              onPageSizeChange={handlePageSizeChange}
-              onMenuAction={handleMenuAction}
-            />
+            <div className="DictionaryPage__TableWrapper">
+              <WordsTable
+                rows={rows}
+                total={total}
+                page={page}
+                pageSize={pageSize}
+                loading={isFetching}
+                onPageChange={setPage}
+                onPageSizeChange={handlePageSizeChange}
+                onMenuAction={handleMenuAction}
+              />
+            </div>
           </div>
         </div>
       </div>
-      
+      <FlashCardWidget
+        disabled={allLearned}
+        onClick={() => setFlashOpen(true)}
+      />
       <EditWordModal
         open={editRow !== null}
         row={editRow}
@@ -270,6 +289,13 @@ export function DictionaryPage() {
         rows={deleteRows}
         onConfirm={handleDeleteConfirm}
         onClose={() => setDeleteRows([])}
+      />
+
+      <FlashCardModal
+        open={flashOpen}
+        words={rows.filter((r) => !r.learned)}
+        onCorrect={handleFlashCorrect}
+        onClose={() => setFlashOpen(false)}
       />
     </div>
   );

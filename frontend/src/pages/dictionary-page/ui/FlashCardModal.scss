@@ -1,0 +1,64 @@
+.FlashCard {
+  &__close {
+    position: absolute !important;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+  }
+
+  &__scene {
+    width: 360px;
+    height: 180px;
+    perspective: 800px;
+    cursor: pointer;
+    margin: 40px auto 16px;
+  }
+
+  &__card {
+    width: 95%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.45s ease;
+    border-radius: 16px;
+    margin: 0 auto;
+
+    &--flipped {
+      transform: rotateY(180deg);
+    }
+  }
+
+  &__face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: transparent;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    &--back {
+      transform: rotateY(180deg);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 8px 0;
+  }
+
+  &__finish {
+    width: 360px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 32px 24px 16px;
+    text-align: center;
+  }
+}

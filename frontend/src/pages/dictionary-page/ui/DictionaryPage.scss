@@ -22,12 +22,26 @@
   }
 
   &__Content {
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 60px;
+    width: 85%;
 
     &__Description {
       width: 479px;
       align-items: start;
       margin-bottom: 24px !important;
+    }
+  }
+
+  &__ContentRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 36px;
+
+    .DictionaryPage__TabsBlock {
+      flex: 1;
+      min-width: 0;
     }
   }
 
