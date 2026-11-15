@@ -10,6 +10,7 @@ import { mapToWordRow } from '../lib/mapToWordRow';
 import { SearchDropdown } from './SearchDropdown';
 import { EditWordModal } from './EditWordModal';
 import { DeleteWordModal } from './DeleteWordModal';
+import { AddWordModal } from './AddWordModal';
 import { FlashCardWidget } from './FlashCardWidget';
 import { FlashCardModal } from './FlashCardModal';
 
@@ -124,6 +125,7 @@ export function DictionaryPage() {
   // ── Модалки ───────────────────────────────────────────
   const [editRow, setEditRow] = useState<WordRow | null>(null);
   const [deleteRows, setDeleteRows] = useState<WordRow[]>([]);
+  const [addOpen, setAddOpen] = useState(false);
 
   const handleAdd = useCallback(
     async (variant: string, partOfSpeech: string, word: string) => {
@@ -147,9 +149,15 @@ export function DictionaryPage() {
   );
 
   const handleManual = useCallback(() => {
-    // TODO: открыть модалку ручного добавления
-    console.log('manual add');
+    setAddOpen(true);
   }, []);
+
+  const handleAddSave = useCallback(
+    async (en: string, ru: string, partOfSpeech: string) => {
+      await insertWord({ en, ru, partOfSpeech }).unwrap();
+    },
+    [insertWord],
+  );
 
   // ── Действия контекстного меню ────────────────────────
   const handleMenuAction = useCallback(
@@ -298,6 +306,12 @@ export function DictionaryPage() {
         rows={deleteRows}
         onConfirm={handleDeleteConfirm}
         onClose={() => setDeleteRows([])}
+      />
+
+      <AddWordModal
+        open={addOpen}
+        onSave={handleAddSave}
+        onClose={() => setAddOpen(false)}
       />
 
       <FlashCardModal

@@ -1,5 +1,26 @@
 export type WordStatus = 'LEARNED' | 'UNLEARNED';
 
+export const PARTS_OF_SPEECH = [
+  'adjective',
+  'adverb',
+  'article',
+  'conjunction',
+  'determiner',
+  'grammar_pattern',
+  'interjection',
+  'letter',
+  'modal_verb',
+  'noun',
+  'numeral',
+  'numeral_fractional',
+  'phrase',
+  'preposition',
+  'pronoun',
+  'verb',
+] as const;
+
+export type PartOfSpeech = typeof PARTS_OF_SPEECH[number];
+
 export interface DictionaryWord {
   id: number;
   en: string;
