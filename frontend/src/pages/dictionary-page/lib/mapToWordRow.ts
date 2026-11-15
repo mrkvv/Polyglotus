@@ -14,6 +14,7 @@ export function mapToWordRow(word: {
 	id: word.id,
 	word: word.en,
 	translation: word.ru,
+	partOfSpeech: word.partOfSpeech,
 	learned: word.status === 'LEARNED',
 	progress: word.progressCount as CustomProgressValue,
 	dateAdded: new Date(word.addedAt).toLocaleDateString('ru-RU'),

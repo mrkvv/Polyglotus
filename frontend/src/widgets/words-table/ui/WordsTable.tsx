@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   TablePagination, Paper, CircularProgress, Checkbox, IconButton,
+  Menu, MenuItem, Divider, Typography,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -10,11 +11,13 @@ import { CustomProgress, CustomProgressValue } from '@shared/ui/CustomProgress';
 import './WordsTable.scss';
 
 export type WordsFilter = 'all' | 'learned' | 'notLearned';
+export type MenuAction = 'markLearned' | 'markUnlearned' | 'edit' | 'delete';
 
 export interface WordRow {
   id: number;
   word: string;
   translation: string;
+  partOfSpeech: string;
   learned: boolean;
   progress: CustomProgressValue;
   dateAdded: string;
@@ -28,6 +31,7 @@ interface WordsTableProps {
   loading: boolean;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
+  onMenuAction: (action: MenuAction, rows: WordRow[]) => void;
 }
 
 export function WordsTable({
@@ -38,9 +42,40 @@ export function WordsTable({
   loading,
   onPageChange,
   onPageSizeChange,
+  onMenuAction,
 }: WordsTableProps) {
-  const [selected, setSelected] = React.useState<number[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
 
+  // ── Контекстное меню ──────────────────────────────────
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+  const [menuRow, setMenuRow] = useState<WordRow | null>(null);
+
+  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>, row: WordRow) => {
+    e.stopPropagation();
+    setMenuAnchor(e.currentTarget);
+    setMenuRow(row);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+    setMenuRow(null);
+  };
+
+  // Если выделено несколько — действие применяется ко всем выделенным.
+  // Иначе — только к строке, на которой открыли меню.
+  const handleMenuAction = (action: MenuAction) => {
+    if (!menuRow) return;
+    const isMulti = selected.length > 1 && selected.includes(menuRow.id);
+    const targetRows = isMulti
+      ? rows.filter((r) => selected.includes(r.id))
+      : [menuRow];
+    onMenuAction(action, targetRows);
+    handleMenuClose();
+  };
+
+  const isMultiSelect = selected.length > 1;
+
+  // ── Выделение строк ───────────────────────────────────
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       setSelected(rows.map((n) => n.id));
@@ -49,7 +84,7 @@ export function WordsTable({
     setSelected([]);
   };
 
-  const handleClick = (_event: React.MouseEvent<unknown>, id: number) => {
+  const handleRowClick = (_event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: number[] = [];
 
@@ -107,7 +142,7 @@ export function WordsTable({
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => handleRowClick(event, row.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -137,8 +172,8 @@ export function WordsTable({
                       {row.dateAdded}
                     </TableCell>
                     <TableCell className="WordsTable__body-cell" align="right">
-                      <IconButton size="small">
-                        <MoreVertIcon />
+                      <IconButton size="small" onClick={(e) => handleMenuOpen(e, row)}>
+                        <MoreVertIcon fontSize="small" />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -148,6 +183,42 @@ export function WordsTable({
           </Table>
         </TableContainer>
       )}
+
+      {/* ── Контекстное меню ── */}
+      <Menu
+        anchorEl={menuAnchor}
+        open={Boolean(menuAnchor)}
+        onClose={handleMenuClose}
+        onClick={(e) => e.stopPropagation()}
+        slotProps={{
+          paper: {
+            elevation: 3,
+            sx: { borderRadius: '10px', minWidth: 200, py: 0.5 },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem onClick={() => handleMenuAction('markLearned')}>
+          <Typography variant="body2">Пометить как Выучено</Typography>
+        </MenuItem>
+        <MenuItem onClick={() => handleMenuAction('markUnlearned')}>
+          <Typography variant="body2">Пометить как Не выучено</Typography>
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={() => handleMenuAction('edit')}
+          disabled={isMultiSelect}
+        >
+          <Typography variant="body2" color={isMultiSelect ? 'text.disabled' : 'text.primary'}>
+            Редактировать
+          </Typography>
+        </MenuItem>
+        <MenuItem onClick={() => handleMenuAction('delete')}>
+          <Typography variant="body2" color="error">Удалить</Typography>
+        </MenuItem>
+      </Menu>
+
       <TablePagination
         className="WordsTable__pagination"
         component="div"
@@ -160,7 +231,9 @@ export function WordsTable({
         }}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         labelRowsPerPage="Rows per page:"
-        labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count}`}
+        labelDisplayedRows={({ from, to, count, page: p }) =>
+          `Page ${p + 1} · ${from}-${to} of ${count}`
+        }
       />
     </Paper>
   );

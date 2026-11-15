@@ -50,11 +50,11 @@ export const dictionaryApi = rtkApi.injectEndpoints({
       invalidatesTags: ['Dictionary'],
     }),
 
-    updateWordsStatuses: builder.mutation<InsertWordResponse, { status: WordStatus, wordsIds: number[] }>({
-      query: ({ status, wordsIds }) => ({
-        url: `/dictionary/words/status/`,
+    updateWordsStatuses: builder.mutation<InsertWordResponse, { status: WordStatus, wordIds: number[] }>({
+      query: ({ status, wordIds }) => ({
+        url: '/dictionary/words/status',
         method: 'PATCH',
-        body: { status, wordsIds },
+        body: { status, wordIds },
       }),
       invalidatesTags: ['Dictionary'],
     }),

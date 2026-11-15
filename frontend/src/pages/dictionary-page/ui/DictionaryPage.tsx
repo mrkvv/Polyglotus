@@ -3,11 +3,13 @@ import './DictionaryPage.scss';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, SyntheticEvent, useRef, useEffect, useCallback } from 'react';
-import { WordsTable, WordsFilter, WordRow } from '@widgets/words-table';
-import { useGetDictionaryQuery, useGetTranslationsQuery, useInsertWordMutation } from '../api/dictionaryApi';
+import { WordsTable, WordsFilter, WordRow, MenuAction } from '@widgets/words-table';
+import { useGetDictionaryQuery, useGetTranslationsQuery, useInsertWordMutation, useUpdateWordStatusMutation, useUpdateWordsStatusesMutation, useDeleteWordMutation, useDeleteWordsBatchMutation, useUpdateWordsMutation } from '../api/dictionaryApi';
 import type { WordStatus } from '../model/types';
 import { mapToWordRow } from '../lib/mapToWordRow';
 import { SearchDropdown } from './SearchDropdown';
+import { EditWordModal } from './EditWordModal';
+import { DeleteWordModal } from './DeleteWordModal';
 
 const filterToStatus: Record<WordsFilter, WordStatus | undefined> = {
   all: undefined,
@@ -88,7 +90,16 @@ export function DictionaryPage() {
 
   // ── Добавление слова ──────────────────────────────────
   const [insertWord] = useInsertWordMutation();
+  const [updateWordStatus] = useUpdateWordStatusMutation();
+  const [updateWordsStatuses] = useUpdateWordsStatusesMutation();
+  const [deleteWord] = useDeleteWordMutation();
+  const [deleteWordsBatch] = useDeleteWordsBatchMutation();
+  const [updateWord] = useUpdateWordsMutation();
   const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
+
+  // ── Модалки ───────────────────────────────────────────
+  const [editRow, setEditRow] = useState<WordRow | null>(null);
+  const [deleteRows, setDeleteRows] = useState<WordRow[]>([]);
 
   const handleAdd = useCallback(
     async (variant: string, partOfSpeech: string, word: string) => {
@@ -115,6 +126,58 @@ export function DictionaryPage() {
     // TODO: открыть модалку ручного добавления
     console.log('manual add');
   }, []);
+
+  // ── Действия контекстного меню ────────────────────────
+  const handleMenuAction = useCallback(
+    async (action: MenuAction, targetRows: WordRow[]) => {
+      const ids = targetRows.map((r) => r.id);
+      const isBatch = targetRows.length > 1;
+
+      switch (action) {
+        case 'markLearned':
+          if (isBatch) {
+            await updateWordsStatuses({ status: 'LEARNED', wordIds: ids });
+          } else {
+            await updateWordStatus({ id: ids[0], status: 'LEARNED' });
+          }
+          break;
+        case 'markUnlearned':
+          if (isBatch) {
+            await updateWordsStatuses({ status: 'UNLEARNED', wordIds: ids });
+          } else {
+            await updateWordStatus({ id: ids[0], status: 'UNLEARNED' });
+          }
+          break;
+        case 'delete':
+          setDeleteRows(targetRows);
+          break;
+        case 'edit':
+          setEditRow(targetRows[0]);
+          break;
+      }
+    },
+    [updateWordStatus, updateWordsStatuses],
+  );
+
+  const handleDeleteConfirm = useCallback(
+    async (rows: WordRow[]) => {
+      if (rows.length === 1) {
+        await deleteWord(rows[0].id).unwrap();
+      } else {
+        await deleteWordsBatch({ wordIds: rows.map((r) => r.id) }).unwrap();
+      }
+    },
+    [deleteWord, deleteWordsBatch],
+  );
+
+  const handleEditSave = useCallback(
+    async (id: number, en: string, ru: string) => {
+      const row = editRow;
+      if (!row) return;
+      await updateWord({ id, body: { en, ru, partOfSpeech: row.partOfSpeech } }).unwrap();
+    },
+    [updateWord, editRow],
+  );
 
   // Фокус на поле — если есть текст, показать дропдаун
   const handleFocus = useCallback(() => {
@@ -189,10 +252,25 @@ export function DictionaryPage() {
               loading={isFetching}
               onPageChange={setPage}
               onPageSizeChange={handlePageSizeChange}
+              onMenuAction={handleMenuAction}
             />
           </div>
         </div>
       </div>
+      
+      <EditWordModal
+        open={editRow !== null}
+        row={editRow}
+        onSave={handleEditSave}
+        onClose={() => setEditRow(null)}
+      />
+
+      <DeleteWordModal
+        open={deleteRows.length > 0}
+        rows={deleteRows}
+        onConfirm={handleDeleteConfirm}
+        onClose={() => setDeleteRows([])}
+      />
     </div>
   );
 }
