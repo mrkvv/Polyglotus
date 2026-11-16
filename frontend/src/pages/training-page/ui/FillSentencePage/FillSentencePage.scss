@@ -49,28 +49,66 @@
 
     &__Sentence {
       line-height: 1.6 !important;
-      max-width: 600px;
+      max-width: 680px;
     }
 
     &__Controls {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 16px;
 
       &__Input {
-        width: 180px;
+        width: 220px;
 
         .MuiOutlinedInput-root {
           border-radius: 999px;
         }
       }
 
-      &__Hint {
+      // helperText для подсказки — жёлтый акцент
+      &__HelperHint {
         color: var(--color-training-yellow-accent) !important;
-        border-color: var(--color-training-yellow-accent) !important;
+      }
 
-        &:hover {
+      // ── Кнопка «Проверить» ──
+      &__Check {
+        color: $color-training-green-accent !important;
+        border-color: $color-training-green-accent !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+
+        &:hover:not(:disabled) {
+          background-color: var(--color-training-green-bg) !important;
+        }
+
+        &--correct {
+          background-color: #3d8f3d !important;
+          border-color: #3d8f3d !important;
+          color: #fff !important;
+        }
+      }
+
+      // ── Кнопка «Подсказка» ──
+      &__Hint {
+        color: $color-training-yellow-accent !important;
+        border-color: $color-training-yellow-accent !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+
+        &:hover:not(:disabled) {
           background-color: var(--color-training-yellow-bg) !important;
+        }
+
+        // После нажатия — жёлтый filled + disabled
+        &--used {
+          background-color: var(--color-training-yellow-accent) !important;
+          border-color: var(--color-training-yellow-accent) !important;
+          color: #fff !important;
+
+          &.Mui-disabled {
+            opacity: 0.7 !important;
+            background-color: var(--color-training-yellow-accent) !important;
+            border-color: var(--color-training-yellow-accent) !important;
+            color: #fff !important;
+          }
         }
       }
     }
@@ -78,6 +116,47 @@
     &__Progress {
       align-self: flex-end;
       color: $color-text !important;
+    }
+
+    // ── Экран завершения ──
+    &__Done {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+
+      &__Title {
+        color: $color-text !important;
+      }
+
+      &__Subtitle {
+        color: $color-text-muted !important;
+        text-align: center;
+        white-space: pre-line;
+        line-height: 1.6 !important;
+      }
+
+      &__Actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      &__Btn {
+        min-width: 300px;
+        font-weight: 600 !important;
+        letter-spacing: 0.06em !important;
+        color: $color-training-green-accent !important;
+        border-color: $color-training-green-accent !important;
+
+        &:hover {
+          background-color: var(--color-training-green-bg) !important;
+        }
+      }
     }
   }
 }
