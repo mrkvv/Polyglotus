@@ -54,14 +54,43 @@
       gap: 12px;
 
       &__Btn {
-        color: $color-training-green-accent !important;
-        border-color: $color-training-green-accent !important;
-        font-size: 13px !important;
         font-weight: 600 !important;
         letter-spacing: 0.06em !important;
+        transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
 
-        &:hover {
-          background-color: var(--color-training-green-bg) !important;
+        &:not(&--correct):not(&--wrong) {
+          color: $color-training-green-accent !important;
+          border-color: $color-training-green-accent !important;
+
+          &:hover:not(:disabled) {
+            background-color: var(--color-training-green-bg) !important;
+          }
+        }
+
+        &--correct {
+          background-color: #3d8f3d !important;
+          border-color: #3d8f3d !important;
+          color: #fff !important;
+
+          &.Mui-disabled {
+            opacity: 1 !important;
+            background-color: #3d8f3d !important;
+            border-color: #3d8f3d !important;
+            color: #fff !important;
+          }
+        }
+
+        &--wrong {
+          background-color: #c62828 !important;
+          border-color: #c62828 !important;
+          color: #fff !important;
+
+          &.Mui-disabled {
+            opacity: 1 !important;
+            background-color: #c62828 !important;
+            border-color: #c62828 !important;
+            color: #fff !important;
+          }
         }
       }
     }
@@ -69,6 +98,46 @@
     &__Progress {
       align-self: flex-end;
       color: $color-text !important;
+    }
+
+    &__Done {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+
+      &__Title {
+        color: $color-text !important;
+      }
+
+      &__Subtitle {
+        color: $color-text-muted !important;
+        text-align: center;
+        white-space: pre-line;
+        line-height: 1.6 !important;
+      }
+
+      &__Actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      &__Btn {
+        min-width: 300px;
+        font-weight: 600 !important;
+        letter-spacing: 0.06em !important;
+        color: $color-training-green-accent !important;
+        border-color: $color-training-green-accent !important;
+
+        &:hover {
+          background-color: var(--color-training-green-bg) !important;
+        }
+      }
     }
   }
 }
