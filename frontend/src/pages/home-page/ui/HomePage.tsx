@@ -4,6 +4,7 @@ import { useGetDailyWordQuery, useGetPhraseQuery } from '@entities/reference/api
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import { useGetUserMeQuery } from '@entities/user/api/uesrApi';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export function HomePage() {
   const { data: phraseData } = useGetPhraseQuery();
@@ -11,8 +12,15 @@ export function HomePage() {
   const { data: dailyWord } = useGetDailyWordQuery();
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const currentStreak = user?.streak.current;
+
+  const handleDailyWordClick = () => {
+    if (dailyWord?.word) {
+      navigate('/dictionary', { state: { searchWord: dailyWord.word } });
+    }
+  };
 
 
   return (
@@ -34,7 +42,7 @@ export function HomePage() {
           </Typography>
         </Paper>
 
-        <Button disableElevation={true} disableRipple={true} sx={{ textTransform: 'none', textAlign: 'left' }}>
+        <Button disableElevation={true} disableRipple={true} sx={{ textTransform: 'none', textAlign: 'left' }} onClick={handleDailyWordClick}>
           <Paper className="HomePage__Card" variant="outlined" square={false}>
             <Typography variant="h4" sx={{ padding: '30px' }}>{t('new_word')}</Typography>
             <Typography variant="h3" sx={{ padding: '5px 30px', fontWeight: '700'}}>{dailyWord?.word}</Typography>

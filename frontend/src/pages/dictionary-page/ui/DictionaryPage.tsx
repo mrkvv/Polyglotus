@@ -3,6 +3,7 @@ import './DictionaryPage.scss';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, SyntheticEvent, useRef, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { WordsTable, WordsFilter, WordRow, MenuAction } from '@widgets/words-table';
 import {
   useGetDictionaryQuery,
@@ -35,6 +36,8 @@ const SEARCH_DEBOUNCE_MS = 400;
 
 export function DictionaryPage() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // ── Таблица ───────────────────────────────────────────
   const [filter, setFilter] = useState<WordsFilter>('all');
@@ -66,6 +69,25 @@ export function DictionaryPage() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchWrapperRef = useRef<HTMLDivElement>(null);
+
+  // Инициализация из навигации (например, карточка "слово дня" на главной)
+  useEffect(() => {
+    const word = (location.state as { searchWord?: string } | null)?.searchWord;
+    if (word) {
+      setSearchInput(word);
+      setDebouncedWord(word);
+      setDropdownOpen(true);
+      // Фокус и позиционирование курсора в конец строки
+      requestAnimationFrame(() => {
+        const input = searchInputRef.current;
+        if (input) {
+          input.focus();
+          input.setSelectionRange(word.length, word.length);
+        }
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Дебаунс: обновляем debouncedWord при изменении ввода
   useEffect(() => {
@@ -247,6 +269,7 @@ export function DictionaryPage() {
             onFocus={handleFocus}
             autoComplete="off"
             slotProps={{
+              htmlInput: { ref: searchInputRef },
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
