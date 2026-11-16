@@ -3,6 +3,7 @@ package polyglotus.api_gateway.model.path;
 import polyglotus.api_gateway.model.Action;
 
 public enum AiServicePath implements Path {
+    HELLO_MESSAGE("/ai/chat/hello", Action.AI_CHAT),
     CHAT("/ai/chat", Action.AI_CHAT);
 
     private final String path;
