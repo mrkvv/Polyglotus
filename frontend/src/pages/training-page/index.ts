@@ -1,1 +1,5 @@
 export { TrainingPage } from './ui/MainTrainingPage/TrainingPage'
+export { WordToTranslationPage } from './ui/WordToTranslationPage/WordToTranslationPage'
+export { TranslationToWordPage } from './ui/TranslationToWordPage/TranslationToWordPage'
+export { PairsPage } from './ui/PairsPage/PairsPage'
+export { FillSentencePage } from './ui/FillSentencePage/FillSentencePage'

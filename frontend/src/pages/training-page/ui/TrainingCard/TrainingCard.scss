@@ -1,0 +1,90 @@
+.TrainingCard {
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
+  height: 100%;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  &--yellow {
+    background-color: var(--color-training-yellow-bg);
+
+    .TrainingCard__Title,
+    .TrainingCard__Description {
+      color: var(--color-training-yellow-accent) !important;
+    }
+
+    .TrainingCard__Button {
+      border-color: var(--color-training-yellow-accent);
+      color: var(--color-training-yellow-accent);
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.06);
+      }
+    }
+  }
+
+  &--green {
+    background-color: var(--color-training-green-bg);
+
+    .TrainingCard__Title,
+    .TrainingCard__Description {
+      color: var(--color-training-green-accent) !important;
+    }
+
+    .TrainingCard__Button {
+      border-color: var(--color-training-green-accent);
+      color: var(--color-training-green-accent);
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.06);
+      }
+    }
+  }
+
+  &__Body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  &__Title {
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+  }
+
+  &__Description {
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+    opacity: 0.95;
+  }
+
+  &__Button {
+    margin-top: 24px;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 2px solid;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &__Icon {
+      font-size: 11px !important;
+    }
+  }
+}

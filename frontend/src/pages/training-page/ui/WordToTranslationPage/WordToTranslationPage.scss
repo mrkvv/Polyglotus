@@ -1,0 +1,74 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.WordToTranslationPage {
+  width: 100%;
+  height: 100%;
+  background: $color-bg;
+  display: flex;
+  flex-direction: column;
+  padding: 70px 100px;
+
+  &__Header {
+    margin-bottom: 24px;
+
+    &__Title {
+      font-weight: 700 !important;
+      line-height: 1.2 !important;
+    }
+  }
+
+  &__Content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    &__Description {
+      max-width: 479px;
+      margin-bottom: 32px !important;
+      color: $color-text-muted;
+      line-height: 1.5 !important;
+    }
+  }
+
+  &__Card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 48px;
+
+    &__Center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+    }
+
+    &__Options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+
+      &__Btn {
+        color: $color-training-yellow-accent !important;
+        border-color: $color-training-yellow-accent !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.06em !important;
+
+        &:hover {
+          background-color: var(--color-training-yellow-bg) !important;
+        }
+      }
+    }
+
+    &__Progress {
+      align-self: flex-end;
+      color: $color-text !important;
+    }
+  }
+}

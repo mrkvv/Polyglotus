@@ -1,0 +1,83 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.FillSentencePage {
+  width: 100%;
+  height: 100%;
+  background: $color-bg;
+  display: flex;
+  flex-direction: column;
+  padding: 70px 100px;
+
+  &__Header {
+    margin-bottom: 24px;
+
+    &__Title {
+      font-weight: 700 !important;
+      line-height: 1.2 !important;
+    }
+  }
+
+  &__Content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    &__Description {
+      max-width: 479px;
+      margin-bottom: 32px !important;
+      color: $color-text-muted;
+      line-height: 1.5 !important;
+    }
+  }
+
+  &__Card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 48px;
+
+    &__Center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    &__Sentence {
+      line-height: 1.6 !important;
+      max-width: 600px;
+    }
+
+    &__Controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      &__Input {
+        width: 180px;
+
+        .MuiOutlinedInput-root {
+          border-radius: 999px;
+        }
+      }
+
+      &__Hint {
+        color: var(--color-training-yellow-accent) !important;
+        border-color: var(--color-training-yellow-accent) !important;
+
+        &:hover {
+          background-color: var(--color-training-yellow-bg) !important;
+        }
+      }
+    }
+
+    &__Progress {
+      align-self: flex-end;
+      color: $color-text !important;
+    }
+  }
+}

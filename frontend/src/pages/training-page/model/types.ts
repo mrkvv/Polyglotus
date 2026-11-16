@@ -38,3 +38,12 @@ export interface TaskFill {
 	answer: string;
 	id: number;
 }
+
+export type TrainingCardColor = 'yellow' | 'green'
+
+export interface TrainingCardConfig {
+	titleKey: string
+	descriptionKey: string
+	color: TrainingCardColor
+	path: string
+}
