@@ -36,5 +36,6 @@ export const trainingApi = rtkApi.injectEndpoints({
 
 export const {
 	useGetSimpleTrainingQuery,
-	useGetPairsTrainingQuery
+	useGetPairsTrainingQuery,
+	useGetFillSentenceTrainingQuery,
 } = trainingApi;

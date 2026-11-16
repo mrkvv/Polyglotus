@@ -24,5 +24,9 @@
   "training_fill_desc": "Вставьте пропущенное слово в предложение.",
   "to_training": "К ТРЕНИРОВКЕ",
   "check": "ПРОВЕРИТЬ",
-  "hint": "ПОДСКАЗКА"
+  "hint": "ПОДСКАЗКА",
+  "training_complete_title": "Отличная работа!",
+  "training_complete_word_to_translation": "Вы успешно прошли тренировку Слово-перевод.\nХотите пройти еще одну тренировку?",
+  "training_continue": "ПРОДОЛЖИТЬ ТРЕНИРОВКУ",
+  "training_go_home": "ВЕРНУТЬСЯ К ТРЕНИРОВКАМ"
 }
