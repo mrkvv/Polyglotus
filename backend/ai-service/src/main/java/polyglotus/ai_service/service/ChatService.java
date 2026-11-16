@@ -11,6 +11,7 @@ import polyglotus.ai_service.exception.ModelContextIsExhaustedException;
 import polyglotus.ai_service.model.ChatMessage;
 import polyglotus.ai_service.repository.ChatMessagesRepository;
 import polyglotus.ai_service.repository.UserRepository;
+import polyglotus.ai_service.repository.UserTopicsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +21,14 @@ public class ChatService {
     private static final String USER_ROLE = "user";
     private static final String ASSISTANT_ROLE = "llm";
 
-    private static final String TOP_K_WORDS_DELIMITER = ", ";
+    private static final String DELIMITER = ", ";
 
     private static final int CHARS_PER_TOKEN = 4;
     private static final int ADDITIONAL_TOKENS_PER_MESSAGE_WASTES = 4;
     private static final int TOKENS_LIMIT = 4096;
+
+    private static final String HELLO_MESSAGE = "Hello, %s! I'm your AI English partner. " +
+            "I see you're interested in %s. Let's chat about it! What do you think?";
 
     private static final String SYSTEM_PROMPT = """
             You are an English teacher. You ONLY speak English.
@@ -38,19 +42,28 @@ public class ChatService {
     private final ChatClient client;
     private final ChatMessagesRepository chatMessagesRepository;
     private final UserRepository userRepository;
+    private final UserTopicsRepository userTopicsRepository;
     private final EmbedderService embedderService;
     private final ValidationService validationService;
 
     public ChatService(@Qualifier("chatClient") ChatClient client,
                        ChatMessagesRepository chatMessagesRepository,
                        UserRepository userRepository,
+                       UserTopicsRepository userTopicsRepository,
                        EmbedderService embedderService,
                        ValidationService validationService) {
         this.client = client;
         this.chatMessagesRepository = chatMessagesRepository;
         this.userRepository = userRepository;
+        this.userTopicsRepository = userTopicsRepository;
         this.embedderService = embedderService;
         this.validationService = validationService;
+    }
+
+    public String getHelloMessage(Integer userId) {
+        String username = userRepository.getUsername(userId);
+        String userTopics = String.join(DELIMITER, userTopicsRepository.getUserTopics(userId));
+        return String.format(HELLO_MESSAGE, username, userTopics);
     }
 
     public String sendAndReceiveAnswer(Integer userId, String message) {
@@ -60,7 +73,7 @@ public class ChatService {
         checkContextSize(messageHistory);
 
         List<String> topKDialogWords = embedderService.getTopKWords(userId, messageHistory, message);
-        String topKDialogWordsString = String.join(TOP_K_WORDS_DELIMITER, topKDialogWords);
+        String topKDialogWordsString = String.join(DELIMITER, topKDialogWords);
 
         List<Message> springMessages = formSpringMessages(
                 userRepository.getUserLevel(userId),

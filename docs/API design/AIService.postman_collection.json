@@ -1,11 +1,11 @@
 {
   "info": {
-    "_postman_id": "07bbb96e-0688-4f55-b18b-a6f96190a913",
+    "_postman_id": "51fd3324-1043-4c3d-9a28-9c02e3abaea7",
     "name": "AIService",
     "description": "Микросервис для работы с LLM.\n\nТокены сессий проверяются и извлекаются на этапе обработки запроса в API Gateway, следовательно сюда токен не доходит, вместо него приходит заголовок \"X-User-Id\", содержащий id пользователя, отправляющего запрос.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "53202645",
-    "_collection_link": "https://go.postman.co/collection/53202645-07bbb96e-0688-4f55-b18b-a6f96190a913?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/53202645-51fd3324-1043-4c3d-9a28-9c02e3abaea7?source=collection_link"
   },
   "item": [
     {
@@ -78,7 +78,7 @@
             }
           ],
           "cookie": [],
-          "body": "{\r\n    \"userMessage\": \"Hello, give me 5 daily excersizes\",\r\n    \"AiMessage\": \"Sure, here is your daily ex....\"\r\n}"
+          "body": "{\r\n    \"userMessage\": \"Hello, give me 5 daily excersizes\",\r\n    \"aiMessage\": \"Sure, here is your daily ex....\"\r\n}"
         }
       ]
     },
@@ -130,7 +130,60 @@
             }
           ],
           "cookie": [],
-          "body": "{\r\n    \"messages\": [\r\n        { \"id\": 1, \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\", \"createdAt\": \"...\"},\r\n        { \"id\": 2, \"role\": \"ai\", \"content\": \"Sure, here is your daily ex....\", \"createdAt\": \"...\"},\r\n        { \"id\": 12, \"role\": \"user\", \"content\": \"...\", \"createdAt\": \"...\"},\r\n        { \"id\": 14, \"role\": \"ai\", \"content\": \"...\", \"createdAt\": \"...\"}\r\n    ]\r\n}"
+          "body": "{\r\n    \"messages\": [\r\n        { \"id\": 1, \"userId\": 1, \"role\": \"user\", \"content\": \"Hello, give me 5 daily excersizes\", \"createdAt\": \"...\"},\r\n        { \"id\": 2, \"userId\": 1, \"role\": \"LLM\", \"content\": \"Sure, here is your daily ex....\", \"createdAt\": \"...\"},\r\n        { \"id\": 12, \"userId\": 1, \"role\": \"user\", \"content\": \"...\", \"createdAt\": \"...\"},\r\n        { \"id\": 14, \"userId\": 1, \"role\": \"LLM\", \"content\": \"...\", \"createdAt\": \"...\"}\r\n    ]\r\n}"
+        }
+      ]
+    },
+    {
+      "name": "Получить приветственное сообщение",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ],
+        "url": {
+          "raw": "/ai/chat/hello",
+          "path": [
+            "ai",
+            "chat",
+            "hello"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Пример",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "1"
+              }
+            ],
+            "url": {
+              "raw": "/ai/chatt/hello",
+              "path": [
+                "ai",
+                "chatt",
+                "hello"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\r\n    \"helloMessage\": \"Hello, mrkv! I'm your AI English partner. I see you're interested in Adventures, Health. Let's chat about it! What do you think?\"\r\n}"
         }
       ]
     },
@@ -175,7 +228,7 @@
           "status": "No Content",
           "code": 204,
           "_postman_previewlanguage": "text",
-          "header": null,
+          "header": [],
           "cookie": [],
           "body": ""
         }

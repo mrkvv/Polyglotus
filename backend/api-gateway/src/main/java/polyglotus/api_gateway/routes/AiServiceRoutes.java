@@ -19,6 +19,9 @@ public class AiServiceRoutes {
                 .route("chat", r -> r
                         .path(AiServicePath.CHAT.path())
                         .uri(aiServiceUrl))
+                .route("chat-hello", r -> r
+                        .path(AiServicePath.HELLO_MESSAGE.path())
+                        .uri(aiServiceUrl))
                 .build();
     }
 }
