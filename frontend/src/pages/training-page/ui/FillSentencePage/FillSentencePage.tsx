@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGetFillSentenceTrainingQuery } from '../../api/trainingApi'
 import { useIncrementWordProgressMutation } from '@entities/vocabulary/api/vocabularyApi'
 
-const AMOUNT = 3
+const AMOUNT = 5
 
 type InputState = 'idle' | 'correct' | 'wrong'
 
@@ -26,10 +26,10 @@ export function FillSentencePage() {
   // Флаг: была ли хотя бы одна ошибка на текущем задании
   const hadError = useRef(false)
 
-  const { data, isLoading, isError, refetch } = useGetFillSentenceTrainingQuery({ amount: AMOUNT })
+  const { data, isLoading, isFetching, isError, refetch } = useGetFillSentenceTrainingQuery({ amount: AMOUNT }, { refetchOnMountOrArgChange: true })
   const [incrementWordProgress] = useIncrementWordProgressMutation()
 
-  const tasks = data?.task ?? []
+  const tasks = (data?.tasks ?? []).slice(0, 3)
   const currentTask = tasks[taskIndex]
 
   const goNext = useCallback((nextCorrectIds: number[]) => {
@@ -120,7 +120,7 @@ export function FillSentencePage() {
 
         <Paper className="FillSentencePage__Card" variant="outlined" square={false}>
 
-          {isLoading && (
+          {(isLoading || isFetching) && (
             <Box className="FillSentencePage__Card__Center">
               <CircularProgress />
             </Box>
@@ -136,7 +136,7 @@ export function FillSentencePage() {
 
           {isDone && (
             <Box className="FillSentencePage__Card__Done">
-              <Typography variant="h3" fontWeight={700} className="FillSentencePage__Card__Done__Title">
+              <Typography variant="h3" sx={{ fontWeight: 700 }} className="FillSentencePage__Card__Done__Title">
                 {t('training_complete_title')}
               </Typography>
               <Typography variant="h5" className="FillSentencePage__Card__Done__Subtitle">
@@ -165,7 +165,7 @@ export function FillSentencePage() {
             </Box>
           )}
 
-          {!isLoading && !isError && !isDone && currentTask && (
+          {!isLoading && !isFetching && !isError && !isDone && currentTask && (
             <>
               <Box className="FillSentencePage__Card__Center">
                 <Typography variant="h5" className="FillSentencePage__Card__Sentence">
@@ -176,7 +176,6 @@ export function FillSentencePage() {
                   <TextField
                     label="Введите слово"
                     variant="outlined"
-                    size="small"
                     value={inputValue}
                     onChange={(e) => handleInputChange(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -189,6 +188,13 @@ export function FillSentencePage() {
                         ? 'FillSentencePage__Card__Controls__HelperHint'
                         : undefined,
                     }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': { borderRadius: '999px', fontSize: '1rem' },
+                      '& .MuiInputLabel-root': { fontSize: '1rem' },
+                      '& .MuiFormHelperText-root': { position: 'absolute', bottom: '-22px', whiteSpace: 'nowrap' },
+                      position: 'relative',
+                      mb: '22px',
+                    }}
                   />
 
                   <Button
@@ -196,7 +202,7 @@ export function FillSentencePage() {
                     onClick={handleCheck}
                     disabled={!inputValue.trim()}
                     className={`FillSentencePage__Card__Controls__Check${inputState === 'correct' ? ' FillSentencePage__Card__Controls__Check--correct' : ''}`}
-                    sx={{ borderRadius: '999px', textTransform: 'none', fontSize: '0.875rem', px: 3, py: 1 }}
+                    sx={{ borderRadius: '999px', textTransform: 'none', fontSize: '1rem', px: 3, py: 1, mb: '22px' }}
                   >
                     {t('check')}
                   </Button>
@@ -206,7 +212,7 @@ export function FillSentencePage() {
                     onClick={handleHint}
                     disabled={hintUsed}
                     className={`FillSentencePage__Card__Controls__Hint${hintUsed ? ' FillSentencePage__Card__Controls__Hint--used' : ''}`}
-                    sx={{ borderRadius: '999px', textTransform: 'none', fontSize: '0.875rem', px: 3, py: 1 }}
+                    sx={{ borderRadius: '999px', textTransform: 'none', fontSize: '1rem', px: 3, py: 1, mb: '22px' }}
                   >
                     {t('hint')}
                   </Button>
@@ -216,7 +222,7 @@ export function FillSentencePage() {
               <Typography
                 className="FillSentencePage__Card__Progress"
                 variant="h4"
-                fontWeight={700}
+                sx={{ fontWeight: 700 }}
               >
                 {taskIndex + 1}/{tasks.length}
               </Typography>

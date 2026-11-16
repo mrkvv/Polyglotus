@@ -31,7 +31,7 @@ export interface Pair {
 }
 
 export interface GetFillSentenceTrainingResponse {
-	task: TaskFill[];
+	tasks: TaskFill[];
 	amount: number;
 }
 
