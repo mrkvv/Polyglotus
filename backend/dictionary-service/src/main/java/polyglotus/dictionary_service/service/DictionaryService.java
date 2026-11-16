@@ -115,6 +115,8 @@ public class DictionaryService {
     @Transactional
     public Word editWord(Integer userId, Integer wordId, String ru, String en, String partOfSpeech) {
         validationService.validateWords(ru, en);
+        validationService.validateWordsLength(ru, en);
+        validationService.validateWordsLanguage(ru, en);
         validationService.validatePartOfSpeech(partOfSpeech);
 
         Integer enWordId = wordRepository.findOrCreateEnWord(en);
