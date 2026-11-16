@@ -28,6 +28,16 @@ public class AiController {
         this.exerciseService = exerciseService;
     }
 
+    @GetMapping("/chat/hello")
+    public ResponseEntity<Map<String, String>> getHelloMessage(
+            @RequestHeader(name = X_USER_ID_HEADER) Integer userId
+    ) {
+        Map<String, String> response = Map.of(
+                "helloMessage", chatService.getHelloMessage(userId)
+        );
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/chat")
     public ResponseEntity<Map<String, String>> chat(
             @RequestHeader(name = X_USER_ID_HEADER) Integer userId,
