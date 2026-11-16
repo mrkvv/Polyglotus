@@ -84,14 +84,6 @@ export const dictionaryApi = rtkApi.injectEndpoints({
       }),
       invalidatesTags: ['Dictionary'],
     }),
-
-    incrementWordProgress: builder.mutation<void, { ids: number[] }>({
-      query: (body) => ({
-        url: `/training/mark-correct`,
-        method: 'POST',
-        body,
-      }),
-    }),
   }),
 });
 
@@ -104,6 +96,5 @@ export const {
   useUpdateWordsStatusesMutation,
   useUpdateWordsMutation,
   useDeleteWordMutation,
-  useDeleteWordsBatchMutation,
-  useIncrementWordProgressMutation,
+  useDeleteWordsBatchMutation
 } = dictionaryApi;

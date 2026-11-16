@@ -4,7 +4,18 @@ import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, SyntheticEvent, useRef, useEffect, useCallback } from 'react';
 import { WordsTable, WordsFilter, WordRow, MenuAction } from '@widgets/words-table';
-import { useGetDictionaryQuery, useGetTranslationsQuery, useInsertWordMutation, useUpdateWordStatusMutation, useUpdateWordsStatusesMutation, useDeleteWordMutation, useDeleteWordsBatchMutation, useUpdateWordsMutation, useIncrementWordProgressMutation, useLazyGetDictionaryQuery } from '../api/dictionaryApi';
+import {
+  useGetDictionaryQuery,
+  useGetTranslationsQuery,
+  useInsertWordMutation,
+  useUpdateWordStatusMutation,
+  useUpdateWordsStatusesMutation,
+  useDeleteWordMutation,
+  useDeleteWordsBatchMutation,
+  useUpdateWordsMutation,
+  useLazyGetDictionaryQuery
+} from '../api/dictionaryApi';
+import { useIncrementWordProgressMutation } from "@entities/vocabulary/api/vocabularyApi";
 import type { WordStatus } from '../model/types';
 import { mapToWordRow } from '../lib/mapToWordRow';
 import { SearchDropdown } from './SearchDropdown';

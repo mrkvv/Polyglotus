@@ -16,7 +16,7 @@ import {
 import "./routes.scss"
 import { Sidebar } from '@widgets/sidebar'
 import { AIChatPage } from '@pages/ai-chat-page'
-import { TrainingPage } from '@pages/training-page'
+import { TrainingPage, WordToTranslationPage, TranslationToWordPage, PairsPage, FillSentencePage } from '@pages/training-page'
 import { DictionaryPage } from '@pages/dictionary-page'
 import { SettingsPage } from '@pages/settings-page'
 import { ErrorHandlerProvider } from '@app/providers/ErrorHandlerProvider'
@@ -103,6 +103,10 @@ export const router = createBrowserRouter([
           { path: '/home', element: <HomePage /> },
           { path: '/chat', element: <AIChatPage /> },
           { path: '/trainings', element: <TrainingPage /> },
+          { path: '/trainings/word-to-translation', element: <WordToTranslationPage /> },
+          { path: '/trainings/translation-to-word', element: <TranslationToWordPage /> },
+          { path: '/trainings/pairs', element: <PairsPage /> },
+          { path: '/trainings/fill', element: <FillSentencePage /> },
           { path: '/dictionary', element: <DictionaryPage /> },
           { path: '/settings', element: <SettingsPage /> },
         ],
