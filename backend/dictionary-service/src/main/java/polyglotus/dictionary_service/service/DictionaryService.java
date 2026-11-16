@@ -30,7 +30,20 @@ public class DictionaryService {
 
     @Transactional
     public Word addWord(Integer userId, String en, String ru, String partOfSpeech) {
-        validationService.validateWords(en, ru);
+        validationService.validateWords(ru, en);
+        return save(userId, en, ru, partOfSpeech);
+    }
+
+    @Transactional
+    public Word addWordByHand(Integer userId, String en, String ru, String partOfSpeech) {
+        validationService.validateWords(ru, en);
+        validationService.validateWordsLength(ru, en);
+        validationService.validateWordsLanguage(ru, en);
+
+        return save(userId, en, ru, partOfSpeech);
+    }
+
+    private Word save(Integer userId, String en, String ru, String partOfSpeech) {
         validationService.validatePartOfSpeech(partOfSpeech);
 
         Integer enWordId = wordRepository.findOrCreateEnWord(en);

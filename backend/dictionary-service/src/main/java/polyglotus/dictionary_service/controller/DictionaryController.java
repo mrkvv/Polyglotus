@@ -47,6 +47,20 @@ public class DictionaryController {
                         .body(addedWord);
     }
 
+    @PostMapping("/words/by-hand")
+    public ResponseEntity<Word> addWordByHand(
+            @RequestHeader(name = X_USER_ID_HEADER) Integer userId,
+            @RequestBody AddWordRequest request
+    ) {
+        String enWord = request.en();
+        String ruWord = request.ru();
+        String partOfSpeech = request.partOfSpeech();
+
+        Word addedWord = dictionaryService.addWordByHand(userId, enWord, ruWord, partOfSpeech);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(addedWord);
+    }
+
     @DeleteMapping("/words/{id}")
     public ResponseEntity<Void> deleteWord(
             @RequestHeader(name = X_USER_ID_HEADER) Integer userId,
