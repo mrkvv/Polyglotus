@@ -17,16 +17,21 @@
   }
 
   &__Cards {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 32px;
-    flex-wrap: wrap;
-    align-items: center; 
+    width: 100%;
+
+    // MUI Button внутри не должен ломать сетку
+    & > .MuiButtonBase-root {
+      min-width: 0;
+      padding: 0;
+    }
   }
 
   &__Card {
-    width: 556px; 
-    height: 556px; 
+    aspect-ratio: 1;
+    width: 100%;
     padding: 24px;
     display: flex;
     flex-direction: column;

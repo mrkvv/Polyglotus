@@ -40,15 +40,24 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    object-fit: cover;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 
     // SVG-аватар приходит через dangerouslySetInnerHTML
-    svg {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
+    &Inner {
+      width: 200px;
+      height: 200px;
+      flex-shrink: 0;
+      transform: scale(calc(120 / 200));
+      transform-origin: center center;
+
+      svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
     }
 
     &--placeholder {
@@ -200,15 +209,25 @@
       padding: 0;
       background: transparent;
       cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       @include transition(transform 0.1s);
 
-      // SVG-аватар
-      div, svg {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        overflow: hidden;
-        display: block;
+      // Враппер 200x200 сжимается до размера слота
+      div {
+        width: 200px;
+        height: 200px;
+        flex-shrink: 0;
+        transform: scale(calc(100 / 200));
+        transform-origin: center center;
+
+        svg {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
       }
 
       &:hover {

@@ -57,8 +57,13 @@ export function HomePage() {
           </Typography>
         </Paper>
 
-        <Button disableElevation={true} disableRipple={true} sx={{ textTransform: 'none', textAlign: 'left' }} onClick={handleDailyWordClick}>
-          <Paper className="HomePage__Card" variant="outlined" square={false}>
+        <Button
+          disableElevation
+          disableRipple
+          sx={{ textTransform: 'none', textAlign: 'left', display: 'block', width: '100%', height: '100%', padding: 0 }}
+          onClick={handleDailyWordClick}
+        >
+          <Paper className="HomePage__Card" variant="outlined" square={false} sx={{ width: '100%', height: '100%', boxSizing: 'border-box' }}>
             <Typography variant="h4" sx={{ padding: '30px' }}>{t('new_word')}</Typography>
             <Typography variant="h3" sx={{ padding: '5px 30px', fontWeight: '700'}}>{dailyWord?.word}</Typography>
             <Typography variant="h5" sx={{ padding: '26px 30px' }}>{t('new_word_text')}</Typography>

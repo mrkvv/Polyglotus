@@ -91,10 +91,12 @@ export function SettingsPage() {
           aria-label="Изменить аватар"
         >
           {currentAvatarSvg ? (
-            <div
-              className="SettingsPage__Avatar"
-              dangerouslySetInnerHTML={{ __html: currentAvatarSvg }}
-            />
+            <div className="SettingsPage__Avatar">
+              <div
+                className="SettingsPage__AvatarInner"
+                dangerouslySetInnerHTML={{ __html: currentAvatarSvg }}
+              />
+            </div>
           ) : (
             <div className="SettingsPage__Avatar SettingsPage__Avatar--placeholder" />
           )}
