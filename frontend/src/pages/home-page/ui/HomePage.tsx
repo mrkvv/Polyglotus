@@ -2,6 +2,7 @@ import { Box, Button, Paper, Typography } from '@mui/material'
 import './HomePage.scss'
 import { useGetDailyWordQuery, useGetPhraseQuery } from '@entities/reference/api/referenceApi';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import { useGetUserMeQuery } from '@entities/user/api/uesrApi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +15,19 @@ export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const currentStreak = user?.streak.current;
+  const currentStreak = user?.streak.current ?? 0;
+
+  const trainedToday = (() => {
+    const lastDate = user?.streak.lastTrainingDate;
+    if (!lastDate) return false;
+    const today = new Date();
+    const last = new Date(lastDate);
+    return (
+      last.getFullYear() === today.getFullYear() &&
+      last.getMonth() === today.getMonth() &&
+      last.getDate() === today.getDate()
+    );
+  })();
 
   const handleDailyWordClick = () => {
     if (dailyWord?.word) {
@@ -31,14 +44,16 @@ export function HomePage() {
       <div className="HomePage__Cards">
         <Paper className="HomePage__Card" variant="outlined" square={false}>
           <Box className='HomePage__Card__Circle'>
-            <CircleOutlinedIcon sx={{ fontSize: "50px" }}/>
+            {trainedToday
+              ? <CheckCircleOutlinedIcon sx={{ fontSize: "50px", color: "success.main" }} />
+              : <CircleOutlinedIcon sx={{ fontSize: "50px" }} />
+            }
           </Box>
           <Typography variant="h4" sx={{ padding: '5px 30px' }}>
-            {t('streak_title', { count: currentStreak})}
+            {t('streak_title', { count: currentStreak })}
           </Typography>
           <Typography variant="h5" sx={{ padding: '26px 30px' }}>
-            Пройдите тренировку сегодня, чтобы не потерять серию
-            {/*TODO: useEffect на refetch по запросу стрика - проверять, что поле с датой изменилось ????*/}
+            {t(trainedToday ? 'streak_done' : 'streak_pending')}
           </Typography>
         </Paper>
 
