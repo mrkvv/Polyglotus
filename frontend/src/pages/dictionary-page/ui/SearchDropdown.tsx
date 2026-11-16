@@ -12,6 +12,7 @@ interface SearchDropdownProps {
   word: string;
   data: GetTranslationsResponse | undefined;
   isLoading: boolean;
+  isError: boolean;
   /** Ключ: "word|variant|part_of_speech" */
   pendingIds: Set<string>;
   onAdd: (variant: string, partOfSpeech: string, word: string) => void;
@@ -113,6 +114,7 @@ export function SearchDropdown({
   word,
   data,
   isLoading,
+  isError,
   pendingIds,
   onAdd,
   onManual,
@@ -128,6 +130,18 @@ export function SearchDropdown({
       <Paper elevation={3} sx={paperSx}>
         <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
           <CircularProgress size={24} />
+        </Box>
+      </Paper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Paper elevation={3} sx={paperSx}>
+        <Box sx={{ px: 2, py: 2.5 }}>
+          <Typography variant="body2" color="text.secondary">
+            Перевод не найден
+          </Typography>
         </Box>
       </Paper>
     );

@@ -118,7 +118,7 @@ export function DictionaryPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const { data: translationsData, isFetching: isTranslationsFetching } =
+  const { data: translationsData, isFetching: isTranslationsFetching, isError: isTranslationsError } =
     useGetTranslationsQuery(
       { word: debouncedWord },
       { skip: !debouncedWord },
@@ -285,6 +285,7 @@ export function DictionaryPage() {
               word={debouncedWord}
               data={translationsData}
               isLoading={isTranslationsFetching}
+              isError={isTranslationsError}
               pendingIds={pendingIds}
               onAdd={handleAdd}
               onManual={handleManual}

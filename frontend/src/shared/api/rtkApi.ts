@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { UNAUTHORIZED_EVENT } from '@app/providers/ErrorHandlerProvider';
+import { UNAUTHORIZED_EVENT, API_ERROR_EVENT } from '@app/providers/ErrorHandlerProvider';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:8000',
@@ -25,8 +25,15 @@ const baseQueryWithUnauthorized: BaseQueryFn<
 
   if (result.error) {
     const data = result.error.data as { error?: string } | undefined;
+
     if (data?.error === 'UNAUTHORIZED') {
       window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+    } else if (api.endpoint !== 'getTranslations') {
+      // Поиск переводов обрабатывает ошибки локально в SearchDropdown — не дублируем toast
+      const status = result.error.status;
+      window.dispatchEvent(
+        new CustomEvent(API_ERROR_EVENT, { detail: { status } })
+      );
     }
   }
 
