@@ -2,9 +2,11 @@
 import { Navigate, Outlet, useMatch } from 'react-router-dom';
 import { onboardingStore } from '@entities/user';
 import { useGetReferencesQuery } from '@entities/reference';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export const OnboardingLayout = () => {
+  const { t } = useTranslation();
   const { data, isLoading, isError } = useGetReferencesQuery();
 
   const step1 = useMatch('/login/step-1');
@@ -19,27 +21,27 @@ export const OnboardingLayout = () => {
 
   if (isLoading) {
     return (
-      <Box 
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <CircularProgress />
       </Box>
     );
   }
 
   if (isError || !data) {
-    return <div>Ошибка загрузки данных</div>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Typography color="error">{t('onboarding_load_error')}</Typography>
+      </Box>
+    );
   }
 
   return (
-    <Outlet 
-      context={{ 
-        avatars: data.avatars, 
-        levels: data.levels, 
-        topics: data.topics 
-      }} 
+    <Outlet
+      context={{
+        avatars: data.avatars,
+        levels: data.levels,
+        topics: data.topics,
+      }}
     />
   );
 };

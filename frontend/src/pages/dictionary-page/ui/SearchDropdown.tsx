@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Paper, Typography, List, ListItemButton, ListItemText,
   Divider, Button, Box, CircularProgress,
@@ -31,6 +32,7 @@ function CatalogGroup({
   pendingIds: Set<string>;
   onAdd: (variant: string, partOfSpeech: string, word: string) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <Box>
       {/* Заголовок группы: тема + часть речи */}
@@ -81,7 +83,7 @@ function CatalogGroup({
                   <CircularProgress size={14} />
                 ) : (
                   <Typography variant="caption" color="success.main" fontWeight={600}>
-                    + добавить
+                    {t('search_add_hint')}
                   </Typography>
                 )}
               </Box>
@@ -119,6 +121,7 @@ export function SearchDropdown({
   onAdd,
   onManual,
 }: SearchDropdownProps) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
@@ -140,7 +143,7 @@ export function SearchDropdown({
       <Paper elevation={3} sx={paperSx}>
         <Box sx={{ px: 2, py: 2.5 }}>
           <Typography variant="body2" color="text.secondary">
-            Перевод не найден
+            {t('search_not_found')}
           </Typography>
         </Box>
       </Paper>
@@ -168,16 +171,15 @@ export function SearchDropdown({
         {nothingFound && (
           <Box sx={{ px: 2, py: 2.5 }}>
             <Typography variant="body2" color="text.secondary">
-              Перевод не найден
+              {t('search_not_found')}
             </Typography>
           </Box>
         )}
 
-        {/* ── Секция: Добавленные ── */}
         {hasAdded && (
           <Box>
             <Typography variant="overline" sx={sectionTitleSx}>
-              Добавленные
+              {t('search_section_added')}
             </Typography>
             {inUserDictionary.map((item) => (
               <UserGroup key={item.id} item={item} word={word} />
@@ -187,11 +189,10 @@ export function SearchDropdown({
 
         {hasAdded && hasCatalog && <Divider />}
 
-        {/* ── Секция: Не добавленные ── */}
         {hasCatalog && (
           <Box>
             <Typography variant="overline" sx={sectionTitleSx}>
-              Не добавленные
+              {t('search_section_catalog')}
             </Typography>
             {visibleCatalog.map((item, i) => (
               <CatalogGroup
@@ -217,7 +218,7 @@ export function SearchDropdown({
                   '&:hover': { backgroundColor: 'transparent', color: 'success.dark' },
                 }}
               >
-                КО ВСЕМ ПЕРЕВОДАМ
+                {t('search_all_translations')}
               </Button>
             )}
           </Box>
@@ -240,7 +241,7 @@ export function SearchDropdown({
             '&:hover': { backgroundColor: 'transparent', color: 'text.primary' },
           }}
         >
-          Добавить слово вручную?
+          {t('search_add_manual')}
         </Button>
       </Box>
     </Paper>

@@ -132,7 +132,7 @@ export function PairsPage() {
           {isError && (
             <Box className="PairsPage__Card__Center">
               <Typography variant="h5" color="error">
-                Не удалось загрузить тренировку
+                {t('training_load_error')}
               </Typography>
             </Box>
           )}

@@ -100,8 +100,8 @@ export function FillSentencePage() {
   }
 
   const getHelperText = (): string => {
-    if (showHint) return `Правильное слово: ${currentTask.answer}`
-    if (inputState === 'wrong') return 'Введено неверное слово.'
+    if (showHint) return t('fill_hint_correct', { answer: currentTask.answer })
+    if (inputState === 'wrong') return t('fill_wrong_input')
     return ' '
   }
 
@@ -129,7 +129,7 @@ export function FillSentencePage() {
           {isError && (
             <Box className="FillSentencePage__Card__Center">
               <Typography variant="h5" color="error">
-                Не удалось загрузить тренировку
+                {t('training_load_error')}
               </Typography>
             </Box>
           )}
@@ -174,7 +174,7 @@ export function FillSentencePage() {
 
                 <Box className="FillSentencePage__Card__Controls">
                   <TextField
-                    label="Введите слово"
+                    label={t('fill_label')}
                     variant="outlined"
                     value={inputValue}
                     onChange={(e) => handleInputChange(e.target.value)}

@@ -25,11 +25,11 @@ export function Sidebar() {
   const navigate = useNavigate();
 
   const menuItems = [
-    { text: 'Главная', icon: <HomeIcon />, path: '/home' },
-    { text: 'Тренировки', icon: <TaskIcon />, path: '/trainings' },
-    { text: 'ИИ чат', icon: <AssistantIcon />, path: '/chat' },
-    { text: 'Словарь', icon: <StarIcon />, path: '/dictionary' },
-    { text: 'Настройки', icon: <SettingsIcon />, path: '/settings'  },
+    { text: t('nav_home'), icon: <HomeIcon />, path: '/home' },
+    { text: t('nav_trainings'), icon: <TaskIcon />, path: '/trainings' },
+    { text: t('nav_chat'), icon: <AssistantIcon />, path: '/chat' },
+    { text: t('nav_dictionary'), icon: <StarIcon />, path: '/dictionary' },
+    { text: t('nav_settings'), icon: <SettingsIcon />, path: '/settings' },
   ];
 
   return (

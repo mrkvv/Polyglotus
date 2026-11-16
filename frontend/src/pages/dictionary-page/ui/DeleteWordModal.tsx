@@ -3,6 +3,7 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   Button, Typography,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import type { WordRow } from '@widgets/words-table';
 
 interface DeleteWordModalProps {
@@ -13,6 +14,7 @@ interface DeleteWordModalProps {
 }
 
 export function DeleteWordModal({ open, rows, onConfirm, onClose }: DeleteWordModalProps) {
+  const { t } = useTranslation();
   const [deleting, setDeleting] = useState(false);
   const isBatch = rows.length > 1;
 
@@ -27,12 +29,12 @@ export function DeleteWordModal({ open, rows, onConfirm, onClose }: DeleteWordMo
   };
 
   const title = isBatch
-    ? `Удалить ${rows.length} слова?`
-    : `Удалить слово ${rows[0]?.word}?`;
+    ? t('delete_modal_title_batch', { count: rows.length })
+    : t('delete_modal_title_one', { word: rows[0]?.word });
 
   const description = isBatch
-    ? `Будут удалены слова: ${rows.map((r) => r.word).join(', ')}. Это действие нельзя отменить.`
-    : 'Это действие нельзя отменить.';
+    ? t('delete_modal_desc_batch', { words: rows.map((r) => r.word).join(', ') })
+    : t('delete_modal_desc_one');
 
   return (
     <Dialog
@@ -56,10 +58,10 @@ export function DeleteWordModal({ open, rows, onConfirm, onClose }: DeleteWordMo
           disabled={deleting}
           sx={{ color: '#c62828', fontWeight: 700 }}
         >
-          Удалить
+          {t('delete_modal_confirm')}
         </Button>
         <Button onClick={onClose} color="inherit">
-          Отмена
+          {t('word_modal_cancel')}
         </Button>
       </DialogActions>
     </Dialog>

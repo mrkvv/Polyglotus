@@ -262,7 +262,7 @@ export function DictionaryPage() {
         <div className="DictionaryPage__SearchWrapper" ref={searchWrapperRef}>
           <TextField
             className="DictionaryPage__Search"
-            placeholder="Search"
+            placeholder={t('search_placeholder')}
             variant="outlined"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
@@ -306,9 +306,9 @@ export function DictionaryPage() {
               value={filter}
               onChange={handleFilterChange}
             >
-              <Tab value="all" label="ВСЕ" />
-              <Tab value="learned" label="ВЫУЧИЛ" />
-              <Tab value="notLearned" label="НЕ ВЫУЧИЛ" />
+              <Tab value="all" label={t('tab_all')} />
+              <Tab value="learned" label={t('tab_learned')} />
+              <Tab value="notLearned" label={t('tab_not_learned')} />
             </Tabs>
 
             <div className="DictionaryPage__TableWrapper">
