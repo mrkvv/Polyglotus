@@ -21,11 +21,13 @@ export interface GetPairsTrainingResponse {
 }
 
 export interface TaskPairs {
-	pairs: {
-		id: number;
-		word: string;
-		translation: string;
-	}
+	pairs: Pair[];
+}
+
+export interface Pair {
+	id: number;
+	word: string;
+	translation: string;
 }
 
 export interface GetFillSentenceTrainingResponse {
