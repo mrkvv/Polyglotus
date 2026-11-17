@@ -115,5 +115,12 @@
   "nav_dictionary": "Словарь",
   "nav_settings": "Настройки",
 
-  "onboarding_load_error": "Ошибка загрузки данных"
+  "onboarding_load_error": "Ошибка загрузки данных",
+
+  "chat_title": "ИИ чат",
+  "chat_placeholder": "Написать сообщение...",
+  "chat_send": "Отправить",
+  "chat_end_dialog": "Завершить диалог",
+  "chat_context_overflow": "Контекст переполнен. Начните новый диалог.",
+  "chat_char_limit": "{{count}}/256"
 }

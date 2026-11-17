@@ -28,7 +28,7 @@ const baseQueryWithUnauthorized: BaseQueryFn<
 
     if (data?.error === 'UNAUTHORIZED') {
       window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
-    } else if (!['getTranslations', 'insertWordManualy', 'updateWords'].includes(api.endpoint)) {
+    } else if (!['getTranslations', 'insertWordManualy', 'updateWords', 'sendMessage', 'deleteChat'].includes(api.endpoint)) {
       // Поиск переводов обрабатывает ошибки локально в SearchDropdown — не дублируем toast
       const status = result.error.status;
       window.dispatchEvent(
@@ -44,5 +44,5 @@ export const rtkApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithUnauthorized,
   endpoints: () => ({}),
-  tagTypes: ['User', 'References', 'Dictionary'],
+  tagTypes: ['User', 'References', 'Dictionary', 'ChatHistory'],
 });
