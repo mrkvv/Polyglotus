@@ -5,10 +5,16 @@ VALUES ('A1', 'Начинаю с нуля'), ('A2', 'Знаю основы'),
     ON CONFLICT (level_name) DO NOTHING;
 
 INSERT INTO topics (topic_name)
-VALUES ('Путешествия'),
-       ('Технологии'),
-       ('Здоровье и спорт'),
-       ('Образование')
+VALUES ('Travel & Culture'),
+       ('Food & Cooking'),
+       ('Movies & Music'),
+       ('Technology & Gadgets'),
+       ('Hobbies & Free Time'),
+       ('Work & Career'),
+       ('Health & Sports'),
+       ('Books & Literature'),
+       ('Daily Life & Routines'),
+       ('Nature & Environment')
     ON CONFLICT (topic_name) DO NOTHING;
 
 INSERT INTO motivational_phrases (phrase)
