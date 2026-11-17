@@ -15,7 +15,7 @@ public class ChatMessagesRepository {
             SELECT id, user_id, content, role, created_at
             FROM chat_messages
             WHERE user_id = ?
-            ORDER BY created_at ASC
+            ORDER BY id ASC
             """;
 
     private static final String INSERT_MESSAGE_SQL = """
