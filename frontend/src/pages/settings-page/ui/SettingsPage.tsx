@@ -8,10 +8,12 @@ import { setTheme } from '@app/store/themeSlice'
 import { useGetUserMeQuery, useUpdateUserAvatarMutation, useUpdateUserLevelMutation, useUpdateUserThemeMutation } from '@entities/user/api/uesrApi'
 import { useGetReferencesQuery } from '@entities/reference'
 import { useLogoutMutation } from '@features/auth/api/authApi'
+import { useTranslation } from 'react-i18next'
 import './SettingsPage.scss'
 import { useNavigate } from 'react-router-dom'
 
 export function SettingsPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const theme = useSelector((state: RootState) => state.theme.theme)
@@ -91,10 +93,12 @@ export function SettingsPage() {
           aria-label="Изменить аватар"
         >
           {currentAvatarSvg ? (
-            <div
-              className="SettingsPage__Avatar"
-              dangerouslySetInnerHTML={{ __html: currentAvatarSvg }}
-            />
+            <div className="SettingsPage__Avatar">
+              <div
+                className="SettingsPage__AvatarInner"
+                dangerouslySetInnerHTML={{ __html: currentAvatarSvg }}
+              />
+            </div>
           ) : (
             <div className="SettingsPage__Avatar SettingsPage__Avatar--placeholder" />
           )}
@@ -107,43 +111,35 @@ export function SettingsPage() {
         </Typography>
       </div>
 
-      {/* Тема приложения */}
       <section className="SettingsPage__Section">
         <Typography variant="h4" className="SettingsPage__SectionTitle">
-          Тема приложения
+          {t('settings_theme_title')}
         </Typography>
         <div className="SettingsPage__ThemeRow">
           <button
             className={`SettingsPage__ThemeOption${theme === 'light' ? ' SettingsPage__ThemeOption--selected' : ''}`}
-            onClick={() => {
-              dispatch(setTheme('light'))
-              handleSelectTheme('light')
-            }}
-            aria-label="Светлая тема"
+            onClick={() => { dispatch(setTheme('light')); handleSelectTheme('light') }}
+            aria-label={t('settings_theme_light')}
             aria-pressed={theme === 'light'}
           >
             <span className="SettingsPage__ThemeSwatch SettingsPage__ThemeSwatch--light" />
-            <Typography variant="body2">Светлая</Typography>
+            <Typography variant="body2">{t('settings_theme_light')}</Typography>
           </button>
           <button
             className={`SettingsPage__ThemeOption${theme === 'dark' ? ' SettingsPage__ThemeOption--selected' : ''}`}
-            onClick={() => {
-              dispatch(setTheme('dark'))
-              handleSelectTheme('dark')
-            }}
-            aria-label="Тёмная тема"
+            onClick={() => { dispatch(setTheme('dark')); handleSelectTheme('dark') }}
+            aria-label={t('settings_theme_dark')}
             aria-pressed={theme === 'dark'}
           >
             <span className="SettingsPage__ThemeSwatch SettingsPage__ThemeSwatch--dark" />
-            <Typography variant="body2">Тёмная</Typography>
+            <Typography variant="body2">{t('settings_theme_dark')}</Typography>
           </button>
         </div>
       </section>
 
-      {/* Уровень знаний */}
       <section className="SettingsPage__Section">
         <Typography variant="h4" className="SettingsPage__SectionTitle">
-          Уровень знаний
+          {t('settings_level_title')}
         </Typography>
         <Paper className="SettingsPage__LevelsPaper" variant="outlined" square={false}>
           <div className="SettingsPage__LevelsGrid">
@@ -161,12 +157,11 @@ export function SettingsPage() {
         </Paper>
       </section>
 
-      {/* Выйти */}
       <button
         className="SettingsPage__LogoutBtn"
         onClick={() => setIsLogoutModalOpen(true)}
       >
-        <Typography variant="body1">Выйти из учётной записи</Typography>
+        <Typography variant="body1">{t('settings_logout_btn')}</Typography>
         <LogoutIcon sx={{ fontSize: 20 }} />
       </button>
 
@@ -207,7 +202,7 @@ export function SettingsPage() {
               '&:hover': { backgroundColor: '#1B5E20' },
             }}
           >
-            Продолжить
+            {t('settings_avatar_continue')}
           </Button>
         </div>
       </Dialog>
@@ -218,19 +213,16 @@ export function SettingsPage() {
         onClose={() => setIsLogoutModalOpen(false)}
         sx={{ borderRadius: '16px', padding: '8px' }}
       >
-        <DialogTitle>Выйти из учётной записи?</DialogTitle>
+        <DialogTitle>{t('settings_logout_title')}</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">Вы уверены, что хотите выйти?</Typography>
+          <Typography variant="body1">{t('settings_logout_confirm')}</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsLogoutModalOpen(false)} color="inherit">
-            Нет
+            {t('settings_logout_no')}
           </Button>
-          <Button
-            onClick={handleLogoutConfirm}
-            sx={{ color: '#2E7D32', fontWeight: 700 }}
-          >
-            Да
+          <Button onClick={handleLogoutConfirm} sx={{ color: '#2E7D32', fontWeight: 700 }}>
+            {t('settings_logout_yes')}
           </Button>
         </DialogActions>
       </Dialog>

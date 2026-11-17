@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Dialog, IconButton, Button, Typography, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 import type { WordRow } from '@widgets/words-table';
 import './FlashCardModal.scss';
 
@@ -12,6 +13,7 @@ interface FlashCardModalProps {
 }
 
 export function FlashCardModal({ open, words, onFinish, onClose }: FlashCardModalProps) {
+  const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [correctIds, setCorrectIds] = useState<number[]>([]);
@@ -71,8 +73,8 @@ export function FlashCardModal({ open, words, onFinish, onClose }: FlashCardModa
           <CloseIcon fontSize="small" />
         </IconButton>
         <div className="FlashCard__finish">
-          <Typography variant="h5">Вы всё знаете!</Typography>
-          <Typography variant="h6" color="text.secondary">Нет слов для повторения</Typography>
+          <Typography variant="h5">{t('flashcard_all_known')}</Typography>
+          <Typography variant="h6" color="text.secondary">{t('flashcard_no_words')}</Typography>
         </div>
       </Dialog>
     );
@@ -98,9 +100,9 @@ export function FlashCardModal({ open, words, onFinish, onClose }: FlashCardModa
 
       {finished ? (
         <div className="FlashCard__finish">
-          <Typography variant="h5">Отличная работа!</Typography>
+          <Typography variant="h5">{t('flashcard_great_job')}</Typography>
           <Typography variant="h6" color="text.secondary">
-            Сегодня вы выучили {correctIds.length} {wordLabel(correctIds.length)}
+            {t('flashcard_learned_count', { count: correctIds.length })}
           </Typography>
         </div>
       ) : (
@@ -109,7 +111,7 @@ export function FlashCardModal({ open, words, onFinish, onClose }: FlashCardModa
             className="FlashCard__scene"
             onClick={() => setFlipped((f) => !f)}
             role="button"
-            aria-label="Перевернуть карточку"
+            aria-label={t('flashcard_widget_label')}
           >
             <div className={`FlashCard__card${flipped ? ' FlashCard__card--flipped' : ''}`}>
               <div className="FlashCard__face FlashCard__face--front">
@@ -125,21 +127,14 @@ export function FlashCardModal({ open, words, onFinish, onClose }: FlashCardModa
 
           <div className="FlashCard__actions">
             <Button onClick={handleCorrect} sx={{ color: '#2E7D32', fontWeight: 700, fontSize: 14 }}>
-              Верно
+              {t('flashcard_correct')}
             </Button>
             <Button onClick={handleWrong} sx={{ color: '#999', fontWeight: 700, fontSize: 14 }}>
-              Не верно
+              {t('flashcard_wrong')}
             </Button>
           </div>
         </>
       )}
     </Dialog>
   );
-}
-
-function wordLabel(n: number): string {
-  if (n % 100 >= 11 && n % 100 <= 14) return 'слов';
-  if (n % 10 === 1) return 'слово';
-  if (n % 10 >= 2 && n % 10 <= 4) return 'слова';
-  return 'слов';
 }

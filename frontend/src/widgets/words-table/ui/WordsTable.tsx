@@ -8,6 +8,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { CustomProgress, CustomProgressValue } from '@shared/ui/CustomProgress';
+import { useTranslation } from 'react-i18next';
 import './WordsTable.scss';
 
 export type WordsFilter = 'all' | 'learned' | 'notLearned';
@@ -44,6 +45,7 @@ export function WordsTable({
   onPageSizeChange,
   onMenuAction,
 }: WordsTableProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<number[]>([]);
 
   // ── Контекстное меню ──────────────────────────────────
@@ -128,11 +130,11 @@ export function WordsTable({
                     indeterminateIcon={<CheckCircleIcon />}
                   />
                 </TableCell>
-                <TableCell className="WordsTable__head-cell">Слово</TableCell>
-                <TableCell className="WordsTable__head-cell">Перевод</TableCell>
-                <TableCell className="WordsTable__head-cell">Статус</TableCell>
-                <TableCell className="WordsTable__head-cell" align="center">Прогресс изучения</TableCell>
-                <TableCell className="WordsTable__head-cell" align="center">Дата добавления</TableCell>
+                <TableCell className="WordsTable__head-cell">{t('table_col_word')}</TableCell>
+                <TableCell className="WordsTable__head-cell">{t('table_col_translation')}</TableCell>
+                <TableCell className="WordsTable__head-cell">{t('table_col_status')}</TableCell>
+                <TableCell className="WordsTable__head-cell" align="center">{t('table_col_progress')}</TableCell>
+                <TableCell className="WordsTable__head-cell" align="center">{t('table_col_date')}</TableCell>
                 <TableCell className="WordsTable__head-cell" align="right" />
               </TableRow>
             </TableHead>
@@ -163,7 +165,7 @@ export function WordsTable({
                     </TableCell>
                     <TableCell className="WordsTable__body-cell">{row.translation}</TableCell>
                     <TableCell className="WordsTable__body-cell">
-                      {row.learned ? 'Выучено' : 'Не выучено'}
+                      {row.learned ? t('table_status_learned') : t('table_status_not_learned')}
                     </TableCell>
                     <TableCell className="WordsTable__body-cell" align="center">
                       <CustomProgress value={row.progress} />
@@ -200,22 +202,19 @@ export function WordsTable({
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={() => handleMenuAction('markLearned')}>
-          <Typography variant="body2">Пометить как Выучено</Typography>
+          <Typography variant="body2">{t('table_menu_mark_learned')}</Typography>
         </MenuItem>
         <MenuItem onClick={() => handleMenuAction('markUnlearned')}>
-          <Typography variant="body2">Пометить как Не выучено</Typography>
+          <Typography variant="body2">{t('table_menu_mark_unlearned')}</Typography>
         </MenuItem>
         <Divider />
-        <MenuItem
-          onClick={() => handleMenuAction('edit')}
-          disabled={isMultiSelect}
-        >
+        <MenuItem onClick={() => handleMenuAction('edit')} disabled={isMultiSelect}>
           <Typography variant="body2" color={isMultiSelect ? 'text.disabled' : 'text.primary'}>
-            Редактировать
+            {t('table_menu_edit')}
           </Typography>
         </MenuItem>
         <MenuItem onClick={() => handleMenuAction('delete')}>
-          <Typography variant="body2" color="error">Удалить</Typography>
+          <Typography variant="body2" color="error">{t('table_menu_delete')}</Typography>
         </MenuItem>
       </Menu>
 
@@ -230,9 +229,9 @@ export function WordsTable({
           onPageSizeChange(parseInt(e.target.value, 10));
         }}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
-        labelRowsPerPage="Rows per page:"
+        labelRowsPerPage={t('table_rows_per_page')}
         labelDisplayedRows={({ from, to, count, page: p }) =>
-          `Page ${p + 1} · ${from}-${to} of ${count}`
+          t('table_page_of', { page: p + 1, from, to, count })
         }
       />
     </Paper>

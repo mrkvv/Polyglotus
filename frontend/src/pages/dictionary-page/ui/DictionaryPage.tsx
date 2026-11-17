@@ -3,6 +3,7 @@ import './DictionaryPage.scss';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, SyntheticEvent, useRef, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { WordsTable, WordsFilter, WordRow, MenuAction } from '@widgets/words-table';
 import {
   useGetDictionaryQuery,
@@ -35,6 +36,8 @@ const SEARCH_DEBOUNCE_MS = 400;
 
 export function DictionaryPage() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // ── Таблица ───────────────────────────────────────────
   const [filter, setFilter] = useState<WordsFilter>('all');
@@ -67,6 +70,25 @@ export function DictionaryPage() {
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchWrapperRef = useRef<HTMLDivElement>(null);
 
+  // Инициализация из навигации (например, карточка "слово дня" на главной)
+  useEffect(() => {
+    const word = (location.state as { searchWord?: string } | null)?.searchWord;
+    if (word) {
+      setSearchInput(word);
+      setDebouncedWord(word);
+      setDropdownOpen(true);
+      // Фокус и позиционирование курсора в конец строки
+      requestAnimationFrame(() => {
+        const input = searchInputRef.current;
+        if (input) {
+          input.focus();
+          input.setSelectionRange(word.length, word.length);
+        }
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Дебаунс: обновляем debouncedWord при изменении ввода
   useEffect(() => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -96,7 +118,7 @@ export function DictionaryPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const { data: translationsData, isFetching: isTranslationsFetching } =
+  const { data: translationsData, isFetching: isTranslationsFetching, isError: isTranslationsError } =
     useGetTranslationsQuery(
       { word: debouncedWord },
       { skip: !debouncedWord },
@@ -240,13 +262,14 @@ export function DictionaryPage() {
         <div className="DictionaryPage__SearchWrapper" ref={searchWrapperRef}>
           <TextField
             className="DictionaryPage__Search"
-            placeholder="Search"
+            placeholder={t('search_placeholder')}
             variant="outlined"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             onFocus={handleFocus}
             autoComplete="off"
             slotProps={{
+              htmlInput: { ref: searchInputRef },
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
@@ -262,6 +285,7 @@ export function DictionaryPage() {
               word={debouncedWord}
               data={translationsData}
               isLoading={isTranslationsFetching}
+              isError={isTranslationsError}
               pendingIds={pendingIds}
               onAdd={handleAdd}
               onManual={handleManual}
@@ -282,9 +306,9 @@ export function DictionaryPage() {
               value={filter}
               onChange={handleFilterChange}
             >
-              <Tab value="all" label="ВСЕ" />
-              <Tab value="learned" label="ВЫУЧИЛ" />
-              <Tab value="notLearned" label="НЕ ВЫУЧИЛ" />
+              <Tab value="all" label={t('tab_all')} />
+              <Tab value="learned" label={t('tab_learned')} />
+              <Tab value="notLearned" label={t('tab_not_learned')} />
             </Tabs>
 
             <div className="DictionaryPage__TableWrapper">

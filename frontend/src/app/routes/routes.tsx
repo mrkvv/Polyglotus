@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
-import { userStore } from '@entities/user'
 import { LoginPage } from '@pages/login-page'
 import { HomePage } from '@pages/home-page'
 import { AuthCallbackPage } from '@pages/auth-callback-page'
@@ -62,12 +61,19 @@ function ProtectedLayout() {
   )
 }
 
-function ProtectedLayoutClean() {
+function OnboardingGuard() {
   const token = localStorage.getItem('token');
-  if (!token) {
-    return <Navigate to="/login" replace />
-  }
-  return <Outlet />
+  const { data: user, isLoading } = useGetUserMeQuery(undefined, { skip: !token });
+
+  if (!token) return <Navigate to="/login" replace />;
+
+  // Ждём ответа — не рендерим ничего, чтобы не было флика редиректа
+  if (isLoading || !user) return null;
+
+  // Уже прошёл онбординг — не пускаем обратно
+  if (user.topicIds.length > 0) return <Navigate to="/home" replace />;
+
+  return <Outlet />;
 }
 
 export const router = createBrowserRouter([
@@ -82,9 +88,9 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // ── Онбординг (только для залогиненных) ───
+      // ── Онбординг (только для новых пользователей) ───
       {
-        element: <ProtectedLayoutClean />,
+        element: <OnboardingGuard />,
         children: [
           {
             element: <OnboardingLayout />,

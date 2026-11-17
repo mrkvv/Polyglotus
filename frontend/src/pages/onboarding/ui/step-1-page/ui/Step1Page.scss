@@ -50,19 +50,29 @@
     }
 
     &__Avatar {
-      width: 100%;
-      height: 100%;
+      width: 120px;
+      height: 120px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       user-select: none;
 
-      // Масштабирует SVG 200x200 под размер слота
-      svg {
-        width: 100%;
-        height: 100%;
-        display: block;
+      // SVG с viewBox корректно масштабируются через width/height.
+      // SVG без viewBox (intrinsic 200x200) вписываем scale-трансформом:
+      // контейнер-враппер 200x200 сжимается до 120x120.
+      &Inner {
+        width: 200px;
+        height: 200px;
+        flex-shrink: 0;
+        transform: scale(calc(120 / 200));
+        transform-origin: center center;
+
+        svg {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
       }
     }
   }

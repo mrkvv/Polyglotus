@@ -3,6 +3,7 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   TextField, Button, MenuItem,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { PARTS_OF_SPEECH } from '../model/types';
 
 interface AddWordModalProps {
@@ -12,6 +13,7 @@ interface AddWordModalProps {
 }
 
 export function AddWordModal({ open, onSave, onClose }: AddWordModalProps) {
+  const { t } = useTranslation();
   const [en, setEn] = useState('');
   const [ru, setRu] = useState('');
   const [partOfSpeech, setPartOfSpeech] = useState('');
@@ -44,12 +46,12 @@ export function AddWordModal({ open, onSave, onClose }: AddWordModalProps) {
       PaperProps={{ sx: { borderRadius: '12px', padding: '8px', minWidth: 360 } }}
     >
       <DialogTitle sx={{ fontWeight: 600, fontSize: 16, pb: 1 }}>
-        Добавить слово
+        {t('word_modal_add_title')}
       </DialogTitle>
 
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: '8px !important' }}>
         <TextField
-          label="Слово"
+          label={t('word_modal_field_word')}
           value={en}
           onChange={(e) => setEn(e.target.value)}
           size="small"
@@ -57,14 +59,14 @@ export function AddWordModal({ open, onSave, onClose }: AddWordModalProps) {
           autoFocus
         />
         <TextField
-          label="Перевод"
+          label={t('word_modal_field_translation')}
           value={ru}
           onChange={(e) => setRu(e.target.value)}
           size="small"
           fullWidth
         />
         <TextField
-          label="Часть речи"
+          label={t('word_modal_field_pos')}
           value={partOfSpeech}
           onChange={(e) => setPartOfSpeech(e.target.value)}
           size="small"
@@ -85,10 +87,10 @@ export function AddWordModal({ open, onSave, onClose }: AddWordModalProps) {
           disabled={saving || !en.trim() || !ru.trim() || !partOfSpeech}
           sx={{ color: '#2E7D32', fontWeight: 700 }}
         >
-          Сохранить
+          {t('word_modal_save')}
         </Button>
         <Button onClick={handleClose} color="inherit">
-          Отмена
+          {t('word_modal_cancel')}
         </Button>
       </DialogActions>
     </Dialog>

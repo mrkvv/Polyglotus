@@ -45,8 +45,12 @@ export function Step1Page() {
             >
               <div 
                 className="Step1Page__Slot__Avatar"
-                dangerouslySetInnerHTML={{ __html: svg }} 
-              />
+              >
+                <div
+                  className="Step1Page__Slot__AvatarInner"
+                  dangerouslySetInnerHTML={{ __html: svg }}
+                />
+              </div>
             </button>
           ))}
         </div>
