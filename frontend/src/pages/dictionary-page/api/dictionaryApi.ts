@@ -41,6 +41,15 @@ export const dictionaryApi = rtkApi.injectEndpoints({
       invalidatesTags: ['Dictionary'],
     }),
 
+    insertWordManualy: builder.mutation<InsertWordResponse, InsertWordRequest>({
+      query: (body) => ({
+        url: '/dictionary/words/by-hand',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Dictionary'],
+    }),
+
     updateWordStatus: builder.mutation<InsertWordResponse, { id: number, status: WordStatus }>({
       query: ({ id, status }) => ({
         url: `/dictionary/words/status/${id}`,
@@ -92,6 +101,7 @@ export const {
   useLazyGetDictionaryQuery,
   useGetTranslationsQuery,
   useInsertWordMutation,
+  useInsertWordManualyMutation,
   useUpdateWordStatusMutation,
   useUpdateWordsStatusesMutation,
   useUpdateWordsMutation,

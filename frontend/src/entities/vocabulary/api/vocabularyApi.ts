@@ -8,6 +8,7 @@ export const vocabularyApi = rtkApi.injectEndpoints({
 				method: 'POST',
 				body,
 			}),
+			invalidatesTags: ['User', 'Dictionary']
 		}),
 	})
 })

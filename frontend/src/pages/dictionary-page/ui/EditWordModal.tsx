@@ -13,25 +13,56 @@ interface EditWordModalProps {
   onClose: () => void;
 }
 
+function isUnsupportedSymbol(e: unknown): boolean {
+  const data = (e as { data?: { error?: string } })?.data;
+  return data?.error === 'UNSUPPORTED_SYMBOL';
+}
+
+function getInvalidAlphabetField(e: unknown, en: string, ru: string): 'en' | 'ru' | null {
+  const data = (e as { data?: { error?: string; message?: string } })?.data;
+  if (data?.error !== 'INVALID_ALPHABET') return null;
+  const match = data.message?.match(/Word: '([^']+)'/);
+  const badWord = match?.[1];
+  if (!badWord) return 'en';
+  if (badWord === en.trim()) return 'en';
+  if (badWord === ru.trim()) return 'ru';
+  return 'en';
+}
+
 export function EditWordModal({ open, row, onSave, onClose }: EditWordModalProps) {
   const { t } = useTranslation();
   const [en, setEn] = useState('');
   const [ru, setRu] = useState('');
   const [saving, setSaving] = useState(false);
+  const [enError, setEnError] = useState<string | null>(null);
+  const [ruError, setRuError] = useState<string | null>(null);
 
   useEffect(() => {
     if (row) {
       setEn(row.word);
       setRu(row.translation);
+      setEnError(null);
+      setRuError(null);
     }
   }, [row]);
 
   const handleSave = async () => {
     if (!row) return;
+    setEnError(null);
+    setRuError(null);
     setSaving(true);
     try {
       await onSave(row.id, en, ru);
       onClose();
+    } catch (e) {
+      if (isUnsupportedSymbol(e)) {
+        setEnError(t('word_modal_unsupported_symbol'));
+        setRuError(t('word_modal_unsupported_symbol'));
+      } else {
+        const field = getInvalidAlphabetField(e, en, ru);
+        if (field === 'en') setEnError(t('word_modal_invalid_alphabet_en'));
+        else if (field === 'ru') setRuError(t('word_modal_invalid_alphabet_ru'));
+      }
     } finally {
       setSaving(false);
     }
@@ -51,17 +82,23 @@ export function EditWordModal({ open, row, onSave, onClose }: EditWordModalProps
         <TextField
           label={t('word_modal_field_word')}
           value={en}
-          onChange={(e) => setEn(e.target.value)}
+          onChange={(e) => { setEn(e.target.value); setEnError(null); }}
           size="small"
           fullWidth
           autoFocus
+          autoComplete="off"
+          error={!!enError}
+          helperText={enError ?? ' '}
         />
         <TextField
           label={t('word_modal_field_translation')}
           value={ru}
-          onChange={(e) => setRu(e.target.value)}
+          onChange={(e) => { setRu(e.target.value); setRuError(null); }}
           size="small"
           fullWidth
+          autoComplete="off"
+          error={!!ruError}
+          helperText={ruError ?? ' '}
         />
       </DialogContent>
 
