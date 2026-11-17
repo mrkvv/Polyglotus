@@ -6,5 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Word(
         @JsonProperty("id") Integer id,
-        @JsonProperty("word") String word
+        @JsonProperty("word") String word,
+        @JsonProperty("translation") String translation
 ) {}

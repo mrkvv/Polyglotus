@@ -35,28 +35,27 @@ public class ExerciseService {
         }
 
         List<String> generatedSentences = new ArrayList<>();
-        List<String> stringWords = words.stream()
-                .map(Word::word)
-                .toList();
-
-        for(String word : stringWords) {
+        for(Word word : words) {
             generatedSentences.add(generateSentenceForWord(word, level));
         }
 
         return GenerateSentencesResponse.from(words, generatedSentences);
     }
 
-    private String generateSentenceForWord(String word, String level) {
+    private String generateSentenceForWord(Word word, String level) {
         for(int attempt = 0; attempt < MAX_GENERATING_ATTEMPTS; attempt++) {
             String sentence = client.prompt()
-                    .user("Word: " + word + ". Level: " + level)
+                    .user("Word: " + word.word()
+                            + "\nTranslation: " + word.translation()
+                            + "\nLevel: " + level)
                     .call()
                     .content();
 
-            if(validationService.isGeneratedSentenceCorrect(sentence, word)) {
+            if(validationService.isGeneratedSentenceCorrect(sentence, word.word())) {
                 return sentence;
             }
-            LOGGER.warn("Failed to generate sentence for word '{}'. Generated sentence: {}", word, sentence);
+            LOGGER.warn("Failed to generate sentence for word '{}' ({}). Generated sentence: {}",
+                    word.word(), word.translation(), sentence);
         }
         return null;
     }

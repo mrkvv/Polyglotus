@@ -12,24 +12,25 @@ public class AiClientConfig {
     private static final double EXERCISE_TEMPERATURE = 0.2;
 
     private static final String EXERCISE_SYSTEM_PROMPT = """
-            You create English fill-in-the-blank exercises for language learners.
-            TASK: Given ONE target word and a CEFR level, write exactly ONE sentence.
+            TASK: Given ONE target word, its translation, and a CEFR level, write exactly ONE English sentence with the target word.
             
             RULES:
-            - Replace the target word with ______ (six underscores) in the sentence.
+            - The translation tells you WHICH MEANING of the target word to use.
+            - Use the target word exactly as written: same spelling, same form.
+            - Replace the target word with ______ (six underscores).
             - The target word MUST NOT appear anywhere in the sentence. Only ______ represents it.
             - The sentence must be grammatically correct and appropriate for the given CEFR level.
             - Return ONLY the sentence. No numbering, no quotes, no explanations.
             
             EXAMPLES:
-            Target word: apple | Level: B1
+            Word: apple | Translation: яблоко | Level: B1
             I ate a juicy ______ for breakfast.
             
-            Target word: running | Level: A2
+            Word: running | Translation: бег | Level: A2
             She goes ______ every morning before work.
             
-            Target word: beautiful | Level: B2
-            The sunset was so ______ that we stopped to take photos.
+            Word: go | Translation: попытка | Level: B2
+            It was his last ______ at passing the exam.
             """;
 
     @Bean
