@@ -183,6 +183,7 @@ export function FillSentencePage() {
                     error={inputState === 'wrong'}
                     helperText={getHelperText()}
                     className={`FillSentencePage__Card__Controls__Input${showHint ? ' FillSentencePage__Card__Controls__Input--hint' : ''}`}
+                    autoComplete="off"
                     FormHelperTextProps={{
                       className: showHint
                         ? 'FillSentencePage__Card__Controls__HelperHint'

@@ -62,6 +62,10 @@
   "flashcard_correct": "Верно",
   "flashcard_wrong": "Не верно",
 
+  "word_modal_unsupported_symbol": "Допустимы только буквы, круглые скобки, дефис и апостроф",
+  "word_modal_invalid_alphabet_en": "Поле «Слово» должно содержать только английские буквы",
+  "word_modal_invalid_alphabet_ru": "Поле «Перевод» должно содержать только русские буквы",
+  "word_modal_invalid_alphabet": "Недопустимые символы в одном из полей",
   "word_modal_add_title": "Добавить слово",
   "word_modal_edit_title": "Редактировать слово",
   "word_modal_field_word": "Слово",

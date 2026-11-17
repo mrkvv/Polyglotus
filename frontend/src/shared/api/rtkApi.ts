@@ -28,7 +28,7 @@ const baseQueryWithUnauthorized: BaseQueryFn<
 
     if (data?.error === 'UNAUTHORIZED') {
       window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
-    } else if (api.endpoint !== 'getTranslations') {
+    } else if (!['getTranslations', 'insertWordManualy', 'updateWords'].includes(api.endpoint)) {
       // Поиск переводов обрабатывает ошибки локально в SearchDropdown — не дублируем toast
       const status = result.error.status;
       window.dispatchEvent(

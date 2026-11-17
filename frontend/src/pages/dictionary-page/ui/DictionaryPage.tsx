@@ -14,7 +14,8 @@ import {
   useDeleteWordMutation,
   useDeleteWordsBatchMutation,
   useUpdateWordsMutation,
-  useLazyGetDictionaryQuery
+  useLazyGetDictionaryQuery,
+  useInsertWordManualyMutation
 } from '../api/dictionaryApi';
 import { useIncrementWordProgressMutation } from "@entities/vocabulary/api/vocabularyApi";
 import type { WordStatus } from '../model/types';
@@ -126,6 +127,7 @@ export function DictionaryPage() {
 
   // ── Добавление слова ──────────────────────────────────
   const [insertWord] = useInsertWordMutation();
+  const [insertWordManualy] = useInsertWordManualyMutation();
   const [updateWordStatus] = useUpdateWordStatusMutation();
   const [updateWordsStatuses] = useUpdateWordsStatusesMutation();
   const [deleteWord] = useDeleteWordMutation();
@@ -159,6 +161,7 @@ export function DictionaryPage() {
   const [editRow, setEditRow] = useState<WordRow | null>(null);
   const [deleteRows, setDeleteRows] = useState<WordRow[]>([]);
   const [addOpen, setAddOpen] = useState(false);
+  const [addInitialWord, setAddInitialWord] = useState('');
 
   const handleAdd = useCallback(
     async (variant: string, partOfSpeech: string, word: string) => {
@@ -182,14 +185,15 @@ export function DictionaryPage() {
   );
 
   const handleManual = useCallback(() => {
+    setAddInitialWord(searchInput.trim());
     setAddOpen(true);
-  }, []);
+  }, [searchInput]);
 
   const handleAddSave = useCallback(
     async (en: string, ru: string, partOfSpeech: string) => {
-      await insertWord({ en, ru, partOfSpeech }).unwrap();
+      await insertWordManualy({ en, ru, partOfSpeech }).unwrap();
     },
-    [insertWord],
+    [insertWordManualy],
   );
 
   // ── Действия контекстного меню ────────────────────────
@@ -345,6 +349,7 @@ export function DictionaryPage() {
 
       <AddWordModal
         open={addOpen}
+        initialWord={addInitialWord}
         onSave={handleAddSave}
         onClose={() => setAddOpen(false)}
       />
