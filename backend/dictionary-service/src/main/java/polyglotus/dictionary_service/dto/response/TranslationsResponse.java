@@ -10,20 +10,7 @@ public record TranslationsResponse(
         List<Translation> inUserDictionary,
         List<BloomHubTranslationGroup> inCatalog
 ) {
-    public static TranslationsResponse getBy(
-            String word,
-            List<Map<String, Object>> rawUserTranslationsList,
-            List<BloomHubTranslationGroup> inCatalogList
-    ) {
-        List<Translation> inUserDictionary = rawUserTranslationsList.stream()
-                .map(Translation::fromMap)
-                .toList();
-
-        return new TranslationsResponse(word, inUserDictionary, inCatalogList);
-    }
-
     public record Translation(Integer id, String ru, String partOfSpeech) {
-
         public static Translation fromMap(Map<String, Object> map) {
             Integer id = (Integer) map.get("id");
             String ru = (String) map.get("translation");
