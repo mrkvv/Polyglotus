@@ -39,6 +39,8 @@
   "training_go_home": "ВЕРНУТЬСЯ НА ГЛАВНЫЙ ЭКРАН",
 
   "training_load_error": "Не удалось загрузить тренировку",
+  "training_all_known": "Вы всё знаете!",
+  "training_no_words": "Нет невыученных слов для тренировки",
   "fill_label": "Введите слово",
   "fill_hint_correct": "Правильное слово: {{answer}}",
   "fill_wrong_input": "Введено неверное слово.",

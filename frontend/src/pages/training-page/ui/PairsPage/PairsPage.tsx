@@ -32,6 +32,7 @@ export function PairsPage() {
   const tasks = data?.tasks ?? []
   const currentTask = tasks[taskIndex]
   const pairs: Pair[] = currentTask?.pairs ?? []
+  const isEmpty = !isLoading && !isError && tasks.length === 0
 
   // Перемешиваем переводы один раз при смене задания
   const shuffledTranslations = useMemo(() => {
@@ -134,6 +135,28 @@ export function PairsPage() {
               <Typography variant="h5" color="error">
                 {t('training_load_error')}
               </Typography>
+            </Box>
+          )}
+
+          {isEmpty && (
+            <Box className="PairsPage__Card__Done">
+              <Typography variant="h3" fontWeight={700}>
+                {t('training_all_known')}
+              </Typography>
+              <Typography variant="h5" color="text.secondary">
+                {t('training_no_words')}
+              </Typography>
+              <Box className="PairsPage__Card__Done__Actions">
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowForwardIosIcon />}
+                  onClick={() => navigate('/home')}
+                  className="PairsPage__Card__Done__Btn"
+                  sx={{ borderRadius: '999px', textTransform: 'none' }}
+                >
+                  {t('training_go_home')}
+                </Button>
+              </Box>
             </Box>
           )}
 

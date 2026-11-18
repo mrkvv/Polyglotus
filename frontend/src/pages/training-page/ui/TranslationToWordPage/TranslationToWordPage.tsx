@@ -26,6 +26,7 @@ export function TranslationToWordPage() {
 
   const tasks = data?.tasks ?? []
   const currentTask = tasks[taskIndex]
+  const isEmpty = !isLoading && !isError && tasks.length === 0
 
   const handleOptionClick = useCallback((option: string) => {
     if (correctOption !== null) return
@@ -116,6 +117,28 @@ export function TranslationToWordPage() {
               <Typography variant="h5" color="error">
                 {t('training_load_error')}
               </Typography>
+            </Box>
+          )}
+
+          {isEmpty && (
+            <Box className="TranslationToWordPage__Card__Done">
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
+                {t('training_all_known')}
+              </Typography>
+              <Typography variant="h5" color="text.secondary">
+                {t('training_no_words')}
+              </Typography>
+              <Box className="TranslationToWordPage__Card__Done__Actions">
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowForwardIosIcon />}
+                  onClick={() => navigate('/home')}
+                  className="TranslationToWordPage__Card__Done__Btn"
+                  sx={{ borderRadius: '999px', textTransform: 'none' }}
+                >
+                  {t('training_go_home')}
+                </Button>
+              </Box>
             </Box>
           )}
 
