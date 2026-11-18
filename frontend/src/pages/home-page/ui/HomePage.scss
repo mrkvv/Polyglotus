@@ -17,28 +17,36 @@
   }
 
   &__Cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: row;
     gap: 32px;
-    width: 100%;
+    align-items: flex-start;
 
-    // MUI Button внутри не должен ломать сетку
+    // MUI Button не должен растягиваться
     & > .MuiButtonBase-root {
       min-width: 0;
       padding: 0;
+      flex-shrink: 0;
+      width: fit-content;
     }
   }
 
   &__Card {
+    width: 560px;
+    height: 560px;
     aspect-ratio: 1;
-    width: 100%;
-    padding: 24px;
+    padding: 28px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    box-sizing: border-box;
 
     &__Circle {
-      padding: 30px;
+      padding: 4px 0;
+    }
+
+    &__Description {
+      color: $color-text-muted;
     }
   }
 }

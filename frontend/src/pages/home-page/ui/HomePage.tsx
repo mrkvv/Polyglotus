@@ -52,7 +52,7 @@ export function HomePage() {
           <Typography variant="h4" sx={{ padding: '5px 30px' }}>
             {t('streak_title', { count: currentStreak })}
           </Typography>
-          <Typography variant="h5" sx={{ padding: '26px 30px' }}>
+          <Typography variant="h5" className="HomePage__Card__Description" sx={{ padding: '26px 30px' }}>
             {t(trainedToday ? 'streak_done' : 'streak_pending')}
           </Typography>
         </Paper>
@@ -60,13 +60,13 @@ export function HomePage() {
         <Button
           disableElevation
           disableRipple
-          sx={{ textTransform: 'none', textAlign: 'left', display: 'block', width: '100%', height: '100%', padding: 0 }}
+          sx={{ textTransform: 'none', textAlign: 'left', padding: 0, display: 'flex' }}
           onClick={handleDailyWordClick}
         >
-          <Paper className="HomePage__Card" variant="outlined" square={false} sx={{ width: '100%', height: '100%', boxSizing: 'border-box' }}>
+          <Paper className="HomePage__Card" variant="outlined" square={false}>
             <Typography variant="h4" sx={{ padding: '30px' }}>{t('new_word')}</Typography>
             <Typography variant="h3" sx={{ padding: '5px 30px', fontWeight: '700'}}>{dailyWord?.word}</Typography>
-            <Typography variant="h5" sx={{ padding: '26px 30px' }}>{t('new_word_text')}</Typography>
+            <Typography variant="h5" className="HomePage__Card__Description" sx={{ padding: '26px 30px' }}>{t('new_word_text')}</Typography>
           </Paper>
         </Button>
 
