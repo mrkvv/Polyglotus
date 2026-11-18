@@ -231,7 +231,6 @@ export function AIChatPage() {
         </div>
       </div>
 
-      {/* Модалка подтверждения завершения диалога */}
       <Dialog
         open={confirmOpen}
         onClose={() => setConfirmOpen(false)}

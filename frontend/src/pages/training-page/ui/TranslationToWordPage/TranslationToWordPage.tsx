@@ -75,10 +75,6 @@ export function TranslationToWordPage() {
     refetch()
   }
 
-  const handleGoTrainings = () => {
-    navigate('/trainings')
-  }
-
   const getButtonVariant = (option: string): 'outlined' | 'contained' => {
     if (option === correctOption) return 'contained'
     if (wrongOptions.has(option)) return 'contained'
@@ -144,7 +140,7 @@ export function TranslationToWordPage() {
                 <Button
                   variant="outlined"
                   endIcon={<ArrowForwardIosIcon />}
-                  onClick={handleGoTrainings}
+                  onClick={() => navigate('/home')}
                   className="TranslationToWordPage__Card__Done__Btn"
                   sx={{ borderRadius: '999px', textTransform: 'none' }}
                 >
