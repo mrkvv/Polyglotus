@@ -63,6 +63,8 @@
   "flashcard_wrong": "Не верно",
 
   "word_modal_unsupported_symbol": "Допустимы только буквы, круглые скобки, дефис и апостроф",
+  "word_modal_size_exceeded": "Поле превышает допустимую длину",
+  "word_modal_empty_field": "Поле не может быть пустым",
   "word_modal_invalid_alphabet_en": "Поле «Слово» должно содержать только английские буквы",
   "word_modal_invalid_alphabet_ru": "Поле «Перевод» должно содержать только русские буквы",
   "word_modal_invalid_alphabet": "Недопустимые символы в одном из полей",
@@ -122,5 +124,10 @@
   "chat_send": "Отправить",
   "chat_end_dialog": "Завершить диалог",
   "chat_context_overflow": "Контекст переполнен. Начните новый диалог.",
+  "chat_model_exhausted": "Контекст модели переполнен. Необходимо начать новый диалог.",
+  "chat_confirm_end_title": "Завершить диалог?",
+  "chat_confirm_end_subtitle": "Это сбросит текущий контекст",
+  "chat_confirm_end_yes": "ЗАВЕРШИТЬ",
+  "chat_confirm_end_no": "ОТМЕНА",
   "chat_char_limit": "{{count}}/256"
 }
