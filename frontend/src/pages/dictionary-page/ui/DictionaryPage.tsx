@@ -119,7 +119,7 @@ export function DictionaryPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const { data: translationsData, isFetching: isTranslationsFetching, isError: isTranslationsError } =
+  const { data: translationsData, isFetching: isTranslationsFetching, isError: isTranslationsError, refetch: refetchTranslations } =
     useGetTranslationsQuery(
       { word: debouncedWord },
       { skip: !debouncedWord },
@@ -169,10 +169,8 @@ export function DictionaryPage() {
       setPendingIds((prev) => new Set(prev).add(key));
       try {
         await insertWord({ en: word, ru: variant, partOfSpeech }).unwrap();
-        // После успешного добавления — стираем поле и закрываем дропдаун
-        setSearchInput('');
-        setDebouncedWord('');
-        setDropdownOpen(false);
+        // Обновляем дропдаун — слово должно переехать в раздел "добавленных"
+        await refetchTranslations();
       } finally {
         setPendingIds((prev) => {
           const next = new Set(prev);
@@ -181,7 +179,7 @@ export function DictionaryPage() {
         });
       }
     },
-    [insertWord],
+    [insertWord, refetchTranslations],
   );
 
   const handleManual = useCallback(() => {
