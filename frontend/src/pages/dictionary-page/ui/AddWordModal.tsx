@@ -18,6 +18,20 @@ function isUnsupportedSymbol(e: unknown): boolean {
   return data?.error === 'UNSUPPORTED_SYMBOL';
 }
 
+function isSizeExceeded(e: unknown): boolean {
+  const data = (e as { data?: { error?: string } })?.data;
+  return data?.error === 'WORDS_SIZE_EXCEEDED';
+}
+
+function getSizeExceededField(e: unknown, en: string, ru: string): 'en' | 'ru' | 'both' {
+  const enBad = en.trim().length > 30;
+  const ruBad = ru.trim().length > 30;
+  if (enBad && ruBad) return 'both';
+  if (enBad) return 'en';
+  if (ruBad) return 'ru';
+  return 'both'; // fallback
+}
+
 function getInvalidAlphabetField(e: unknown, en: string, ru: string): 'en' | 'ru' | null {
   const data = (e as { data?: { error?: string; message?: string } })?.data;
   if (data?.error !== 'INVALID_ALPHABET') return null;
@@ -53,6 +67,13 @@ export function AddWordModal({ open, initialWord = '', onSave, onClose }: AddWor
   const handleSave = async () => {
     setEnError(null);
     setRuError(null);
+
+    // Клиентская валидация пустых полей
+    let hasError = false;
+    if (!en.trim()) { setEnError(t('word_modal_empty_field')); hasError = true; }
+    if (!ru.trim()) { setRuError(t('word_modal_empty_field')); hasError = true; }
+    if (hasError) return;
+
     setSaving(true);
     try {
       await onSave(en.trim(), ru.trim(), partOfSpeech);
@@ -61,6 +82,10 @@ export function AddWordModal({ open, initialWord = '', onSave, onClose }: AddWor
       if (isUnsupportedSymbol(e)) {
         setEnError(t('word_modal_unsupported_symbol'));
         setRuError(t('word_modal_unsupported_symbol'));
+      } else if (isSizeExceeded(e)) {
+        const field = getSizeExceededField(e, en, ru);
+        if (field === 'en' || field === 'both') setEnError(t('word_modal_size_exceeded'));
+        if (field === 'ru' || field === 'both') setRuError(t('word_modal_size_exceeded'));
       } else {
         const field = getInvalidAlphabetField(e, en, ru);
         if (field === 'en') setEnError(t('word_modal_invalid_alphabet_en'));
@@ -126,7 +151,7 @@ export function AddWordModal({ open, initialWord = '', onSave, onClose }: AddWor
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button
           onClick={handleSave}
-          disabled={saving || !en.trim() || !ru.trim() || !partOfSpeech}
+          disabled={saving || !partOfSpeech}
           sx={{ color: '#2E7D32', fontWeight: 700 }}
         >
           {t('word_modal_save')}

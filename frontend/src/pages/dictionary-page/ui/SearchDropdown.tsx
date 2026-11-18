@@ -146,6 +146,24 @@ export function SearchDropdown({
             {t('search_not_found')}
           </Typography>
         </Box>
+        <Divider />
+        <Box sx={{ px: 2, py: 1.25 }}>
+          <Button
+            size="small"
+            startIcon={<EditOutlinedIcon fontSize="small" />}
+            onClick={onManual}
+            sx={{
+              color: 'text.secondary',
+              fontWeight: 400,
+              fontSize: '13px',
+              textTransform: 'none',
+              p: 0,
+              '&:hover': { backgroundColor: 'transparent', color: 'text.primary' },
+            }}
+          >
+            {t('search_add_manual')}
+          </Button>
+        </Box>
       </Paper>
     );
   }

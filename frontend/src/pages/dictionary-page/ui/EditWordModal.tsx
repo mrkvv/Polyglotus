@@ -18,6 +18,20 @@ function isUnsupportedSymbol(e: unknown): boolean {
   return data?.error === 'UNSUPPORTED_SYMBOL';
 }
 
+function isSizeExceeded(e: unknown): boolean {
+  const data = (e as { data?: { error?: string } })?.data;
+  return data?.error === 'WORDS_SIZE_EXCEEDED';
+}
+
+function getSizeExceededField(e: unknown, en: string, ru: string): 'en' | 'ru' | 'both' {
+  const enBad = en.trim().length > 30;
+  const ruBad = ru.trim().length > 30;
+  if (enBad && ruBad) return 'both';
+  if (enBad) return 'en';
+  if (ruBad) return 'ru';
+  return 'both'; // fallback
+}
+
 function getInvalidAlphabetField(e: unknown, en: string, ru: string): 'en' | 'ru' | null {
   const data = (e as { data?: { error?: string; message?: string } })?.data;
   if (data?.error !== 'INVALID_ALPHABET') return null;
@@ -58,6 +72,10 @@ export function EditWordModal({ open, row, onSave, onClose }: EditWordModalProps
       if (isUnsupportedSymbol(e)) {
         setEnError(t('word_modal_unsupported_symbol'));
         setRuError(t('word_modal_unsupported_symbol'));
+      } else if (isSizeExceeded(e)) {
+        const field = getSizeExceededField(e, en, ru);
+        if (field === 'en' || field === 'both') setEnError(t('word_modal_size_exceeded'));
+        if (field === 'ru' || field === 'both') setRuError(t('word_modal_size_exceeded'));
       } else {
         const field = getInvalidAlphabetField(e, en, ru);
         if (field === 'en') setEnError(t('word_modal_invalid_alphabet_en'));

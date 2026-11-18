@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Typography, IconButton, CircularProgress } from '@mui/material';
+import { Typography, IconButton, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useTranslation } from 'react-i18next';
@@ -21,12 +21,19 @@ function isContextOverflow(e: unknown): boolean {
   return data?.error === 'CONTEXT_OVERFLOW';
 }
 
+function isModelExhausted(e: unknown): boolean {
+  const data = (e as { data?: { error?: string } })?.data;
+  return data?.error === 'MODEL_CONTEXT_EXHAUSTED';
+}
+
 export function AIChatPage() {
   const { t } = useTranslation();
   const [input, setInput] = useState('');
   const [contextOverflow, setContextOverflow] = useState(false);
+  const [modelExhausted, setModelExhausted] = useState(false);
   const [optimisticMessages, setOptimisticMessages] = useState<Message[]>([]);
   const [isSending, setIsSending] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -45,6 +52,7 @@ export function AIChatPage() {
   ];
 
   const hasHistory = historyMessages.length > 0;
+  const chatBlocked = contextOverflow || modelExhausted;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -63,7 +71,7 @@ export function AIChatPage() {
 
   const handleSend = useCallback(async () => {
     const content = input.trim();
-    if (!content || isSending || contextOverflow) return;
+    if (!content || isSending || chatBlocked) return;
 
     setInput('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
@@ -86,11 +94,13 @@ export function AIChatPage() {
       setOptimisticMessages([]);
       if (isContextOverflow(e)) {
         setContextOverflow(true);
+      } else if (isModelExhausted(e)) {
+        setModelExhausted(true);
       }
     } finally {
       setIsSending(false);
     }
-  }, [input, isSending, contextOverflow, sendMessage]);
+  }, [input, isSending, chatBlocked, sendMessage]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -99,22 +109,24 @@ export function AIChatPage() {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeleteConfirm = async () => {
+    setConfirmOpen(false);
     await deleteChat().unwrap();
     setContextOverflow(false);
+    setModelExhausted(false);
     setOptimisticMessages([]);
   };
 
   const isLoading = historyLoading || helloLoading;
-  const canSend = input.trim().length > 0 && !isSending && !contextOverflow;
+  const canSend = input.trim().length > 0 && !isSending && !chatBlocked;
 
   return (
     <div className="AIChatPage">
       <div className="AIChatPage__Header">
         <button
           className="AIChatPage__EndBtn"
-          onClick={handleDelete}
-          disabled={isDeleting || (!hasHistory && !contextOverflow)}
+          onClick={() => setConfirmOpen(true)}
+          disabled={isDeleting || (!hasHistory && !chatBlocked)}
         >
           <Typography variant="body2">{t('chat_end_dialog')}</Typography>
           <RefreshIcon fontSize="small" />
@@ -142,7 +154,6 @@ export function AIChatPage() {
               </div>
             )}
 
-            {/* История */}
             {allMessages.map((msg) => (
               <div
                 key={msg.id}
@@ -162,7 +173,6 @@ export function AIChatPage() {
               </div>
             ))}
 
-            {/* Typing-индикатор */}
             {isSending && (
               <div className="AIChatPage__Message AIChatPage__Message--ai">
                 <div className="AIChatPage__Bubble AIChatPage__Bubble--ai AIChatPage__Bubble--typing">
@@ -171,11 +181,18 @@ export function AIChatPage() {
               </div>
             )}
 
-            {/* Переполнение контекста (F_Chat_11/13) */}
             {contextOverflow && (
               <div className="AIChatPage__Message AIChatPage__Message--ai">
                 <div className="AIChatPage__Bubble AIChatPage__Bubble--overflow">
                   <Typography variant="body2">{t('chat_context_overflow')}</Typography>
+                </div>
+              </div>
+            )}
+
+            {modelExhausted && (
+              <div className="AIChatPage__Message AIChatPage__Message--ai">
+                <div className="AIChatPage__Bubble AIChatPage__Bubble--overflow">
+                  <Typography variant="body2">{t('chat_model_exhausted')}</Typography>
                 </div>
               </div>
             )}
@@ -196,7 +213,7 @@ export function AIChatPage() {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             rows={1}
-            disabled={contextOverflow}
+            disabled={chatBlocked}
           />
           <div className="AIChatPage__InputMeta">
             <Typography variant="caption" className="AIChatPage__CharCount">
@@ -213,6 +230,37 @@ export function AIChatPage() {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        PaperProps={{ sx: { borderRadius: '16px', padding: '8px', minWidth: 320 } }}
+      >
+        <DialogTitle sx={{ fontWeight: 700, fontSize: 18, textAlign: 'center', pb: 0 }}>
+          {t('chat_confirm_end_title')}
+        </DialogTitle>
+        <DialogContent sx={{ textAlign: 'center', pt: '8px !important', pb: 0 }}>
+          <Typography variant="body2" color="text.secondary">
+            {t('chat_confirm_end_subtitle')}
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: 'center', gap: 1, pb: 2, pt: 2 }}>
+          <Button
+            onClick={handleDeleteConfirm}
+            disabled={isDeleting}
+            sx={{ color: '#2E7D32', fontWeight: 700, letterSpacing: '0.05em' }}
+          >
+            {t('chat_confirm_end_yes')}
+          </Button>
+          <Button
+            onClick={() => setConfirmOpen(false)}
+            color="inherit"
+            sx={{ fontWeight: 400, letterSpacing: '0.05em' }}
+          >
+            {t('chat_confirm_end_no')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

@@ -29,6 +29,7 @@ export function WordToTranslationPage() {
 
   const tasks = data?.tasks ?? []
   const currentTask = tasks[taskIndex]
+  const isEmpty = !isLoading && !isError && tasks.length === 0
 
   const handleOptionClick = useCallback((option: string) => {
     // Уже выбран верный — ничего не делаем
@@ -83,10 +84,6 @@ export function WordToTranslationPage() {
     refetch()
   }
 
-  const handleGoHome = () => {
-    navigate('/trainings')
-  }
-
   const getButtonVariant = (option: string): 'outlined' | 'contained' => {
     if (option === correctOption) return 'contained'
     if (wrongOptions.has(option)) return 'contained'
@@ -134,6 +131,28 @@ export function WordToTranslationPage() {
             </Box>
           )}
 
+          {isEmpty && (
+            <Box className="WordToTranslationPage__Card__Done">
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
+                {t('training_all_known')}
+              </Typography>
+              <Typography variant="h5" color="text.secondary">
+                {t('training_no_words')}
+              </Typography>
+              <Box className="WordToTranslationPage__Card__Done__Actions">
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowForwardIosIcon />}
+                  onClick={() => navigate('/home')}
+                  className="WordToTranslationPage__Card__Done__Btn"
+                  sx={{ borderRadius: '999px', textTransform: 'none' }}
+                >
+                  {t('training_go_home')}
+                </Button>
+              </Box>
+            </Box>
+          )}
+
           {isDone && (
             <Box className="WordToTranslationPage__Card__Done">
               <Typography variant="h3" sx={{fontWeight: 700}} className="WordToTranslationPage__Card__Done__Title">
@@ -155,7 +174,7 @@ export function WordToTranslationPage() {
                 <Button
                   variant="outlined"
                   endIcon={<ArrowForwardIosIcon />}
-                  onClick={handleGoHome}
+                  onClick={() => navigate('/home')}
                   className="WordToTranslationPage__Card__Done__Btn"
                   sx={{ borderRadius: '999px', textTransform: 'none' }}
                 >

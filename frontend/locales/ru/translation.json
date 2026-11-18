@@ -36,9 +36,11 @@
   "training_complete_pairs": "Вы успешно прошли тренировку Соедини пары.\nХотите пройти еще одну тренировку?",
   "training_complete_fill": "Вы успешно прошли тренировку Дополни предложение.\nХотите пройти еще одну тренировку?",
   "training_continue": "ПРОДОЛЖИТЬ ТРЕНИРОВКУ",
-  "training_go_home": "ВЕРНУТЬСЯ К ТРЕНИРОВКАМ",
+  "training_go_home": "ВЕРНУТЬСЯ НА ГЛАВНЫЙ ЭКРАН",
 
   "training_load_error": "Не удалось загрузить тренировку",
+  "training_all_known": "Вы всё знаете!",
+  "training_no_words": "Нет невыученных слов для тренировки",
   "fill_label": "Введите слово",
   "fill_hint_correct": "Правильное слово: {{answer}}",
   "fill_wrong_input": "Введено неверное слово.",
@@ -63,6 +65,8 @@
   "flashcard_wrong": "Не верно",
 
   "word_modal_unsupported_symbol": "Допустимы только буквы, круглые скобки, дефис и апостроф",
+  "word_modal_size_exceeded": "Поле превышает допустимую длину",
+  "word_modal_empty_field": "Поле не может быть пустым",
   "word_modal_invalid_alphabet_en": "Поле «Слово» должно содержать только английские буквы",
   "word_modal_invalid_alphabet_ru": "Поле «Перевод» должно содержать только русские буквы",
   "word_modal_invalid_alphabet": "Недопустимые символы в одном из полей",
@@ -122,5 +126,10 @@
   "chat_send": "Отправить",
   "chat_end_dialog": "Завершить диалог",
   "chat_context_overflow": "Контекст переполнен. Начните новый диалог.",
+  "chat_model_exhausted": "Контекст модели переполнен. Необходимо начать новый диалог.",
+  "chat_confirm_end_title": "Завершить диалог?",
+  "chat_confirm_end_subtitle": "Это сбросит текущий контекст",
+  "chat_confirm_end_yes": "ЗАВЕРШИТЬ",
+  "chat_confirm_end_no": "ОТМЕНА",
   "chat_char_limit": "{{count}}/256"
 }

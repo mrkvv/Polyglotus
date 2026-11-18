@@ -155,7 +155,7 @@ export function FillSentencePage() {
                 <Button
                   variant="outlined"
                   endIcon={<ArrowForwardIosIcon />}
-                  onClick={() => navigate('/trainings')}
+                  onClick={() => navigate('/home')}
                   className="FillSentencePage__Card__Done__Btn"
                   sx={{ borderRadius: '999px', textTransform: 'none' }}
                 >
