@@ -64,6 +64,12 @@ export function EditWordModal({ open, row, onSave, onClose }: EditWordModalProps
     if (!row) return;
     setEnError(null);
     setRuError(null);
+
+    let hasError = false;
+    if (!en.trim()) { setEnError(t('word_modal_empty_field')); hasError = true; }
+    if (!ru.trim()) { setRuError(t('word_modal_empty_field')); hasError = true; }
+    if (hasError) return;
+
     setSaving(true);
     try {
       await onSave(row.id, en, ru);
@@ -123,7 +129,7 @@ export function EditWordModal({ open, row, onSave, onClose }: EditWordModalProps
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button
           onClick={handleSave}
-          disabled={saving || !en.trim() || !ru.trim()}
+          disabled={saving}
           sx={{ color: '#2E7D32', fontWeight: 700 }}
         >
           {t('word_modal_save')}

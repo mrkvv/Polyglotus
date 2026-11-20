@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, SyntheticEvent, useRef, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { WordsTable, WordsFilter, WordRow, MenuAction } from '@widgets/words-table';
 import {
   useGetDictionaryQuery,
@@ -15,17 +16,18 @@ import {
   useDeleteWordsBatchMutation,
   useUpdateWordsMutation,
   useLazyGetDictionaryQuery,
-  useInsertWordManualyMutation
-} from '../api/dictionaryApi';
+  useInsertWordManualyMutation,
+  dictionaryApi,
+} from '../../api/dictionaryApi';
 import { useIncrementWordProgressMutation } from "@entities/vocabulary/api/vocabularyApi";
-import type { WordStatus } from '../model/types';
-import { mapToWordRow } from '../lib/mapToWordRow';
-import { SearchDropdown } from './SearchDropdown';
-import { EditWordModal } from './EditWordModal';
-import { DeleteWordModal } from './DeleteWordModal';
-import { AddWordModal } from './AddWordModal';
-import { FlashCardWidget } from './FlashCardWidget';
-import { FlashCardModal } from './FlashCardModal';
+import type { WordStatus } from '../../model/types';
+import { mapToWordRow } from '../../lib/mapToWordRow';
+import { SearchDropdown } from '../SearchDropdown/SearchDropdown';
+import { EditWordModal } from '../EditWordModal';
+import { DeleteWordModal } from '../DeleteWordModal';
+import { AddWordModal } from '../AddWordModal';
+import { FlashCardWidget } from '@widgets/flash-card/ui/FlashCardWidget/FlashCardWidget';
+import { FlashCardModal } from '@widgets/flash-card/ui/FlashCardModal/FlashCardModal';
 
 const filterToStatus: Record<WordsFilter, WordStatus | undefined> = {
   all: undefined,
@@ -37,6 +39,7 @@ const SEARCH_DEBOUNCE_MS = 400;
 
 export function DictionaryPage() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const location = useLocation();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -119,7 +122,7 @@ export function DictionaryPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const { data: translationsData, isFetching: isTranslationsFetching, isError: isTranslationsError, refetch: refetchTranslations } =
+  const { data: translationsData, isFetching: isTranslationsFetching, isError: isTranslationsError } =
     useGetTranslationsQuery(
       { word: debouncedWord },
       { skip: !debouncedWord },
@@ -169,8 +172,12 @@ export function DictionaryPage() {
       setPendingIds((prev) => new Set(prev).add(key));
       try {
         await insertWord({ en: word, ru: variant, partOfSpeech }).unwrap();
-        // Обновляем дропдаун — слово должно переехать в раздел "добавленных"
-        await refetchTranslations();
+        // Явно инвалидируем кэш переводов до очистки поля,
+        // иначе RTK Query не успевает это сделать пока подписчик ещё активен
+        dispatch(dictionaryApi.util.invalidateTags(['Dictionary']));
+        setSearchInput('');
+        setDebouncedWord('');
+        setDropdownOpen(false);
       } finally {
         setPendingIds((prev) => {
           const next = new Set(prev);
@@ -179,7 +186,7 @@ export function DictionaryPage() {
         });
       }
     },
-    [insertWord, refetchTranslations],
+    [insertWord, dispatch],
   );
 
   const handleManual = useCallback(() => {

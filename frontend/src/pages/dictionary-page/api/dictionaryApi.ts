@@ -30,6 +30,7 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         method: 'GET',
         params: { word },
       }),
+      providesTags: ['Dictionary'],
     }),
 
     insertWord: builder.mutation<InsertWordResponse, InsertWordRequest>({
@@ -38,7 +39,7 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Dictionary'],
+      invalidatesTags: ['Dictionary', 'Training'],
     }),
 
     insertWordManualy: builder.mutation<InsertWordResponse, InsertWordRequest>({
@@ -47,7 +48,7 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Dictionary'],
+      invalidatesTags: ['Dictionary', 'Training'],
     }),
 
     updateWordStatus: builder.mutation<InsertWordResponse, { id: number, status: WordStatus }>({
@@ -56,7 +57,7 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { status },
       }),
-      invalidatesTags: ['Dictionary'],
+      invalidatesTags: ['Dictionary', 'Training'],
     }),
 
     updateWordsStatuses: builder.mutation<InsertWordResponse, { status: WordStatus, wordIds: number[] }>({
@@ -65,7 +66,7 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { status, wordIds },
       }),
-      invalidatesTags: ['Dictionary'],
+      invalidatesTags: ['Dictionary', 'Training'],
     }),
 
     updateWords: builder.mutation<InsertWordResponse, UpdateWordPayload>({
@@ -74,7 +75,7 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: ['Dictionary'],
+      invalidatesTags: ['Dictionary', 'Training'],
     }),
 
     deleteWord: builder.mutation<void, number>({
@@ -82,7 +83,7 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         url: `/dictionary/words/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Dictionary'],
+      invalidatesTags: ['Dictionary', 'Training'],
     }),
     
     deleteWordsBatch: builder.mutation<void, { wordIds: number[] }>({
@@ -91,7 +92,7 @@ export const dictionaryApi = rtkApi.injectEndpoints({
         method: 'DELETE',
         body,
       }),
-      invalidatesTags: ['Dictionary'],
+      invalidatesTags: ['Dictionary', 'Training'],
     }),
   }),
 });
