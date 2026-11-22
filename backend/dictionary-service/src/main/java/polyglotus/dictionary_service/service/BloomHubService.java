@@ -2,6 +2,7 @@ package polyglotus.dictionary_service.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 import polyglotus.dictionary_service.dto.BloomHubTranslationGroup;
 import polyglotus.dictionary_service.dto.response.BloomHubApiResponse;
 
@@ -20,18 +21,21 @@ public class BloomHubService {
     }
 
     public List<BloomHubTranslationGroup> getTranslations(String enWord) {
-        BloomHubApiResponse response = restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(TRANSLATIONS_PATH_TEMPLATE)
-                        .queryParam("language", "ru")
-                        .build(enWord)
-                )
-                .retrieve()
-                .body(BloomHubApiResponse.class);
+        try {
+            BloomHubApiResponse response = restClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(TRANSLATIONS_PATH_TEMPLATE)
+                            .queryParam("language", "ru")
+                            .build(enWord)
+                    )
+                    .retrieve()
+                    .body(BloomHubApiResponse.class);
 
-        if(response == null || response.getTranslationGroups() == null) {
+            return response == null || response.getTranslationGroups() == null
+                    ? List.of()
+                    : response.getTranslationGroups();
+        } catch (RestClientResponseException e) {
             return List.of();
         }
-        return response.getTranslationGroups();
     }
 }
