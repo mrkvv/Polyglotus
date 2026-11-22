@@ -5,7 +5,7 @@ import {
   Divider, Button, Box, CircularProgress,
 } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import type { CatalogTranslationItem, UserDictionaryItem, GetTranslationsResponse } from '../model/types';
+import type { CatalogTranslationItem, UserDictionaryItem, GetTranslationsResponse } from '../../model/types';
 
 const CATALOG_PREVIEW_LIMIT = 2;
 

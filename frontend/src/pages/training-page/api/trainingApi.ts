@@ -14,6 +14,7 @@ export const trainingApi = rtkApi.injectEndpoints({
 				method: 'GET',
 				params: { to, amount },
 			}),
+			providesTags: ['Dictionary'],
 		}),
 
 		getPairsTraining: builder.query<GetPairsTrainingResponse, { amount: number }>({
@@ -22,6 +23,7 @@ export const trainingApi = rtkApi.injectEndpoints({
 				method: 'GET',
 				params: { amount },
 			}),
+			providesTags: ['Dictionary'],
 		}),
 
 		getFillSentenceTraining: builder.query<GetFillSentenceTrainingResponse, { amount: number }>({
@@ -30,6 +32,7 @@ export const trainingApi = rtkApi.injectEndpoints({
 				method: 'GET',
 				params: { amount },
 			}),
+			providesTags: ['Dictionary'],
 		}),
 	})
 })

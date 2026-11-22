@@ -140,7 +140,7 @@ export function PairsPage() {
 
           {isEmpty && (
             <Box className="PairsPage__Card__Done">
-              <Typography variant="h3" fontWeight={700}>
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
                 {t('training_all_known')}
               </Typography>
               <Typography variant="h5" color="text.secondary">
@@ -162,7 +162,7 @@ export function PairsPage() {
 
           {isDone && (
             <Box className="PairsPage__Card__Done">
-              <Typography variant="h3" fontWeight={700} className="PairsPage__Card__Done__Title">
+              <Typography variant="h3" sx={{ fontWeight: 700 }} className="PairsPage__Card__Done__Title">
                 {t('training_complete_title')}
               </Typography>
               <Typography variant="h5" className="PairsPage__Card__Done__Subtitle">
@@ -202,7 +202,7 @@ export function PairsPage() {
                       variant={matchedIds.has(pair.id) || selectedEnId === pair.id ? 'contained' : 'outlined'}
                       className={getEnClass(pair)}
                       onClick={() => handleEnClick(pair.id)}
-                      sx={{ borderRadius: '999px', textTransform: 'none', fontSize: '1rem', px: 3, py: 1 }}
+                      sx={{ borderRadius: '999px', textTransform: 'none', fontSize: '1.5rem', px: 3, py: 1 }}
                     >
                       {pair.word}
                     </Button>
@@ -217,7 +217,7 @@ export function PairsPage() {
                       variant={matchedIds.has(pair.id) || wrongRuId === pair.id ? 'contained' : 'outlined'}
                       className={getRuClass(pair)}
                       onClick={() => handleRuClick(pair)}
-                      sx={{ borderRadius: '999px', textTransform: 'none', fontSize: '1rem', px: 3, py: 1 }}
+                      sx={{ borderRadius: '999px', textTransform: 'none', fontSize: '1.5rem', px: 3, py: 1 }}
                     >
                       {pair.translation}
                     </Button>
@@ -228,7 +228,7 @@ export function PairsPage() {
               <Typography
                 className="PairsPage__Card__Progress"
                 variant="h4"
-                fontWeight={700}
+                sx={{ fontWeight: 700 }}
               >
                 {taskIndex + 1}/{tasks.length}
               </Typography>

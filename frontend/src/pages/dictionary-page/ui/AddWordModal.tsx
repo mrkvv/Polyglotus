@@ -52,6 +52,7 @@ export function AddWordModal({ open, initialWord = '', onSave, onClose }: AddWor
   const [saving, setSaving] = useState(false);
   const [enError, setEnError] = useState<string | null>(null);
   const [ruError, setRuError] = useState<string | null>(null);
+  const [posError, setPosError] = useState<string | null>(null);
 
   // Синхронизируем en с initialWord при каждом открытии модала
   useEffect(() => {
@@ -61,17 +62,20 @@ export function AddWordModal({ open, initialWord = '', onSave, onClose }: AddWor
       setPartOfSpeech('');
       setEnError(null);
       setRuError(null);
+      setPosError(null);
     }
   }, [open, initialWord]);
 
   const handleSave = async () => {
     setEnError(null);
     setRuError(null);
+    setPosError(null);
 
     // Клиентская валидация пустых полей
     let hasError = false;
     if (!en.trim()) { setEnError(t('word_modal_empty_field')); hasError = true; }
     if (!ru.trim()) { setRuError(t('word_modal_empty_field')); hasError = true; }
+    if (!partOfSpeech) { setPosError(t('word_modal_empty_field')); hasError = true; }
     if (hasError) return;
 
     setSaving(true);
@@ -135,10 +139,12 @@ export function AddWordModal({ open, initialWord = '', onSave, onClose }: AddWor
         <TextField
           label={t('word_modal_field_pos')}
           value={partOfSpeech}
-          onChange={(e) => setPartOfSpeech(e.target.value)}
+          onChange={(e) => { setPartOfSpeech(e.target.value); setPosError(null); }}
           size="small"
           fullWidth
           select
+          error={!!posError}
+          helperText={posError ?? ' '}
         >
           {PARTS_OF_SPEECH.map((pos) => (
             <MenuItem key={pos} value={pos}>
@@ -151,7 +157,7 @@ export function AddWordModal({ open, initialWord = '', onSave, onClose }: AddWor
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button
           onClick={handleSave}
-          disabled={saving || !partOfSpeech}
+          disabled={saving}
           sx={{ color: '#2E7D32', fontWeight: 700 }}
         >
           {t('word_modal_save')}
