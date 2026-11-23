@@ -197,6 +197,10 @@ export function DictionaryPage() {
   const handleAddSave = useCallback(
     async (en: string, ru: string, partOfSpeech: string) => {
       await insertWordManualy({ en, ru, partOfSpeech }).unwrap();
+      dispatch(dictionaryApi.util.invalidateTags(['Dictionary']));
+      setSearchInput('');
+      setDebouncedWord('');
+      setDropdownOpen(false);
     },
     [insertWordManualy],
   );

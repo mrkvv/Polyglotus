@@ -32,7 +32,6 @@ export const trainingApi = rtkApi.injectEndpoints({
 				method: 'GET',
 				params: { amount },
 			}),
-			providesTags: ['Dictionary'],
 		}),
 	})
 })
